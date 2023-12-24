@@ -1,6 +1,5 @@
 from tkinter import filedialog
 import glob
-import subprocess
 
 # Open source dir
 sourcedir = filedialog.askdirectory(title='Open DIR to process')
