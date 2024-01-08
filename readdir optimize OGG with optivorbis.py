@@ -1,5 +1,8 @@
-# Opens a folder, and recursively feeds all OGG files in it to optivorbis.exe for recompression and reducing file size. optivorbis.exe is available from https://git.codeproxy.net/OptiVorbis/OptiVorbis/releases
-# WARNING: Source files are replaced, no backup, no renaming
+# Opens a folder, and recursively feeds all OGG files in it to optivorbis.exe for recompression and reducing file size.
+# optivorbis.exe is available from https://git.codeproxy.net/OptiVorbis/OptiVorbis/releases
+#
+#   WARNING:
+#   Source files are replaced! No backup, no renaming!
 
 from tkinter import filedialog
 import glob
