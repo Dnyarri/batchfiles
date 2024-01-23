@@ -6,6 +6,7 @@
 
 from tkinter import filedialog
 import subprocess
+from winsound import Beep
 
 # Open source file list
 sourcefilelist = filedialog.askopenfilenames(title='Select PNG files to recompress', filetypes=[('PNG files', '*.png')]) # filtering for PNG
@@ -17,3 +18,4 @@ for filename in sourcefilelist:
     subprocess.run(f'advpng.exe --recompress --shrink-insane --iter 50 "{filename}"')
     # output in quotes for paths with spaces
     # --shrink-insane --iter 50 means Zopfli compression with 50 iterations
+Beep(300, 1200)
