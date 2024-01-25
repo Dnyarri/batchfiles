@@ -4,7 +4,6 @@
 import os
 from subprocess import call
 from tkinter import filedialog
-from winsound import Beep
 
 # Open source dir
 convert_dir = filedialog.askdirectory(title='Open DIR to process')
@@ -20,5 +19,3 @@ for root, dirs, files in os.walk(convert_dir):
             call(["D:/LibreOffice/program/soffice.exe", "--headless", "--convert-to", "docx", file, "--outdir", destination])    # with subprocess.Popen seem to get lost somewhere in the process
         else:
             pass
-
-Beep(300, 1200)

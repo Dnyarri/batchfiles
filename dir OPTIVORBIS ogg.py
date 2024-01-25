@@ -8,10 +8,9 @@ from tkinter import filedialog
 from glob import glob
 from subprocess import run
 import os
-from winsound import Beep
 
 # Open source dir
-sourcedir = filedialog.askdirectory(title='Open folder with OGG files to process')
+sourcedir = filedialog.askdirectory(title='Open DIR to compress OGG files')
 if (sourcedir == ''):
     quit()
 
@@ -20,4 +19,3 @@ for filename in glob(sourcedir + "/**/*.ogg", recursive=True):   # select all OG
     os.rename(f"{filename}", "D:/hujwam.ogg")
     run(f'"optivorbis.exe" "D:/hujwam.ogg" "{filename}"') # output in quotes for paths with spaces
     os.remove("D:/hujwam.ogg")
-Beep(300, 1200)
