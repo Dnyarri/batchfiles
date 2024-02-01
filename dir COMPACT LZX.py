@@ -6,8 +6,9 @@ from tkinter import filedialog
 from subprocess import run
 
 # Open source dir
-sourcedir = filedialog.askdirectory(title='Open DIR to COMPACT')
+sourcedir = filedialog.askdirectory(title='Open DIR to compress DOCX files')
 if (sourcedir == ''):
     quit()
+
 # Process dir
-run(f'compact /c /s /a /i /f /exe:lzx "{sourcedir}\*"')
+run(f'compact /c /s /a /i /f /exe:lzx "{sourcedir}/*"')
