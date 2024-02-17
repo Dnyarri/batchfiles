@@ -2,7 +2,7 @@
 # Main idea not mine, pulled from internet, I just added UI and added/changed some other stuff
 
 import os
-from subprocess import call
+from subprocess import run
 from tkinter import filedialog
 
 # Open source dir
@@ -16,6 +16,6 @@ for root, dirs, files in os.walk(convert_dir):
             # filepath+name
             file = root+"/"+name
             destination = root
-            call(["D:/LibreOffice/program/soffice.exe", "--headless", "--convert-to", "docx", file, "--outdir", destination])    # with subprocess.Popen seem to get lost somewhere in the process
+            run(["D:/LibreOffice/program/soffice.exe", "--headless", "--convert-to", "docx", file, "--outdir", destination])    # with subprocess.Popen seem to get lost somewhere in the process
         else:
             pass
