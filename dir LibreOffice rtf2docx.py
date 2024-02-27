@@ -61,7 +61,7 @@ sortir.update_idletasks()
 
 for root, dirs, files in walk(workingdir):
     for filename in files:
-        if filename.endswith(".rtf") or filename.endswith(".doc") or filename.endswith(".odt"):
+        if filename.endswith(".rtf") or filename.endswith(".doc") or filename.endswith(".odt") or filename.endswith(".fb2"):
             # filepath+filename
             file = root+"/"+filename
             destination = root
