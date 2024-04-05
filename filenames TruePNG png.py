@@ -6,7 +6,8 @@ from tkinter import filedialog
 from subprocess import run
 
 # Open source file list
-sourcefilelist = filedialog.askopenfilenames(title='Select PNG files to recompress', filetypes=[('PNG files', '*.png')]) # filtering for PNG
+sourcefilelist = filedialog.askopenfilenames(title='Select PNG files to recompress', filetypes=[
+                                             ('PNG files', '*.png')])  # filtering for PNG
 if (sourcefilelist == ''):
     quit()
 

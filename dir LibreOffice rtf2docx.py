@@ -36,7 +36,7 @@ from tkinter import filedialog
 sortir = Tk()
 sortir.title('Converting to .docx...')
 sortir.geometry('+100+100')
-zanyato = Label(sortir, text = 'Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
+zanyato = Label(sortir, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 sortir.withdraw()
 
@@ -52,7 +52,7 @@ if (workingdir == ''):
 # Updating dialog
 
 sortir.deiconify()
-zanyato.config(text = 'Allons-y!')
+zanyato.config(text='Allons-y!')
 sortir.update()
 sortir.update_idletasks()
 
@@ -61,16 +61,18 @@ sortir.update_idletasks()
 
 for root, dirs, files in walk(workingdir):
     for filename in files:
-        if filename.endswith(".rtf") or filename.endswith(".doc") or filename.endswith(".odt") or filename.endswith(".fb2"):
+        if filename.endswith(".rtf") or filename.endswith(".doc") or filename.endswith(".odt") or filename.endswith(
+                ".fb2"):
             # filepath+filename
             file = root+"/"+filename
             destination = root
 
-            zanyato.config(text = 'Processing ' + file + '...')      # Updating label, showing processed file name
+            zanyato.config(text='Processing ' + file + '...')      # Updating label, showing processed file name
             sortir.update()
             sortir.update_idletasks()
 
-            run(["D:/LibreOffice/program/soffice.exe", "--headless", "--convert-to", "docx", file, "--outdir", destination])    # with subprocess.Popen seem to get lost somewhere in the process
+            # with subprocess.Popen seem to get lost somewhere in the process
+            run(["D:/LibreOffice/program/soffice.exe", "--headless", "--convert-to", "docx", file, "--outdir", destination])
         else:
             pass
 

@@ -33,7 +33,7 @@ from tkinter import filedialog
 sortir = Tk()
 sortir.title('Recompressing .docx...')
 sortir.geometry('+100+100')
-zanyato = Label(sortir, text = 'Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
+zanyato = Label(sortir, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 sortir.withdraw()
 
@@ -49,7 +49,7 @@ if (sourcedir == ''):
 # Updating dialog
 
 sortir.deiconify()
-zanyato.config(text = 'Allons-y!')
+zanyato.config(text='Allons-y!')
 sortir.update()
 sortir.update_idletasks()
 
@@ -74,11 +74,12 @@ if name == 'nt':
 # Process file list
 for filename in glob(sourcedir + "/**/*.docx", recursive=True):   # select all files in all subfolders
 
-    zanyato.config(text = 'Processing ' + filename + '...')      # Updating label, showing processed file name
+    zanyato.config(text='Processing ' + filename + '...')      # Updating label, showing processed file name
     sortir.update()
     sortir.update_idletasks()
 
-    subprocess.run(f'advzip.exe -q -z -4 -i 20 "{filename}"', startupinfo=startupinfo) # output in quotes for paths with spaces
+    # output in quotes for paths with spaces
+    subprocess.run(f'advzip.exe -q -z -4 -i 20 "{filename}"', startupinfo=startupinfo)
 
 
 # --------------------------------------------------------------

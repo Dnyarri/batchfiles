@@ -36,7 +36,7 @@ from tkinter import filedialog
 sortir = Tk()
 sortir.title('Recompressing .OGG...')
 sortir.geometry('+100+100')
-zanyato = Label(sortir, text = 'Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
+zanyato = Label(sortir, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 sortir.withdraw()
 
@@ -52,7 +52,7 @@ if (sourcedir == ''):
 # Updating dialog
 
 sortir.deiconify()
-zanyato.config(text = 'Allons-y!')
+zanyato.config(text='Allons-y!')
 sortir.update()
 sortir.update_idletasks()
 
@@ -76,12 +76,13 @@ if os.name == 'nt':
 # Process file list
 for filename in glob(sourcedir + "/**/*.ogg", recursive=True):   # select all OGG files in all subfolders
 
-    zanyato.config(text = 'Processing ' + filename + '...')      # Updating label, showing processed file name
+    zanyato.config(text='Processing ' + filename + '...')      # Updating label, showing processed file name
     sortir.update()
     sortir.update_idletasks()
 
     os.rename(f"{filename}", "D:/hujwam.ogg")
-    subprocess.run(f'"optivorbis.exe" "-q" "D:/hujwam.ogg" "{filename}"', startupinfo=startupinfo) # output in quotes for paths with spaces
+    # output in quotes for paths with spaces
+    subprocess.run(f'"optivorbis.exe" "-q" "D:/hujwam.ogg" "{filename}"', startupinfo=startupinfo)
     os.remove("D:/hujwam.ogg")
 
 # --------------------------------------------------------------
