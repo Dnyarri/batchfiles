@@ -1,11 +1,10 @@
-#!/usr/bin/env python
-
 '''
 Opens a folder, and recursively feeds all OGG files in it to optivorbis.exe for recompression and reducing file size.
+
 optivorbis.exe is available from https://git.codeproxy.net/OptiVorbis/OptiVorbis/releases
 
 WARNING:
-Source files are replaced! No backup, no renaming!
+Source files are replaced! No backup, no mercy!
 
 WARNING:
 Drive D: is used for temp file. Edit this if you don't have one.
@@ -21,7 +20,7 @@ __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
 
-from tkinter import Tk, filedialog, Label, X, BOTH, LEFT
+from tkinter import Tk, filedialog, Button, Label, X, BOTH, TOP, BOTTOM
 
 from tkinter.ttk import Progressbar
 
@@ -30,6 +29,7 @@ from tkinter.scrolledtext import ScrolledText
 import os
 
 from glob import glob
+
 import subprocess
 
 # --------------------------------------------------------------
@@ -42,10 +42,22 @@ zanyato = Label(sortir, text='Starting...', font=("arial", 12), padx=16, pady=10
 zanyato.pack()
     
 progressbar =  Progressbar(sortir, orient="horizontal", mode="indeterminate")
-progressbar.pack(fill=X)
+progressbar.pack(fill=X, side=TOP, expand=True)
 
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
-pogovorit.pack(fill=BOTH, side=LEFT, expand=True)
+pogovorit.pack(fill=BOTH, expand=True)
+
+butt = Button(
+    sortir,
+    text='Bye',
+    font=('arial', 14),
+    cursor='hand2',
+    justify='center',
+    state='disabled',
+    command=sortir.destroy
+)
+butt.pack(fill=X, side=BOTTOM, expand=True)
+
 pogovorit.insert('1.0', 'Allons-y!\n')
 
 sortir.withdraw()
@@ -96,16 +108,11 @@ for filename in glob(sourcedir + "/**/*.ogg", recursive=True):   # select all OG
     # output in quotes for paths with spaces
     subprocess.run(f'"optivorbis.exe" "-q" "D:/hujwam.ogg" "{filename}"', startupinfo=startupinfo)
     os.remove("D:/hujwam.ogg")
-
         
     progressbar.start(50)
     pogovorit.insert('end -1 chars', ' Done\n')
 
-# --------------------------------------------------------------
-# Destroying dialog
+progressbar.stop()
+butt.config(state='normal')
 
-sortir.destroy()
 sortir.mainloop()
-
-# Dialog destroyed and closed
-# --------------------------------------------------------------
