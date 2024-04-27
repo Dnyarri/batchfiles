@@ -16,19 +16,21 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.02.27"
+__version__ = "2024.04.27"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
+
+from tkinter import Tk, filedialog, Label, X, BOTH, LEFT
+
+from tkinter.ttk import Progressbar
+
+from tkinter.scrolledtext import ScrolledText
 
 import os
 
 from glob import glob
 import subprocess
-
-from tkinter import Tk
-from tkinter import Label
-from tkinter import filedialog
 
 # --------------------------------------------------------------
 # Creating dialog
@@ -38,6 +40,14 @@ sortir.title('Recompressing .OGG...')
 sortir.geometry('+100+100')
 zanyato = Label(sortir, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
 zanyato.pack()
+    
+progressbar =  Progressbar(sortir, orient="horizontal", mode="indeterminate")
+progressbar.pack(fill=X)
+
+pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
+pogovorit.pack(fill=BOTH, side=LEFT, expand=True)
+pogovorit.insert('1.0', 'Allons-y!\n')
+
 sortir.withdraw()
 
 # Main dialog created and hidden
@@ -76,7 +86,9 @@ if os.name == 'nt':
 # Process file list
 for filename in glob(sourcedir + "/**/*.ogg", recursive=True):   # select all OGG files in all subfolders
 
-    zanyato.config(text='Processing ' + filename + '...')      # Updating label, showing processed file name
+    zanyato.config(text=f'Processing {filename}...')      # Updating label, showing processed file name
+    progressbar.start(50)
+    pogovorit.insert('end -1 chars', f' Starting {filename}... ')
     sortir.update()
     sortir.update_idletasks()
 
@@ -84,6 +96,10 @@ for filename in glob(sourcedir + "/**/*.ogg", recursive=True):   # select all OG
     # output in quotes for paths with spaces
     subprocess.run(f'"optivorbis.exe" "-q" "D:/hujwam.ogg" "{filename}"', startupinfo=startupinfo)
     os.remove("D:/hujwam.ogg")
+
+        
+    progressbar.start(50)
+    pogovorit.insert('end -1 chars', ' Done\n')
 
 # --------------------------------------------------------------
 # Destroying dialog
