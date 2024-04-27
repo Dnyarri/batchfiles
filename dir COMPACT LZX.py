@@ -14,7 +14,7 @@ __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
 
-from tkinter import Tk, filedialog, Button, X, BOTH, TOP, BOTTOM, END
+from tkinter import Tk, filedialog, Button, X, BOTH, TOP, BOTTOM
 
 from tkinter.scrolledtext import ScrolledText
 
@@ -25,7 +25,7 @@ import subprocess
 
 sortir = Tk()
 sortir.title('Compact dir with LZX')
-sortir.geometry('+100+100')
+sortir.geometry('+200+100')
 
 pogovorit = ScrolledText(
     sortir, 
@@ -34,7 +34,6 @@ pogovorit = ScrolledText(
     state='normal'
 )
 pogovorit.pack(fill=BOTH, side=TOP, expand=True)
-pogovorit.insert('1.0', 'Allons-y!\n')
 
 butt = Button(
     sortir,
@@ -45,7 +44,7 @@ butt = Button(
     state='disabled',
     command=sortir.destroy
 )
-butt.pack(fill=X, side=BOTTOM, expand=True)
+butt.pack(padx=4, pady=2, fill=X, side=BOTTOM, expand=True)
 
 sortir.withdraw()
 
@@ -56,13 +55,16 @@ if (sourcedir == ''):
 
 # Updating dialog
 sortir.deiconify()
+pogovorit.insert('1.0', 'Allons-y!\n')
+pogovorit.focus()
 sortir.update()
 sortir.update_idletasks()
 
 # Process dir
 with subprocess.Popen(f'compact /c /s /a /i /f /exe:lzx "{sourcedir}/*"', stdout=subprocess.PIPE, bufsize=1, encoding='cp866', text=True) as p:
     for line in p.stdout:
-        pogovorit.insert(END, line)
+        pogovorit.insert('end', line)
+        pogovorit.see('end')
         sortir.update()
         sortir.update_idletasks()
 

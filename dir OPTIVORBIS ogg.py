@@ -75,6 +75,7 @@ if (sourcedir == ''):
 
 sortir.deiconify()
 zanyato.config(text='Allons-y!')
+pogovorit.focus()
 sortir.update()
 sortir.update_idletasks()
 
@@ -100,17 +101,20 @@ for filename in glob(sourcedir + "/**/*.ogg", recursive=True):   # select all OG
 
     zanyato.config(text=f'Processing {filename}...')      # Updating label, showing processed file name
     progressbar.start(50)
-    pogovorit.insert('end -1 chars', f' Starting {filename}... ')
+    pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
+    pogovorit.see('end')
     sortir.update()
     sortir.update_idletasks()
 
     os.rename(f"{filename}", "D:/hujwam.ogg")
-    # output in quotes for paths with spaces
+    # Note: output in quotes below for paths with spaces
     subprocess.run(f'"optivorbis.exe" "-q" "D:/hujwam.ogg" "{filename}"', startupinfo=startupinfo)
     os.remove("D:/hujwam.ogg")
         
     progressbar.start(50)
     pogovorit.insert('end -1 chars', ' Done\n')
+    sortir.update()
+    sortir.update_idletasks()
 
 progressbar.stop()
 butt.config(state='normal')
