@@ -1,5 +1,10 @@
-#   Replaces filename fragments and formatting I don't like.
-#   Currently removes digits and double dots, and replaces underscores with spaces.
+#!/usr/bin/env python3
+
+'''
+Replaces filename fragments and formatting I don't like.
+Currently removes digits and double dots, and replaces underscores with spaces.
+
+'''
 
 from tkinter import filedialog
 from glob import glob
@@ -17,11 +22,11 @@ for filename in glob(sourcedir + "/**/*.*", recursive=True):    # select all fil
     
     # now goes the set of renaming criteria etc.
 
-    tempfilename = filename.replace('_', ' ')                   # replace underscore with space
+    tempfilename = filename.replace('_', ' ')           # replace underscore with space
 
     for i in "0123456789":
-        tempfilename = tempfilename.replace(i, '')              # replace any digit with nothing
+        tempfilename = tempfilename.replace(i, '')      # replace any digit with nothing
         
-    tempfilename = tempfilename.replace('..', '.')              # replace double dot with single
+    tempfilename = tempfilename.replace('..', '.')      # replace double dot with single
 
-    rename(f"{filename}", f"{tempfilename}")                    # rename it, applying set of renaming criteria etc.
+    rename(f"{filename}", f"{tempfilename}")            # rename it, applying set of renaming criteria etc.

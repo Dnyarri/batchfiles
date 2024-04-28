@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 '''
 Batch conversion of *.rtf, *.doc and *.odt into .docx in selected folder, recursively,
@@ -61,8 +61,7 @@ sortir.update_idletasks()
 
 for root, dirs, files in walk(workingdir):
     for filename in files:
-        if filename.endswith(".rtf") or filename.endswith(".doc") or filename.endswith(".odt") or filename.endswith(
-                ".fb2"):
+        if filename.endswith(".rtf") or filename.endswith(".doc") or filename.endswith(".odt") or filename.endswith(".fb2"):
             # filepath+filename
             file = root+"/"+filename
             destination = root

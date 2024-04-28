@@ -1,10 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 '''
 Opens a folder, and recursively feeds all .docx files in it to advzip.exe for recompression and reducing file size.
 advzip.exe is available from https://github.com/amadvance/advancecomp
 
 WARNING:
+---------
 Source files are replaced! No backup, no renaming!
 
 '''
@@ -74,7 +75,7 @@ if name == 'nt':
 # Process file list
 for filename in glob(sourcedir + "/**/*.docx", recursive=True):   # select all files in all subfolders
 
-    zanyato.config(text='Processing ' + filename + '...')      # Updating label, showing processed file name
+    zanyato.config(text=f'Processing {filename}...')      # Updating label, showing processed file name
     sortir.update()
     sortir.update_idletasks()
 

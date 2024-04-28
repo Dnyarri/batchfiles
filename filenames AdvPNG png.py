@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 '''
 Feeds selected PNG files to advpng.exe for recompression and reducing file size.
@@ -40,9 +40,8 @@ sortir.withdraw()
 # --------------------------------------------------------------
 
 # Open source file list
-sourcefilelist = filedialog.askopenfilenames(title='Select PNG files to recompress', filetypes=[
-                                             ('PNG files', '*.png')])  # filtering for PNG
-if (sourcefilelist == ''):
+sourcefilelist = filedialog.askopenfilenames(title='Select PNG files to recompress', filetypes=[('PNG files', '*.png')])  # filtering for PNG
+if sourcefilelist == '':
     quit()
 
 

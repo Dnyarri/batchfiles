@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 '''
 Opens a folder, and recursively feeds all OGG files in it to optivorbis.exe for recompression and reducing file size.
 
@@ -108,7 +110,7 @@ for filename in glob(sourcedir + "/**/*.ogg", recursive=True):   # select all OG
 
     os.rename(f"{filename}", "D:/hujwam.ogg")
     # Note: output in quotes below for paths with spaces
-    subprocess.run(f'"optivorbis.exe" "-q" "D:/hujwam.ogg" "{filename}"', startupinfo=startupinfo)
+    subprocess.run(f'optivorbis.exe -q D:/hujwam.ogg "{filename}"', startupinfo=startupinfo)
     os.remove("D:/hujwam.ogg")
         
     progressbar.start(50)

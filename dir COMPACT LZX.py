@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 '''
 Compress selected dir and subdirs using Microsoft compact.exe LZX compression (LZX supported since Windows 8).
 Since compact.exe itself provides recursion and stuff, this program does practically nothing
