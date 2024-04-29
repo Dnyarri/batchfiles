@@ -62,8 +62,11 @@ pogovorit.focus()
 sortir.update()
 sortir.update_idletasks()
 
+startupinfo = subprocess.STARTUPINFO()
+startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
 # Process dir
-with subprocess.Popen(f'compact /c /s /a /i /f /exe:lzx "{sourcedir}/*"', stdout=subprocess.PIPE, bufsize=1, encoding='cp866', text=True) as p:
+with subprocess.Popen(f'compact /c /s /a /i /f /exe:lzx "{sourcedir}/*"', stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, encoding='cp866', text=True, startupinfo=startupinfo) as p:
     for line in p.stdout:
         pogovorit.insert('end', line)
         pogovorit.see('end')
