@@ -11,7 +11,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.04.29"
+__version__ = "2024.05.19"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -53,6 +53,7 @@ sortir.withdraw()
 # Open source dir
 sourcedir = filedialog.askdirectory(title='Open DIR to compress with LZX')
 if (sourcedir == ''):
+    sortir.destroy()
     quit()
 
 # Updating dialog

@@ -17,7 +17,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.04.29"
+__version__ = "2024.05.19"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -38,7 +38,7 @@ convert_to_format = 'docx'
 
 # Creating dialog
 sortir = Tk()
-sortir.title('rtf2docx ver. 2024.04.29')
+sortir.title('rtf2docx LibreOffice converter')
 sortir.geometry('+100+100')
 zanyato = Label(sortir, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
 zanyato.pack()
@@ -65,6 +65,7 @@ sortir.withdraw()   # Main dialog created and hidden
 # Open source dir
 sourcedir = filedialog.askdirectory(title='Open DIR to process')
 if (sourcedir == ''):
+    sortir.destroy()
     quit()
 
 path = Path(sourcedir)

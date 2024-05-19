@@ -44,6 +44,7 @@ sortir.withdraw()
 # Open source dir
 sourcedir = filedialog.askdirectory(title='Open DIR to compress DOCX files')
 if (sourcedir == ''):
+    sortir.destroy()
     quit()
 
 # --------------------------------------------------------------
