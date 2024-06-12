@@ -8,16 +8,13 @@ optivorbis.exe is available from https://git.codeproxy.net/OptiVorbis/OptiVorbis
 WARNING:
 Source files are replaced! No backup, no mercy!
 
-WARNING:
-Drive D: is used for temp file. Edit this if you don't have one.
-
 '''
 
 __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.05.19"
+__version__ = "2024.06.12"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -87,11 +84,11 @@ for filename in path.rglob('*.ogg', case_sensitive=False):  # cycle through OGG 
     sortir.update_idletasks()
 
     currentfile = Path(filename)        # file to be processed
-    tempfile = Path('D:/hujwam.ogg')    # temp file 'D:/hujwam.ogg'
+    tempfile = Path(filename.parent / 'hujwam.ogg')    # temp file hujwam.ogg
     currentfile.replace(tempfile)       # move file to temp
 
     # Note: output in quotes below for paths with spaces
-    subprocess.run(f'optivorbis.exe -q D:/hujwam.ogg "{filename}"', startupinfo=startupinfo)
+    subprocess.run(f'optivorbis.exe -q "{tempfile}" "{filename}"', startupinfo=startupinfo)
     # optivorbis.exe writes result from temp back to source location
 
     progressbar.start(50)
