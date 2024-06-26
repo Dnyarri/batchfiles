@@ -84,7 +84,7 @@ for filename in path.rglob('*.ogg', case_sensitive=False):  # cycle through OGG 
     sortir.update_idletasks()
 
     currentfile = Path(filename).resolve()        # file to be processed
-    tempfile = Path(filename.parent / 'hujwam.ogg')    # temp file hujwam.ogg
+    tempfile = Path(filename.resolve().parent / 'hujwam.ogg')    # temp file hujwam.ogg
     currentfile.replace(tempfile)       # move file to temp
 
     # Note: output in quotes below for paths with spaces
