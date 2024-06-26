@@ -14,7 +14,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.06.12"
+__version__ = "2024.06.26"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -31,10 +31,10 @@ import subprocess
 sortir = Tk()
 sortir.title('Recompressing .OGG...')
 sortir.geometry('+100+100')
-zanyato = Label(sortir, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
+zanyato = Label(sortir, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
     
-progressbar =  Progressbar(sortir, orient="horizontal", mode="indeterminate")
+progressbar =  Progressbar(sortir, orient='horizontal', mode='indeterminate')
 progressbar.pack(fill=X, side=TOP, expand=True)
 
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
@@ -42,7 +42,7 @@ pogovorit.pack(fill=BOTH, expand=True)
 
 butt = Button(
     sortir,
-    text='Bye',
+    text='Busy...',
     font=('arial', 14),
     cursor='hand2',
     justify='center',
@@ -83,7 +83,7 @@ for filename in path.rglob('*.ogg', case_sensitive=False):  # cycle through OGG 
     sortir.update()
     sortir.update_idletasks()
 
-    currentfile = Path(filename)        # file to be processed
+    currentfile = Path(filename).resolve()        # file to be processed
     tempfile = Path(filename.parent / 'hujwam.ogg')    # temp file hujwam.ogg
     currentfile.replace(tempfile)       # move file to temp
 
@@ -96,9 +96,9 @@ for filename in path.rglob('*.ogg', case_sensitive=False):  # cycle through OGG 
     sortir.update()
     sortir.update_idletasks()
 
-tempfile.unlink(missing_ok=True)        # removing temp file
+    tempfile.unlink(missing_ok=True)        # removing temp file
 
 progressbar.stop()
-butt.config(state='normal')
+butt.config(text='Dismissed!', state='normal')
 
 sortir.mainloop()
