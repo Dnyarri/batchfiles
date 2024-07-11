@@ -17,7 +17,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.05.19"
+__version__ = "2024.07.11"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -40,7 +40,8 @@ convert_to_format = 'docx'
 sortir = Tk()
 sortir.title('rtf2docx LibreOffice converter')
 sortir.geometry('+100+100')
-zanyato = Label(sortir, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
+sortir.maxsize(800, 600)
+zanyato = Label(sortir, wraplength=800, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
 zanyato.pack()
     
 progressbar =  Progressbar(sortir, orient="horizontal", mode="indeterminate")
@@ -96,6 +97,7 @@ for filename in file_list:
     sortir.update()
     sortir.update_idletasks()
 
+zanyato.config(text=f'Finished {sourcedir}')
 progressbar.stop()
 butt.config(state='normal')
 

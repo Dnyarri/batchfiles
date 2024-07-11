@@ -11,7 +11,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.05.19"
+__version__ = "2024.07.11"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -28,6 +28,7 @@ import subprocess
 sortir = Tk()
 sortir.title('Compact dir with LZX')
 sortir.geometry('+200+100')
+sortir.maxsize(800, 600)
 
 pogovorit = ScrolledText(
     sortir, 

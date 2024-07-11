@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 '''
-Opens a folder, and recursively feeds all OGG files in it to optivorbis.exe
+Opens a folder, and recursively feeds all OGG files in it to
+optivorbis.exe
 for recompression and reducing file size.
 
 optivorbis.exe is available from https://github.com/OptiVorbis/OptiVorbis/
