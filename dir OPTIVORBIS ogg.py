@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
 '''
-Opens a folder, and recursively feeds all OGG files in it to optivorbis.exe for recompression and reducing file size.
+Opens a folder, and recursively feeds all OGG files in it to optivorbis.exe
+for recompression and reducing file size.
 
-optivorbis.exe is available from https://git.codeproxy.net/OptiVorbis/OptiVorbis/releases
+optivorbis.exe is available from https://github.com/OptiVorbis/OptiVorbis/
 
 WARNING:
 Source files are replaced! No backup, no mercy!
@@ -14,7 +15,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.06.26"
+__version__ = "2024.07.11"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -31,7 +32,8 @@ import subprocess
 sortir = Tk()
 sortir.title('Recompressing .OGG...')
 sortir.geometry('+100+100')
-zanyato = Label(sortir, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
+sortir.maxsize(800, 600)
+zanyato = Label(sortir, wraplength=800, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
     
 progressbar =  Progressbar(sortir, orient='horizontal', mode='indeterminate')
@@ -88,7 +90,7 @@ for filename in path.rglob('*.ogg', case_sensitive=False):  # cycle through OGG 
     currentfile.replace(tempfile)       # move file to temp
 
     # Note: output in quotes below for paths with spaces
-    subprocess.run(f'optivorbis.exe -q "{tempfile}" "{filename}"', startupinfo=startupinfo)
+    subprocess.run(f'optivorbis.exe --quiet --vendor_string_action empty "{tempfile}" "{filename}"', startupinfo=startupinfo)
     # optivorbis.exe writes result from temp back to source location
 
     progressbar.start(50)
@@ -98,6 +100,7 @@ for filename in path.rglob('*.ogg', case_sensitive=False):  # cycle through OGG 
 
     tempfile.unlink(missing_ok=True)        # removing temp file
 
+zanyato.config(text=f'Finished {sourcedir}')
 progressbar.stop()
 butt.config(text='Dismissed!', state='normal')
 
