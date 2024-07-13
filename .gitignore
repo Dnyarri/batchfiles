@@ -1,3 +1,5 @@
 temp/
 old/
+*.7z
+*.zip
 *.json

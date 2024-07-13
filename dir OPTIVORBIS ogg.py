@@ -10,13 +10,23 @@ optivorbis.exe is available from https://github.com/OptiVorbis/OptiVorbis/
 WARNING:
 Source files are replaced! No backup, no mercy!
 
+run:
+
+``pythonw.exe "dir OPTIVORBIS ogg.py" "target_name"``
+
+to open in "target_name" dir, or add
+
+``pythonw.exe "dir OPTIVORBIS ogg.py" "%1"``
+
+to "Send to" or right-click or .bat (use exact addresses of pythonw and this file)
+
 '''
 
 __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.07.11"
+__version__ = "2024.07.13"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -26,8 +36,21 @@ from tkinter.ttk import Progressbar
 from tkinter.scrolledtext import ScrolledText
 
 from pathlib import Path
+from sys import argv
 
 import subprocess
+
+'''
+run:
+
+``python "dir OPTIVORBIS ogg.py" "target_name"``
+
+to open in "target_name" dir
+'''
+if len(argv) == 2:
+    tryopen = str(argv[1])
+else:
+    tryopen = Path.cwd()
 
 # Creating dialog
 sortir = Tk()
@@ -59,7 +82,7 @@ pogovorit.insert('1.0', 'Allons-y!\n')
 sortir.withdraw()   # Main dialog created and hidden
 
 # Open source dir
-sourcedir = filedialog.askdirectory(title='Open DIR to compress OGG files')
+sourcedir = filedialog.askdirectory(title='Open DIR to compress OGG files', initialdir=tryopen, mustexist=True)
 if (sourcedir == ''):
     sortir.destroy()
     quit()

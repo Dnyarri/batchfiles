@@ -9,13 +9,23 @@ ffmpeg.exe is available from https://github.com/BtbN/FFmpeg-Builds/
 
 Resulting ogg files are placed side by side with flac source files.
 
+run:
+
+``pythonw.exe "dir ffmpeg flac2ogg 48.py" "target_name"``
+
+to open in "target_name" dir, or add
+
+``pythonw.exe "dir ffmpeg flac2ogg 48.py" "%1"``
+
+to "Send to" or right-click or .bat (use exact addresses of pythonw and this file)
+
 '''
 
 __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.07.11"
+__version__ = "2024.07.13"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -24,8 +34,21 @@ from tkinter import Tk, filedialog, Button, Label, X, BOTH, BOTTOM
 from tkinter.scrolledtext import ScrolledText
 
 from pathlib import Path
+from sys import argv
 
 import subprocess
+
+'''
+run:
+
+``python "dir ffmpeg flac2ogg 48.py" "target_name"``
+
+to open in "target_name" dir
+'''
+if len(argv) == 2:
+    tryopen = str(argv[1])
+else:
+    tryopen = Path.cwd()
 
 # Creating dialog
 sortir = Tk()
@@ -54,7 +77,7 @@ pogovorit.insert('1.0', 'Allons-y!\n')
 sortir.withdraw()   # Main dialog created and hidden
 
 # Open source dir
-sourcedir = filedialog.askdirectory(title='Open DIR to process FLAC to OGG')
+sourcedir = filedialog.askdirectory(title='Open DIR to process FLAC to OGG', initialdir=tryopen, mustexist=True)
 if (sourcedir == ''):
     sortir.destroy()
     quit()
@@ -84,8 +107,6 @@ for filename in path.rglob('*.flac', case_sensitive=False):  # cycle through fla
     currentdir = Path(filename).resolve().parent    # dir with current file
     currentfile_noext = str(Path(filename).resolve().stem)  # file to be processed without extension
     oggfile = f'{currentdir}\\{currentfile_noext}.ogg'  # resulting file name
-    
-    # print(f'{currentfile}\n{oggfile}')
 
     # Note: output in quotes below for paths with spaces
     subprocess.run(f'ffmpeg.exe -loglevel quiet -i "{currentfile}" -map 0:a:? -c:a: libvorbis -aq 10 -ar 48000 -vn -sn -map_metadata:s:0 0:s:0 -metadata comment="" -metadata encoder="" -metadata description="" -metadata copyright="" -metadata encoded_by="" "{oggfile}"', startupinfo=startupinfo)

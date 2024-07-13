@@ -5,22 +5,47 @@ Compress selected dir and subdirs using Microsoft compact.exe LZX compression (L
 Since compact.exe itself provides recursion and stuff, this program does practically nothing
 but provides nice GUI and remembers all the switches for me.
 
+run:
+
+``pythonw.exe "dir COMPACT LZX.py" "target_name"``
+
+to open in "target_name" dir, or add
+
+``pythonw.exe "dir COMPACT LZX.py.py" "%1"``
+
+to "Send to" or right-click or .bat (use exact addresses of pythonw and this file)
+
 '''
 
 __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.07.11"
+__version__ = "2024.07.13"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
 
 from tkinter import Tk, filedialog, Button, X, BOTH, TOP, BOTTOM
-
 from tkinter.scrolledtext import ScrolledText
 
+from pathlib import Path
+from sys import argv
+
 import subprocess
+
+'''
+run:
+
+``python "dir COMPACT LZX.py" "target_name"``
+
+to open in "target_name" dir
+'''
+if len(argv) == 2:
+    tryopen = str(argv[1])
+else:
+    tryopen = Path.cwd()
+
 
 # --------------------------------------------------------------
 # Creating dialog
@@ -52,7 +77,7 @@ butt.pack(padx=4, pady=2, fill=X, side=BOTTOM, expand=True)
 sortir.withdraw()
 
 # Open source dir
-sourcedir = filedialog.askdirectory(title='Open DIR to compress with LZX')
+sourcedir = filedialog.askdirectory(title='Open DIR to compress with LZX', initialdir=tryopen, mustexist=True)
 if (sourcedir == ''):
     sortir.destroy()
     quit()
