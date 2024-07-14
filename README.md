@@ -14,10 +14,11 @@ Most useful are:
 - **dir COMPACT LZX** - Windows only; makes Windows (ver. 8 and 10) compact.exe recompress selected folder and subfolder using LZX filesystem compression. Great for software installations - for modern bloatware compression ratio is typically 2.0-2.7, sometimes higher. No sense to use it on frequently updated docs and stuff - upon editing and saving file gets decompressed back.  
 
 > [!NOTE]
-> Windows users may rename forementioned files from .py to .pyw to avoid starting console.
+> Windows users may rename forementioned files from .py to .pyw to avoid starting console.  
 > Programs *dir COMPACT LZX*, *dir OPTIVORBIS ogg* and *dir ffmpeg flac2ogg 48* accept command line arguments at start time. Argument is supposed to be a name of folder; in this case program GUI opens right in this folder. If argument happen to be a file, GUI will be opened in folder containing it. You may use it for creating shortcuts like  
 > ``pythonw.exe "dir COMPACT LZX.py.py" "%1"``  
 > and then simply drag-and-drop folders onto shortcut to open program right where you need it.  
+> If argument is absent (e.g., you simply double-click program), program simply opens in default directory and wait for you to browse and point to required location.  
 
 - **dir RENAME unflibusta** - batch renaming of files according to patterns, like replacing underscores with spaces, removing digits, and so on. Edit rules pattern to your need.
 
