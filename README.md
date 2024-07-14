@@ -3,16 +3,21 @@
 Some batchfiles are equipped with GUI, some intended to be used as templates for further editing.
 Most useful are:  
 
-- **dir OPTIVORBIS ogg** - recompress all .ogg within dir and subdirs, using [OPTIVORBIS](https://git.codeproxy.net/OptiVorbis/OptiVorbis/releases); saves up to 10% of .ogg size.  
+- **dir ffmpeg flac2ogg 48** - converts all .flac within dir and subdirs to .ogg 48 kHz, using [ffmpeg](https://github.com/BtbN/FFmpeg-Builds/).  
+
+- **dir OPTIVORBIS ogg** - recompress all .ogg within dir and subdirs, using [OPTIVORBIS](https://github.com/OptiVorbis/OptiVorbis/); saves up to 10% of .ogg size.  
 
 - **dir LibreOffice rtf2docx** - batch conversion of .rtf, .doc,  .odt and .fb2 files to .docx using [LibreOffice](https://www.libreoffice.org/). Overcomes clumsy LibreOffice idea of exporting all files into one dir.  
 
 - **dir AdvZIP docx** - recompressing .docx after *dir LibreOffice rtf2docx* using [AdvZIP](https://github.com/amadvance/advancecomp) gives up to 10% space saving.  
 
-- **filenames AdvPNG png** - recompressing .png using [AdvPNG](https://github.com/amadvance/advancecomp) gives up to 5% space saving.  
+- **dir COMPACT LZX** - Windows only; makes Windows (ver. 8 and 10) compact.exe recompress selected folder and subfolder using LZX filesystem compression. Great for software installations - for modern bloatware compression ratio is typically 2.0-2.7, sometimes higher. No sense to use it on frequently updated docs and stuff - upon editing and saving file gets decompressed back.  
 
 > [!NOTE]
 > Windows users may rename forementioned files from .py to .pyw to avoid starting console.
+> Programs *dir COMPACT LZX*, *dir OPTIVORBIS ogg* and *dir ffmpeg flac2ogg 48* accept command line arguments at start time. Argument is supposed to be a name of folder; in this case program GUI opens right in this folder. If argument happen to be a file, GUI will be opened in folder containing it. You may use it for creating shortcuts like  
+> ``pythonw.exe "dir COMPACT LZX.py.py" "%1"``  
+> and then simply drag-and-drop folders onto shortcut to open program right where you need it.  
 
 - **dir RENAME unflibusta** - batch renaming of files according to patterns, like replacing underscores with spaces, removing digits, and so on. Edit rules pattern to your need.
 
