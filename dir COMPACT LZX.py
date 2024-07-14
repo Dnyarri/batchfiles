@@ -5,7 +5,7 @@ Compress selected dir and subdirs using Microsoft compact.exe LZX compression (L
 Since compact.exe itself provides recursion and stuff, this program does practically nothing
 but provides nice GUI and remembers all the switches for me.
 
-run:
+Also supports commandline arguments. Run:
 
 ``pythonw.exe "dir COMPACT LZX.py" "target_name"``
 
@@ -43,11 +43,17 @@ to open in "target_name" dir
 '''
 if len(argv) == 2:
     tryopen = argv[1]
-    if Path(tryopen).is_file():
+    if Path(tryopen).exists():
+        if Path(tryopen).is_file():
+            tryopen = Path(tryopen).parent
+    else:
         tryopen = Path(tryopen).parent
+        if Path(tryopen).exists():
+            tryopen = tryopen
+        else:
+            tryopen = Path.cwd()
 else:
     tryopen = Path.cwd()
-
 
 # --------------------------------------------------------------
 # Creating dialog

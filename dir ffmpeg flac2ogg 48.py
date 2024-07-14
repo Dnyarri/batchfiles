@@ -9,7 +9,7 @@ ffmpeg.exe is available from https://github.com/BtbN/FFmpeg-Builds/
 
 Resulting ogg files are placed side by side with flac source files.
 
-run:
+Also supports commandline arguments. Run:
 
 ``pythonw.exe "dir ffmpeg flac2ogg 48.py" "target_name"``
 
@@ -47,8 +47,15 @@ to open in "target_name" dir
 '''
 if len(argv) == 2:
     tryopen = argv[1]
-    if Path(tryopen).is_file():
+    if Path(tryopen).exists():
+        if Path(tryopen).is_file():
+            tryopen = Path(tryopen).parent
+    else:
         tryopen = Path(tryopen).parent
+        if Path(tryopen).exists():
+            tryopen = tryopen
+        else:
+            tryopen = Path.cwd()
 else:
     tryopen = Path.cwd()
 
