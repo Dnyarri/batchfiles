@@ -21,7 +21,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.07.13"
+__version__ = "2024.07.14"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -42,7 +42,9 @@ run:
 to open in "target_name" dir
 '''
 if len(argv) == 2:
-    tryopen = str(argv[1])
+    tryopen = argv[1]
+    if Path(tryopen).is_file():
+        tryopen = Path(tryopen).parent
 else:
     tryopen = Path.cwd()
 
@@ -77,7 +79,7 @@ butt.pack(padx=4, pady=2, fill=X, side=BOTTOM, expand=True)
 sortir.withdraw()
 
 # Open source dir
-sourcedir = filedialog.askdirectory(title='Open DIR to compress with LZX', initialdir=tryopen, mustexist=True)
+sourcedir = filedialog.askdirectory(title='DIR to compress with LZX', initialdir=tryopen, mustexist=True)
 if (sourcedir == ''):
     sortir.destroy()
     quit()
@@ -93,7 +95,7 @@ startupinfo = subprocess.STARTUPINFO()
 startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
 # Process dir
-with subprocess.Popen(f'compact /c /s /a /i /f /exe:lzx "{sourcedir}/*"', stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, encoding='cp866', text=True, startupinfo=startupinfo) as p:
+with subprocess.Popen(f'compact.exe /c /s /a /i /f /exe:lzx "{sourcedir}/*"', stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, encoding='cp866', text=True, startupinfo=startupinfo) as p:
     for line in p.stdout:
         pogovorit.insert('end', line)
         pogovorit.see('end')

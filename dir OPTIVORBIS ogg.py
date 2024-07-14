@@ -26,7 +26,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.07.13"
+__version__ = "2024.07.14"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -48,7 +48,9 @@ run:
 to open in "target_name" dir
 '''
 if len(argv) == 2:
-    tryopen = str(argv[1])
+    tryopen = argv[1]
+    if Path(tryopen).is_file():
+        tryopen = Path(tryopen).parent
 else:
     tryopen = Path.cwd()
 
@@ -82,7 +84,7 @@ pogovorit.insert('1.0', 'Allons-y!\n')
 sortir.withdraw()   # Main dialog created and hidden
 
 # Open source dir
-sourcedir = filedialog.askdirectory(title='Open DIR to compress OGG files', initialdir=tryopen, mustexist=True)
+sourcedir = filedialog.askdirectory(title='DIR to optimize OGG files', initialdir=tryopen, mustexist=True)
 if (sourcedir == ''):
     sortir.destroy()
     quit()
