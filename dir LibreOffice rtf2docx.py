@@ -17,7 +17,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.07.11"
+__version__ = "2024.07.28"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -31,7 +31,7 @@ from pathlib import Path
 import subprocess
 
 # List of extensions to convert from
-extension_list = {'.rtf', '.doc', '.odt', 'fb2'}
+extension_list = {'.rtf', '.doc', '.odt', '.fb2'}
 
 # Extension to convert to
 convert_to_format = 'docx'
@@ -79,8 +79,10 @@ pogovorit.insert('1.0', 'Allons-y!\n')
 sortir.update()
 sortir.update_idletasks()
 
-# Processing file list
+# Creating file list
 file_list = (p.resolve() for p in path.rglob('*.*') if p.suffix in extension_list)
+
+# Processing file list
 for filename in file_list:
     
     zanyato.config(text=f'Processing {filename}...')    # Updating UI

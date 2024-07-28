@@ -25,7 +25,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.07.14"
+__version__ = "2024.07.28"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -45,6 +45,10 @@ run:
 
 to open in "target_name" dir
 '''
+
+# Add required file extensions here
+extension_list = ['.flac', '.wav']
+
 if len(argv) == 2:
     tryopen = argv[1]
     if Path(tryopen).exists():
@@ -86,7 +90,7 @@ pogovorit.insert('1.0', 'Allons-y!\n')
 sortir.withdraw()   # Main dialog created and hidden
 
 # Open source dir
-sourcedir = filedialog.askdirectory(title='DIR to convert FLAC to OGG', initialdir=tryopen, mustexist=True)
+sourcedir = filedialog.askdirectory(title='DIR to convert FLAC to OGG 48 kHz', initialdir=tryopen, mustexist=True)
 if (sourcedir == ''):
     sortir.destroy()
     quit()
@@ -103,8 +107,11 @@ sortir.update_idletasks()
 startupinfo = subprocess.STARTUPINFO()
 startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-# Process file list
-for filename in path.rglob('*.flac', case_sensitive=False):  # cycle through flac files in subfolders
+# Creating file list
+file_list = (p.resolve() for p in path.rglob('*.*') if p.suffix in extension_list)
+
+# Processing file list
+for filename in file_list:
 
     zanyato.config(text=f'Processing {filename}...')    # Updating UI, showing processed file name
     pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
