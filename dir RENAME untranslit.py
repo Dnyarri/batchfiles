@@ -3,6 +3,7 @@
 '''
 Reverting Latin-transliterated Russian to Russian Russian.
 Note that dictionary based on real patterns rather than ISO 9!
+Dictionaries are subject to change.
 
 '''
 
