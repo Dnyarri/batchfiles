@@ -63,22 +63,11 @@ sortir.title('Compact dir with LZX')
 sortir.geometry('+200+100')
 sortir.maxsize(800, 600)
 
-pogovorit = ScrolledText(
-    sortir, 
-    height=26, 
-    wrap='word', 
-    state='normal'
-)
+pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
 pogovorit.pack(fill=BOTH, side=TOP, expand=True)
 
 butt = Button(
-    sortir,
-    text='Bye',
-    font=('arial', 14),
-    cursor='hand2',
-    justify='center',
-    state='disabled',
-    command=sortir.destroy
+    sortir, text='Bye', font=('arial', 14), cursor='hand2', justify='center', state='disabled', command=sortir.destroy
 )
 butt.pack(padx=4, pady=2, fill=X, side=BOTTOM, expand=True)
 
@@ -86,7 +75,7 @@ sortir.withdraw()
 
 # Open source dir
 sourcedir = filedialog.askdirectory(title='DIR to compress with LZX', initialdir=tryopen, mustexist=True)
-if (sourcedir == ''):
+if sourcedir == '':
     sortir.destroy()
     quit()
 
@@ -101,7 +90,15 @@ startupinfo = subprocess.STARTUPINFO()
 startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
 # Process dir
-with subprocess.Popen(f'compact.exe /c /s /a /i /f /exe:lzx "{sourcedir}/*"', stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, encoding='cp866', text=True, startupinfo=startupinfo) as p:
+with subprocess.Popen(
+    f'compact.exe /c /s /a /i /f /exe:lzx "{sourcedir}/*"',
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    bufsize=1,
+    encoding='cp866',
+    text=True,
+    startupinfo=startupinfo,
+) as p:
     for line in p.stdout:
         pogovorit.insert('end', line)
         pogovorit.see('end')

@@ -43,7 +43,7 @@ sortir.withdraw()
 
 # Open source dir
 sourcedir = filedialog.askdirectory(title='Open DIR to compress DOCX files')
-if (sourcedir == ''):
+if sourcedir == '':
     sortir.destroy()
     quit()
 
@@ -74,9 +74,9 @@ if name == 'nt':
 # --------------------------------------------------------------
 
 # Process file list
-for filename in glob(sourcedir + "/**/*.docx", recursive=True):   # select all files in all subfolders
+for filename in glob(sourcedir + "/**/*.docx", recursive=True):  # select all files in all subfolders
 
-    zanyato.config(text=f'Processing {filename}...')      # Updating label, showing processed file name
+    zanyato.config(text=f'Processing {filename}...')  # Updating label, showing processed file name
     sortir.update()
     sortir.update_idletasks()
 

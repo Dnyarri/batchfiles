@@ -70,7 +70,7 @@ sortir.geometry('+100+100')
 sortir.maxsize(800, 600)
 zanyato = Label(sortir, wraplength=800, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
-    
+
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
 pogovorit.pack(fill=BOTH, expand=True)
 
@@ -81,21 +81,21 @@ butt = Button(
     cursor='hand2',
     justify='center',
     state='disabled',
-    command=sortir.destroy
+    command=sortir.destroy,
 )
 butt.pack(fill=X, side=BOTTOM, expand=True)
 
 pogovorit.insert('1.0', 'Allons-y!\n')
 
-sortir.withdraw()   # Main dialog created and hidden
+sortir.withdraw()  # Main dialog created and hidden
 
 # Open source dir
 sourcedir = filedialog.askdirectory(title='DIR to convert FLAC to OGG 48 kHz', initialdir=tryopen, mustexist=True)
-if (sourcedir == ''):
+if sourcedir == '':
     sortir.destroy()
     quit()
 
-path=Path(sourcedir)
+path = Path(sourcedir)
 
 # Updating dialog
 sortir.deiconify()
@@ -113,19 +113,22 @@ file_list = (p.resolve() for p in path.rglob('*.*') if p.suffix in extension_lis
 # Processing file list
 for filename in file_list:
 
-    zanyato.config(text=f'Processing {filename}...')    # Updating UI, showing processed file name
+    zanyato.config(text=f'Processing {filename}...')  # Updating UI, showing processed file name
     pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
     pogovorit.see('end')
     sortir.update()
     sortir.update_idletasks()
 
     currentfile = Path(filename).resolve()  # file to be processed
-    currentdir = Path(filename).resolve().parent    # dir with current file
+    currentdir = Path(filename).resolve().parent  # dir with current file
     currentfile_noext = str(Path(filename).resolve().stem)  # file to be processed without extension
     oggfile = f'{currentdir}\\{currentfile_noext}.ogg'  # resulting file name
 
     # Note: output in quotes below for paths with spaces
-    subprocess.run(f'ffmpeg.exe -loglevel quiet -i "{currentfile}" -map 0:a:? -c:a: libvorbis -aq 10 -ar 48000 -vn -sn -map_metadata:s:0 0:s:0 -metadata comment="" -metadata encoder="" -metadata description="" -metadata copyright="" -metadata encoded_by="" "{oggfile}"', startupinfo=startupinfo)
+    subprocess.run(
+        f'ffmpeg.exe -loglevel quiet -i "{currentfile}" -map 0:a:? -c:a: libvorbis -aq 10 -ar 48000 -vn -sn -map_metadata:s:0 0:s:0 -metadata comment="" -metadata encoder="" -metadata description="" -metadata copyright="" -metadata encoded_by="" "{oggfile}"',
+        startupinfo=startupinfo,
+    )
 
     # currentfile.unlink(missing_ok=True)        # removing source file
 

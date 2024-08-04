@@ -68,8 +68,8 @@ sortir.geometry('+100+100')
 sortir.maxsize(800, 600)
 zanyato = Label(sortir, wraplength=800, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
-    
-progressbar =  Progressbar(sortir, orient='horizontal', mode='indeterminate')
+
+progressbar = Progressbar(sortir, orient='horizontal', mode='indeterminate')
 progressbar.pack(fill=X, side=TOP, expand=True)
 
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
@@ -82,21 +82,21 @@ butt = Button(
     cursor='hand2',
     justify='center',
     state='disabled',
-    command=sortir.destroy
+    command=sortir.destroy,
 )
 butt.pack(fill=X, side=BOTTOM, expand=True)
 
 pogovorit.insert('1.0', 'Allons-y!\n')
 
-sortir.withdraw()   # Main dialog created and hidden
+sortir.withdraw()  # Main dialog created and hidden
 
 # Open source dir
 sourcedir = filedialog.askdirectory(title='DIR to optimize OGG files', initialdir=tryopen, mustexist=True)
-if (sourcedir == ''):
+if sourcedir == '':
     sortir.destroy()
     quit()
 
-path=Path(sourcedir)
+path = Path(sourcedir)
 
 # Updating dialog
 sortir.deiconify()
@@ -111,19 +111,21 @@ startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 # Process file list
 for filename in path.rglob('*.ogg', case_sensitive=False):  # cycle through OGG files in subfolders
 
-    zanyato.config(text=f'Processing {filename}...')    # Updating UI, showing processed file name
+    zanyato.config(text=f'Processing {filename}...')  # Updating UI, showing processed file name
     progressbar.start(50)
     pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
     pogovorit.see('end')
     sortir.update()
     sortir.update_idletasks()
 
-    currentfile = Path(filename).resolve()        # file to be processed
-    tempfile = Path(filename.resolve().parent / 'hujwam.ogg')    # temp file hujwam.ogg
-    currentfile.replace(tempfile)       # move file to temp
+    currentfile = Path(filename).resolve()  # file to be processed
+    tempfile = Path(filename.resolve().parent / 'hujwam.ogg')  # temp file hujwam.ogg
+    currentfile.replace(tempfile)  # move file to temp
 
     # Note: output in quotes below for paths with spaces
-    subprocess.run(f'optivorbis.exe --quiet --vendor_string_action empty "{tempfile}" "{filename}"', startupinfo=startupinfo)
+    subprocess.run(
+        f'optivorbis.exe --quiet --vendor_string_action empty "{tempfile}" "{filename}"', startupinfo=startupinfo
+    )
     # optivorbis.exe writes result from temp back to source location
 
     progressbar.start(50)
@@ -131,7 +133,7 @@ for filename in path.rglob('*.ogg', case_sensitive=False):  # cycle through OGG 
     sortir.update()
     sortir.update_idletasks()
 
-    tempfile.unlink(missing_ok=True)        # removing temp file
+    tempfile.unlink(missing_ok=True)  # removing temp file
 
 zanyato.config(text=f'Finished {sourcedir}')
 progressbar.stop()

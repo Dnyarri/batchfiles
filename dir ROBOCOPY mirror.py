@@ -30,22 +30,11 @@ sortir = Tk()
 sortir.title('Mirror dir with robocopy')
 sortir.geometry('+200+100')
 
-pogovorit = ScrolledText(
-    sortir, 
-    height=26, 
-    wrap='word', 
-    state='normal'
-)
+pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
 pogovorit.pack(fill=BOTH, side=TOP, expand=True)
 
 butt = Button(
-    sortir,
-    text='Bye',
-    font=('arial', 14),
-    cursor='hand2',
-    justify='center',
-    state='disabled',
-    command=sortir.destroy
+    sortir, text='Bye', font=('arial', 14), cursor='hand2', justify='center', state='disabled', command=sortir.destroy
 )
 butt.pack(padx=4, pady=2, fill=X, side=BOTTOM, expand=True)
 
@@ -53,13 +42,13 @@ sortir.withdraw()
 
 # Open source dir
 sourcedir = filedialog.askdirectory(title='Source DIR')
-if (sourcedir == ''):
+if sourcedir == '':
     sortir.destroy()
     quit()
 
 # Open copy dir
 copydir = filedialog.askdirectory(title='Target DIR')
-if (copydir == ''):
+if copydir == '':
     sortir.destroy()
     quit()
 
@@ -74,7 +63,15 @@ startupinfo = subprocess.STARTUPINFO()
 startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
 # Process dir
-with subprocess.Popen(f'robocopy "{sourcedir}" "{copydir}" /MIR /R:10 /W:5 /V /ETA', stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, encoding='cp866', text=True, startupinfo=startupinfo) as p:
+with subprocess.Popen(
+    f'robocopy "{sourcedir}" "{copydir}" /MIR /R:10 /W:5 /V /ETA',
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    bufsize=1,
+    encoding='cp866',
+    text=True,
+    startupinfo=startupinfo,
+) as p:
     for line in p.stdout:
         pogovorit.insert('end', line)
         pogovorit.see('end')

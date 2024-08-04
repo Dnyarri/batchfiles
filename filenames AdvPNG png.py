@@ -40,7 +40,9 @@ sortir.withdraw()
 # --------------------------------------------------------------
 
 # Open source file list
-sourcefilelist = filedialog.askopenfilenames(title='Select PNG files to recompress', filetypes=[('PNG files', '*.png')])  # filtering for PNG
+sourcefilelist = filedialog.askopenfilenames(
+    title='Select PNG files to recompress', filetypes=[('PNG files', '*.png')]
+)  # filtering for PNG
 if sourcefilelist == '':
     quit()
 
@@ -74,7 +76,7 @@ if os.name == 'nt':
 # Process file list string by string in cycle
 for filename in sourcefilelist:
 
-    zanyato.config(text='Processing ' + filename + '...')      # Updating label, showing processed file name
+    zanyato.config(text='Processing ' + filename + '...')  # Updating label, showing processed file name
     sortir.update()
     sortir.update_idletasks()
 

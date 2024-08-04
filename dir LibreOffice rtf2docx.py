@@ -43,29 +43,23 @@ sortir.geometry('+100+100')
 sortir.maxsize(800, 600)
 zanyato = Label(sortir, wraplength=800, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
 zanyato.pack()
-    
-progressbar =  Progressbar(sortir, orient="horizontal", mode="indeterminate")
+
+progressbar = Progressbar(sortir, orient="horizontal", mode="indeterminate")
 progressbar.pack(fill=X, side=TOP, expand=True)
 
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
 pogovorit.pack(fill=BOTH, expand=True)
 
 butt = Button(
-    sortir,
-    text='Bye',
-    font=('arial', 14),
-    cursor='hand2',
-    justify='center',
-    state='disabled',
-    command=sortir.destroy
+    sortir, text='Bye', font=('arial', 14), cursor='hand2', justify='center', state='disabled', command=sortir.destroy
 )
 butt.pack(fill=X, side=BOTTOM, expand=True)
 
-sortir.withdraw()   # Main dialog created and hidden
+sortir.withdraw()  # Main dialog created and hidden
 
 # Open source dir
 sourcedir = filedialog.askdirectory(title='Open DIR to process')
-if (sourcedir == ''):
+if sourcedir == '':
     sortir.destroy()
     quit()
 
@@ -84,17 +78,19 @@ file_list = (p.resolve() for p in path.rglob('*.*') if p.suffix in extension_lis
 
 # Processing file list
 for filename in file_list:
-    
-    zanyato.config(text=f'Processing {filename}...')    # Updating UI
+
+    zanyato.config(text=f'Processing {filename}...')  # Updating UI
     progressbar.start(50)
     pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
     pogovorit.see('end')
     sortir.update()
     sortir.update_idletasks()
 
-    subprocess.run(f'D:/LibreOffice/program/soffice.exe --headless --convert-to {convert_to_format} "{filename}" --outdir "{(Path(filename)).parent}"')
+    subprocess.run(
+        f'D:/LibreOffice/program/soffice.exe --headless --convert-to {convert_to_format} "{filename}" --outdir "{(Path(filename)).parent}"'
+    )
 
-    progressbar.start(50)       # Updating UI
+    progressbar.start(50)  # Updating UI
     pogovorit.insert('end -1 chars', ' Done\n')
     sortir.update()
     sortir.update_idletasks()

@@ -11,13 +11,22 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.08.03"
+__version__ = "2024.08.04"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
 
 from tkinter import filedialog
 from pathlib import Path
+
+Tre = {
+    'Gogol': 'Гоголь',
+    'Tatyana': 'Татьяна',
+    'Olga': 'Ольга',
+    'Darya': 'Дарья',
+    'Maria': 'Мария',
+    'Group': 'Группа',
+}
 
 Dvo = {
     'ya': 'я',
@@ -103,18 +112,21 @@ Rez = {
 
 # Open source dir
 sourcedir = filedialog.askdirectory(title='Open folder with files to process')
-if (sourcedir == ''):
+if sourcedir == '':
     quit()
 
-path=Path(sourcedir)
+path = Path(sourcedir)
 
 # Process file list
-for filename in path.rglob('*.*'):    # select all files in all subfolders
+for filename in path.rglob('*.*'):  # select all files in all subfolders
 
     filename_parent = str((filename).parent)
     filename_str = str((filename).stem)
     fileext_str = str((filename).suffix)
-    
+
+    for was, will in Tre.items():
+        filename_str = filename_str.replace(was, will)
+
     for was, will in Dvo.items():
         filename_str = filename_str.replace(was, will)
 
@@ -125,4 +137,4 @@ for filename in path.rglob('*.*'):    # select all files in all subfolders
 
     # print (filename_dot_ext)
 
-    filename.rename(filename_dot_ext)   # rename it. Probably ".replace" is better
+    filename.rename(filename_dot_ext)  # rename it. Probably ".replace" is better
