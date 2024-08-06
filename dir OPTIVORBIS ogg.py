@@ -26,7 +26,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.07.14"
+__version__ = "2024.08.06"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -137,6 +137,6 @@ for filename in path.rglob('*.ogg', case_sensitive=False):  # cycle through OGG 
 
 zanyato.config(text=f'Finished {sourcedir}')
 progressbar.stop()
-butt.config(text='Dismissed!', state='normal')
+butt.config(text='Finished, Dismissed!', state='normal')
 
 sortir.mainloop()

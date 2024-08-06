@@ -67,7 +67,7 @@ with subprocess.Popen(
     f'robocopy "{sourcedir}" "{copydir}" /MIR /R:10 /W:5 /V /ETA',
     stdout=subprocess.PIPE,
     stderr=subprocess.PIPE,
-    bufsize=1,
+    bufsize=-1,
     encoding='cp866',
     text=True,
     startupinfo=startupinfo,

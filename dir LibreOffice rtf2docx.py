@@ -17,7 +17,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.07.28"
+__version__ = "2024.08.06"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -51,7 +51,13 @@ pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
 pogovorit.pack(fill=BOTH, expand=True)
 
 butt = Button(
-    sortir, text='Bye', font=('arial', 14), cursor='hand2', justify='center', state='disabled', command=sortir.destroy
+    sortir,
+    text='Busy...',
+    font=('arial', 14),
+    cursor='hand2',
+    justify='center',
+    state='disabled',
+    command=sortir.destroy,
 )
 butt.pack(fill=X, side=BOTTOM, expand=True)
 
@@ -97,6 +103,6 @@ for filename in file_list:
 
 zanyato.config(text=f'Finished {sourcedir}')
 progressbar.stop()
-butt.config(state='normal')
+butt.config(text='Finished, Dismissed!', state='normal')
 
 sortir.mainloop()

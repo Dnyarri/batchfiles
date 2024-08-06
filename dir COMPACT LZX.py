@@ -21,7 +21,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.07.14"
+__version__ = "2024.08.06"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -67,7 +67,13 @@ pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
 pogovorit.pack(fill=BOTH, side=TOP, expand=True)
 
 butt = Button(
-    sortir, text='Bye', font=('arial', 14), cursor='hand2', justify='center', state='disabled', command=sortir.destroy
+    sortir,
+    text='Busy...',
+    font=('arial', 14),
+    cursor='hand2',
+    justify='center',
+    state='disabled',
+    command=sortir.destroy,
 )
 butt.pack(padx=4, pady=2, fill=X, side=BOTTOM, expand=True)
 
@@ -105,7 +111,7 @@ with subprocess.Popen(
         sortir.update()
         sortir.update_idletasks()
 
-butt.config(state='normal')
+butt.config(text='Finished, Dismissed!', state='normal')
 
 sortir.update()
 sortir.update_idletasks()
