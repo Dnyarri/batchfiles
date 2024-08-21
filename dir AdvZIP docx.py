@@ -81,7 +81,7 @@ for filename in glob(sourcedir + "/**/*.docx", recursive=True):  # select all fi
     sortir.update_idletasks()
 
     # output in quotes for paths with spaces
-    subprocess.run(f'advzip.exe -q -z -4 -i 20 "{filename}"', startupinfo=startupinfo)
+    subprocess.run(f'advzip.exe -q -z -4 -i 30 "{filename}"', startupinfo=startupinfo)
 
 
 # --------------------------------------------------------------
