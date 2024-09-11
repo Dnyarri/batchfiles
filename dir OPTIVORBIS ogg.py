@@ -66,7 +66,7 @@ sortir = Tk()
 sortir.title('Recompressing .OGG...')
 sortir.geometry('+100+100')
 sortir.maxsize(800, 600)
-zanyato = Label(sortir, wraplength=800, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
+zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 
 progressbar = Progressbar(sortir, orient='horizontal', mode='indeterminate')
@@ -111,7 +111,7 @@ startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 # Process file list
 for filename in path.rglob('*.ogg', case_sensitive=False):  # cycle through OGG files in subfolders
 
-    zanyato.config(text=f'Processing {filename}...')  # Updating UI, showing processed file name
+    zanyato.config(text=f' Processing {filename}... ')  # Updating UI, showing processed file name
     progressbar.start(50)
     pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
     pogovorit.see('end')

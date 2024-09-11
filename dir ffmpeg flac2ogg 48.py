@@ -68,7 +68,7 @@ sortir = Tk()
 sortir.title('flac2ogg 48 kHz')
 sortir.geometry('+100+100')
 sortir.maxsize(800, 600)
-zanyato = Label(sortir, wraplength=800, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
+zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')

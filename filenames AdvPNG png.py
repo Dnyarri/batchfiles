@@ -32,7 +32,7 @@ from tkinter import filedialog
 sortir = Tk()
 sortir.title('Recompressing .PNG...')
 sortir.geometry('+100+100')
-zanyato = Label(sortir, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
+zanyato = Label(sortir, wraplength=700, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 sortir.withdraw()
 
@@ -76,7 +76,7 @@ if os.name == 'nt':
 # Process file list string by string in cycle
 for filename in sourcefilelist:
 
-    zanyato.config(text='Processing ' + filename + '...')  # Updating label, showing processed file name
+    zanyato.config(text=' Processing ' + filename + '... ')  # Updating label, showing processed file name
     sortir.update()
     sortir.update_idletasks()
 

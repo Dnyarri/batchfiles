@@ -41,7 +41,7 @@ sortir = Tk()
 sortir.title('rtf2docx LibreOffice converter')
 sortir.geometry('+100+100')
 sortir.maxsize(800, 600)
-zanyato = Label(sortir, wraplength=800, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
+zanyato = Label(sortir, wraplength=700, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 
 progressbar = Progressbar(sortir, orient="horizontal", mode="indeterminate")
@@ -85,7 +85,7 @@ file_list = (p.resolve() for p in path.rglob('*.*') if p.suffix in extension_lis
 # Processing file list
 for filename in file_list:
 
-    zanyato.config(text=f'Processing {filename}...')  # Updating UI
+    zanyato.config(text=f' Processing {filename}... ')  # Updating UI
     progressbar.start(50)
     pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
     pogovorit.see('end')

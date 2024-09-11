@@ -34,7 +34,8 @@ from tkinter import filedialog
 sortir = Tk()
 sortir.title('Recompressing .docx...')
 sortir.geometry('+100+100')
-zanyato = Label(sortir, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
+sortir.maxsize(800, 600)
+zanyato = Label(sortir, wraplength=700, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 sortir.withdraw()
 
@@ -76,7 +77,7 @@ if name == 'nt':
 # Process file list
 for filename in glob(sourcedir + "/**/*.docx", recursive=True):  # select all files in all subfolders
 
-    zanyato.config(text=f'Processing {filename}...')  # Updating label, showing processed file name
+    zanyato.config(text=f' Processing {filename}... ')  # Updating label, showing processed file name
     sortir.update()
     sortir.update_idletasks()
 
