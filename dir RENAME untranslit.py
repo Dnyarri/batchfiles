@@ -11,7 +11,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.08.04"
+__version__ = "2024.09.24"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -27,7 +27,9 @@ Tre = {
     'Maria': 'Мария',
     'Group': 'Группа',
     'sch': 'щ',
+    'shch': 'щ',
     'Sch': 'Щ',
+    'Shch': 'Щ',
     'yay': 'яй',
 }
 
@@ -43,7 +45,6 @@ Dvo = {
     'ts': 'ц',
     'ch': 'ч',
     'sh': 'ш',
-    'zh': 'ж',
     'YA': 'Я',
     'YO': 'Ё',
     'YU': 'Ю',
@@ -51,7 +52,6 @@ Dvo = {
     'TS': 'Ц',
     'CH': 'Ч',
     'SH': 'Ш',
-    'ZH': 'Ж',
     'Ya': 'Я',
     'Yo': 'Ё',
     'Yu': 'Ю',
@@ -59,7 +59,6 @@ Dvo = {
     'Ts': 'Ц',
     'Ch': 'Ч',
     'Sh': 'Ш',
-    'Zh': 'Ж',
 }
 
 Rez = {
