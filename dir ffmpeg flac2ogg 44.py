@@ -2,7 +2,7 @@
 
 '''
 Opens a folder, and recursively feeds all flac files in it to ffmpeg.exe
-for conversion to ogg 48 kHz, unchanged bit depth, removing built-in preview and other junk.
+for conversion to ogg 16 bit 44.1 kHz, removing built-in preview and other junk.
 
 ffmpeg.exe is available from https://github.com/BtbN/FFmpeg-Builds/
 ("shared" release)
@@ -11,11 +11,11 @@ Resulting ogg files are placed side by side with flac source files.
 
 Also supports commandline arguments. Run:
 
-``pythonw.exe "dir ffmpeg flac2ogg 48.py" "target_name"``
+``pythonw.exe "dir ffmpeg flac2ogg 44.py" "target_name"``
 
 to open in "target_name" dir, or add
 
-``pythonw.exe "dir ffmpeg flac2ogg 48.py" "%1"``
+``pythonw.exe "dir ffmpeg flac2ogg 44.py" "%1"``
 
 to "Send to" or right-click or .bat (use exact addresses of pythonw and this file)
 
@@ -41,9 +41,10 @@ import subprocess
 '''
 run:
 
-``python "dir ffmpeg flac2ogg 48.py" "target_name"``
+``python "dir ffmpeg flac2ogg 44.py" "target_name"``
 
 to open in "target_name" dir
+
 '''
 
 # Add required file extensions here
@@ -65,10 +66,10 @@ else:
 
 # Creating dialog
 sortir = Tk()
-sortir.title('flac2ogg 48 kHz')
+sortir.title('flac2ogg 44.1 kHz')
 sortir.geometry('+100+100')
 sortir.maxsize(800, 600)
-zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
+zanyato = Label(sortir, wraplength=800, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
@@ -90,7 +91,7 @@ pogovorit.insert('1.0', 'Allons-y!\n')
 sortir.withdraw()  # Main dialog created and hidden
 
 # Open source dir
-sourcedir = filedialog.askdirectory(title='DIR to convert FLAC to OGG 48 kHz', initialdir=tryopen, mustexist=True)
+sourcedir = filedialog.askdirectory(title='DIR to convert FLAC to OGG 16 bit 44.1 kHz', initialdir=tryopen, mustexist=True)
 if sourcedir == '':
     sortir.destroy()
     quit()
@@ -126,7 +127,7 @@ for filename in file_list:
 
     # Note: output in quotes below for paths with spaces
     subprocess.run(
-        f'ffmpeg.exe -loglevel quiet -i "{currentfile}" -map 0:a:? -c:a: libvorbis -aq 10 -ar 48000 -vn -sn -map_metadata:s:0 0:s:0 -metadata comment="" -metadata encoder="" -metadata description="" -metadata copyright="" -metadata encoded_by="" "{oggfile}"',
+        f'ffmpeg.exe -loglevel quiet -i "{currentfile}" -map 0:a:? -c:a: libvorbis -aq 10 -af aresample=out_sample_fmt=s16:out_sample_rate=44100 -vn -sn -map_metadata:s:0 0:s:0 -metadata comment="" -metadata encoder="" -metadata description="" -metadata copyright="" -metadata encoded_by="" "{oggfile}"',
         startupinfo=startupinfo,
     )
 
