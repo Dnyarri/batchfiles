@@ -1,6 +1,5 @@
 temp/
 old/
-dir ffmpeg flac2ogg 44.py
 *.7z
 *.zip
 *.json
