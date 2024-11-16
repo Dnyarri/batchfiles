@@ -25,7 +25,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.10.8"
+__version__ = "2024.11.16"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -47,7 +47,7 @@ to open in "target_name" dir
 '''
 
 # Add required file extensions here
-extension_list = ['.flac', '.wav', '.dsf']
+extension_list = ['.flac', '.wav', '.dsf', '.ape']
 
 if len(argv) == 2:
     tryopen = argv[1]
