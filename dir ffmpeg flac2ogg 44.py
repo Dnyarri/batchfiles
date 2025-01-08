@@ -30,13 +30,11 @@ __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
 
-from tkinter import Tk, filedialog, Button, Label, X, BOTH, BOTTOM
-from tkinter.scrolledtext import ScrolledText
-
+import subprocess
 from pathlib import Path
 from sys import argv
-
-import subprocess
+from tkinter import BOTH, BOTTOM, Button, Label, PhotoImage, Tk, X, filedialog
+from tkinter.scrolledtext import ScrolledText
 
 '''
 run:
@@ -69,6 +67,7 @@ sortir = Tk()
 sortir.title('flac2ogg 44.1 kHz')
 sortir.geometry('+100+100')
 sortir.maxsize(800, 600)
+sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00'))
 zanyato = Label(sortir, wraplength=800, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 

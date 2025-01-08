@@ -26,13 +26,11 @@ __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
 
-from tkinter import Tk, filedialog, Button, X, BOTH, TOP, BOTTOM
-from tkinter.scrolledtext import ScrolledText
-
+import subprocess
 from pathlib import Path
 from sys import argv
-
-import subprocess
+from tkinter import BOTH, BOTTOM, TOP, Button, PhotoImage, Tk, X, filedialog
+from tkinter.scrolledtext import ScrolledText
 
 '''
 run:
@@ -62,6 +60,7 @@ sortir = Tk()
 sortir.title('Compact dir with LZX')
 sortir.geometry('+200+100')
 sortir.maxsize(800, 600)
+sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00'))
 
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
 pogovorit.pack(fill=BOTH, side=TOP, expand=True)

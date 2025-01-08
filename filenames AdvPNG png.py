@@ -1,30 +1,26 @@
 #!/usr/bin/env python3
 
-'''
+"""
 Feeds selected PNG files to advpng.exe for recompression and reducing file size.
 advpng.exe is available from https://github.com/amadvance/advancecomp
 
 WARNING:
 Source files are replaced! No backup, no renaming!
 
-'''
+"""
 
-__author__ = "Ilya Razmanov"
-__copyright__ = "(c) 2024 Ilya Razmanov"
-__credits__ = "Ilya Razmanov"
-__license__ = "unlicense"
-__version__ = "2024.02.27"
-__maintainer__ = "Ilya Razmanov"
-__email__ = "ilyarazmanov@gmail.com"
-__status__ = "Production"
+__author__ = 'Ilya Razmanov'
+__copyright__ = '(c) 2024 Ilya Razmanov'
+__credits__ = 'Ilya Razmanov'
+__license__ = 'unlicense'
+__version__ = '2024.02.27'
+__maintainer__ = 'Ilya Razmanov'
+__email__ = 'ilyarazmanov@gmail.com'
+__status__ = 'Production'
 
 import os
-
 import subprocess
-
-from tkinter import Tk
-from tkinter import Label
-from tkinter import filedialog
+from tkinter import Label, Tk, filedialog
 
 # --------------------------------------------------------------
 # Creating dialog
@@ -32,7 +28,7 @@ from tkinter import filedialog
 sortir = Tk()
 sortir.title('Recompressing .PNG...')
 sortir.geometry('+100+100')
-zanyato = Label(sortir, wraplength=700, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
+zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 sortir.withdraw()
 
@@ -40,9 +36,7 @@ sortir.withdraw()
 # --------------------------------------------------------------
 
 # Open source file list
-sourcefilelist = filedialog.askopenfilenames(
-    title='Select PNG files to recompress', filetypes=[('PNG files', '*.png')]
-)  # filtering for PNG
+sourcefilelist = filedialog.askopenfilenames(title='Select PNG files to recompress', filetypes=[('PNG files', '*.png')])  # filtering for PNG
 if sourcefilelist == '':
     quit()
 
@@ -75,7 +69,6 @@ if os.name == 'nt':
 
 # Process file list string by string in cycle
 for filename in sourcefilelist:
-
     zanyato.config(text=' Processing ' + filename + '... ')  # Updating label, showing processed file name
     sortir.update()
     sortir.update_idletasks()

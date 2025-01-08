@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-'''
+"""
 Batch conversion of .rtf, .doc, .odt and .fb2 files into .docx in selected folder, recursively,
 by means of LibreOffice.
 
@@ -11,24 +11,22 @@ Warning: LibreOffice location is hardcoded directly, change it to match you comp
 Created by: Ilya Razmanov (mailto:ilyarazmanov@gmail.com)
             aka Ilyich the Toad (mailto:amphisoft@gmail.com)
 
-'''
+"""
 
-__author__ = "Ilya Razmanov"
-__copyright__ = "(c) 2024 Ilya Razmanov"
-__credits__ = "Ilya Razmanov"
-__license__ = "unlicense"
-__version__ = "2024.08.06"
-__maintainer__ = "Ilya Razmanov"
-__email__ = "ilyarazmanov@gmail.com"
-__status__ = "Production"
-
-from tkinter import Tk, filedialog, Button, Label, X, BOTH, TOP, BOTTOM
-from tkinter.ttk import Progressbar
-from tkinter.scrolledtext import ScrolledText
-
-from pathlib import Path
+__author__ = 'Ilya Razmanov'
+__copyright__ = '(c) 2024 Ilya Razmanov'
+__credits__ = 'Ilya Razmanov'
+__license__ = 'unlicense'
+__version__ = '2024.08.06'
+__maintainer__ = 'Ilya Razmanov'
+__email__ = 'ilyarazmanov@gmail.com'
+__status__ = 'Production'
 
 import subprocess
+from pathlib import Path
+from tkinter import BOTH, BOTTOM, TOP, Button, Label, PhotoImage, Tk, X, filedialog
+from tkinter.scrolledtext import ScrolledText
+from tkinter.ttk import Progressbar
 
 # List of extensions to convert from
 extension_list = {'.rtf', '.doc', '.odt', '.fb2'}
@@ -40,11 +38,12 @@ convert_to_format = 'docx'
 sortir = Tk()
 sortir.title('rtf2docx LibreOffice converter')
 sortir.geometry('+100+100')
+sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00'))
 sortir.maxsize(800, 600)
-zanyato = Label(sortir, wraplength=700, text='Starting...', font=("arial", 12), padx=16, pady=10, justify='center')
+zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 
-progressbar = Progressbar(sortir, orient="horizontal", mode="indeterminate")
+progressbar = Progressbar(sortir, orient='horizontal', mode='indeterminate')
 progressbar.pack(fill=X, side=TOP, expand=True)
 
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
@@ -84,7 +83,6 @@ file_list = (p.resolve() for p in path.rglob('*.*') if p.suffix in extension_lis
 
 # Processing file list
 for filename in file_list:
-
     zanyato.config(text=f' Processing {filename}... ')  # Updating UI
     progressbar.start(50)
     pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
@@ -92,9 +90,7 @@ for filename in file_list:
     sortir.update()
     sortir.update_idletasks()
 
-    subprocess.run(
-        f'D:/LibreOffice/program/soffice.exe --headless --convert-to {convert_to_format} "{filename}" --outdir "{(Path(filename)).parent}"'
-    )
+    subprocess.run(f'D:/LibreOffice/program/soffice.exe --headless --convert-to {convert_to_format} "{filename}" --outdir "{(Path(filename)).parent}"')
 
     progressbar.start(50)  # Updating UI
     pogovorit.insert('end -1 chars', ' Done\n')

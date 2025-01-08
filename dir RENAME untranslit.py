@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
 
-'''
+"""
 Reverting Latin-transliterated Russian to Russian Russian.
 Note that dictionary based on real patterns rather than ISO 9!
 Dictionaries are subject to change.
 
-'''
+"""
 
-__author__ = "Ilya Razmanov"
-__copyright__ = "(c) 2024 Ilya Razmanov"
-__credits__ = "Ilya Razmanov"
-__license__ = "unlicense"
-__version__ = "2024.09.24"
-__maintainer__ = "Ilya Razmanov"
-__email__ = "ilyarazmanov@gmail.com"
-__status__ = "Production"
+__author__ = 'Ilya Razmanov'
+__copyright__ = '(c) 2024 Ilya Razmanov'
+__credits__ = 'Ilya Razmanov'
+__license__ = 'unlicense'
+__version__ = '2024.09.24'
+__maintainer__ = 'Ilya Razmanov'
+__email__ = 'ilyarazmanov@gmail.com'
+__status__ = 'Production'
 
-from tkinter import filedialog
 from pathlib import Path
+from tkinter import filedialog
 
 Tre = {
     'Gogol': 'Гоголь',
@@ -125,7 +125,6 @@ path = Path(sourcedir)
 
 # Process file list
 for filename in path.rglob('*.*'):  # select all files in all subfolders
-
     filename_parent = str((filename).parent)
     filename_str = str((filename).stem)
     fileext_str = str((filename).suffix)

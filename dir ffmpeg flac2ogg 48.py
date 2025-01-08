@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-'''
+"""
 Opens a folder, and recursively feeds all flac files in it to ffmpeg.exe
 for conversion to ogg 48 kHz, unchanged bit depth, removing built-in preview and other junk.
 
@@ -19,32 +19,30 @@ to open in "target_name" dir, or add
 
 to "Send to" or right-click or .bat (use exact addresses of pythonw and this file)
 
-'''
+"""
 
-__author__ = "Ilya Razmanov"
-__copyright__ = "(c) 2024 Ilya Razmanov"
-__credits__ = "Ilya Razmanov"
-__license__ = "unlicense"
-__version__ = "2024.11.16"
-__maintainer__ = "Ilya Razmanov"
-__email__ = "ilyarazmanov@gmail.com"
-__status__ = "Production"
-
-from tkinter import Tk, filedialog, Button, Label, X, BOTH, BOTTOM
-from tkinter.scrolledtext import ScrolledText
-
-from pathlib import Path
-from sys import argv
+__author__ = 'Ilya Razmanov'
+__copyright__ = '(c) 2024 Ilya Razmanov'
+__credits__ = 'Ilya Razmanov'
+__license__ = 'unlicense'
+__version__ = '2024.11.16'
+__maintainer__ = 'Ilya Razmanov'
+__email__ = 'ilyarazmanov@gmail.com'
+__status__ = 'Production'
 
 import subprocess
+from pathlib import Path
+from sys import argv
+from tkinter import BOTH, BOTTOM, Button, Label, PhotoImage, Tk, X, filedialog
+from tkinter.scrolledtext import ScrolledText
 
-'''
+"""
 run:
 
 ``python "dir ffmpeg flac2ogg 48.py" "target_name"``
 
 to open in "target_name" dir
-'''
+"""
 
 # Add required file extensions here
 extension_list = ['.flac', '.wav', '.dsf', '.ape']
@@ -68,6 +66,7 @@ sortir = Tk()
 sortir.title('flac2ogg 48 kHz')
 sortir.geometry('+100+100')
 sortir.maxsize(800, 600)
+sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00'))
 zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 
@@ -112,7 +111,6 @@ file_list = (p.resolve() for p in path.rglob('*.*') if p.suffix in extension_lis
 
 # Processing file list
 for filename in file_list:
-
     zanyato.config(text=f'Processing {filename}...')  # Updating UI, showing processed file name
     pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
     pogovorit.see('end')

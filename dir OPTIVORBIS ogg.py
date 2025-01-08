@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-'''
+"""
 Opens a folder, and recursively feeds all OGG files in it to
 optivorbis.exe
 for recompression and reducing file size.
@@ -20,33 +20,31 @@ to open in "target_name" dir, or add
 
 to "Send to" or right-click or .bat (use exact addresses of pythonw and this file)
 
-'''
+"""
 
-__author__ = "Ilya Razmanov"
-__copyright__ = "(c) 2024 Ilya Razmanov"
-__credits__ = "Ilya Razmanov"
-__license__ = "unlicense"
-__version__ = "2024.08.06"
-__maintainer__ = "Ilya Razmanov"
-__email__ = "ilyarazmanov@gmail.com"
-__status__ = "Production"
-
-from tkinter import Tk, filedialog, Button, Label, X, BOTH, TOP, BOTTOM
-from tkinter.ttk import Progressbar
-from tkinter.scrolledtext import ScrolledText
-
-from pathlib import Path
-from sys import argv
+__author__ = 'Ilya Razmanov'
+__copyright__ = '(c) 2024 Ilya Razmanov'
+__credits__ = 'Ilya Razmanov'
+__license__ = 'unlicense'
+__version__ = '2024.08.06'
+__maintainer__ = 'Ilya Razmanov'
+__email__ = 'ilyarazmanov@gmail.com'
+__status__ = 'Production'
 
 import subprocess
+from pathlib import Path
+from sys import argv
+from tkinter import BOTH, BOTTOM, TOP, Button, Label, PhotoImage, Tk, X, filedialog
+from tkinter.scrolledtext import ScrolledText
+from tkinter.ttk import Progressbar
 
-'''
+"""
 run:
 
 ``python "dir OPTIVORBIS ogg.py" "target_name"``
 
 to open in "target_name" dir
-'''
+"""
 if len(argv) == 2:
     tryopen = argv[1]
     if Path(tryopen).exists():
@@ -66,6 +64,7 @@ sortir = Tk()
 sortir.title('Recompressing .OGG...')
 sortir.geometry('+100+100')
 sortir.maxsize(800, 600)
+sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00'))
 zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 
@@ -110,7 +109,6 @@ startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
 # Process file list
 for filename in path.rglob('*.ogg', case_sensitive=False):  # cycle through OGG files in subfolders
-
     zanyato.config(text=f' Processing {filename}... ')  # Updating UI, showing processed file name
     progressbar.start(50)
     pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
@@ -123,9 +121,7 @@ for filename in path.rglob('*.ogg', case_sensitive=False):  # cycle through OGG 
     currentfile.replace(tempfile)  # move file to temp
 
     # Note: output in quotes below for paths with spaces
-    subprocess.run(
-        f'optivorbis.exe --quiet --vendor_string_action empty "{tempfile}" "{filename}"', startupinfo=startupinfo
-    )
+    subprocess.run(f'optivorbis.exe --quiet --vendor_string_action empty "{tempfile}" "{filename}"', startupinfo=startupinfo)
     # optivorbis.exe writes result from temp back to source location
 
     progressbar.start(50)
