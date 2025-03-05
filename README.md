@@ -20,7 +20,10 @@ Most useful are:
 > and then simply drag-and-drop folders onto shortcut to open program right where you need it.  
 > If argument is absent (e.g., you simply double-click program), program simply opens in default directory and wait for you to browse and point to required location.  
 
-- **dir RENAME untranslit** - batch renaming, intended for Russian users. Программа для оптового переименования (batch renaming) файлов с транслитерированными именами обратно с латиницы на русский (кириллицу). Не соответствует ISO 9, словари переименования составлены на основе того, с чем я лично сталкиваюсь. **Будьте крайне осторожны**, не направляйте эту программу на директории типа Windows или Program Files.
+- **dir RENAME untranslit** - batch renaming, intended **for Russian users**. Программа для оптового переименования (batch renaming) файлов с транслитерированными именами обратно с латиницы на русский (кириллицу). Не соответствует ISO 9, словари переименования составлены на основе того, с чем я лично сталкиваюсь.
+
+> [!CAUTION]
+> **Будьте крайне осторожны**, не направляйте эту программу на директории типа Windows или Program Files!
 
 - **dir RENAME unflibusta** - batch renaming of files according to patterns, like replacing underscores with spaces, removing digits, and so on. Edit rules pattern to your need.
 
