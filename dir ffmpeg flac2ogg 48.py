@@ -25,7 +25,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2024.11.16'
+__version__ = '2025.07.12'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -33,7 +33,7 @@ __status__ = 'Production'
 import subprocess
 from pathlib import Path
 from sys import argv
-from tkinter import BOTH, BOTTOM, Button, Label, PhotoImage, Tk, X, filedialog
+from tkinter import BOTH, BOTTOM, Button, Label, Tk, filedialog
 from tkinter.scrolledtext import ScrolledText
 
 """
@@ -66,7 +66,6 @@ sortir = Tk()
 sortir.title('flac2ogg 48 kHz')
 sortir.geometry('+100+100')
 sortir.maxsize(800, 600)
-sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00'))
 zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 
@@ -82,7 +81,7 @@ butt = Button(
     state='disabled',
     command=sortir.destroy,
 )
-butt.pack(fill=X, side=BOTTOM, expand=True)
+butt.pack(fill='x', side=BOTTOM, expand=True)
 
 pogovorit.insert('1.0', 'Allons-y!\n')
 
@@ -135,6 +134,6 @@ for filename in file_list:
     sortir.update_idletasks()
 
 zanyato.config(text=f'Finished {sourcedir}')
-butt.config(text='Finished, Dismissed!', state='normal')
+butt.config(text='Finished, Dismissed!', bg='spring green', state='normal')
 
 sortir.mainloop()

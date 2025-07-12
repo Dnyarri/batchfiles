@@ -26,7 +26,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2024.08.06'
+__version__ = '2025.07.12'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -34,7 +34,7 @@ __status__ = 'Production'
 import subprocess
 from pathlib import Path
 from sys import argv
-from tkinter import BOTH, BOTTOM, TOP, Button, Label, PhotoImage, Tk, X, filedialog
+from tkinter import BOTH, BOTTOM, TOP, Button, Label, Tk, filedialog
 from tkinter.scrolledtext import ScrolledText
 from tkinter.ttk import Progressbar
 
@@ -64,12 +64,11 @@ sortir = Tk()
 sortir.title('Recompressing .OGG...')
 sortir.geometry('+100+100')
 sortir.maxsize(800, 600)
-sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00'))
 zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 
 progressbar = Progressbar(sortir, orient='horizontal', mode='indeterminate')
-progressbar.pack(fill=X, side=TOP, expand=True)
+progressbar.pack(fill='x', side=TOP, expand=True)
 
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
 pogovorit.pack(fill=BOTH, expand=True)
@@ -83,7 +82,7 @@ butt = Button(
     state='disabled',
     command=sortir.destroy,
 )
-butt.pack(fill=X, side=BOTTOM, expand=True)
+butt.pack(fill='x', side=BOTTOM, expand=True)
 
 pogovorit.insert('1.0', 'Allons-y!\n')
 
@@ -133,6 +132,6 @@ for filename in path.rglob('*.ogg', case_sensitive=False):  # cycle through OGG 
 
 zanyato.config(text=f'Finished {sourcedir}')
 progressbar.stop()
-butt.config(text='Finished, Dismissed!', state='normal')
+butt.config(text='Finished, Dismissed!', bg='spring green', state='normal')
 
 sortir.mainloop()

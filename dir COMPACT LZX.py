@@ -21,7 +21,7 @@ __author__ = "Ilya Razmanov"
 __copyright__ = "(c) 2024 Ilya Razmanov"
 __credits__ = "Ilya Razmanov"
 __license__ = "unlicense"
-__version__ = "2024.08.06"
+__version__ = "2025.07.12"
 __maintainer__ = "Ilya Razmanov"
 __email__ = "ilyarazmanov@gmail.com"
 __status__ = "Production"
@@ -29,7 +29,7 @@ __status__ = "Production"
 import subprocess
 from pathlib import Path
 from sys import argv
-from tkinter import BOTH, BOTTOM, TOP, Button, PhotoImage, Tk, X, filedialog
+from tkinter import BOTH, BOTTOM, TOP, Button, Tk, filedialog
 from tkinter.scrolledtext import ScrolledText
 
 '''
@@ -60,7 +60,6 @@ sortir = Tk()
 sortir.title('Compact dir with LZX')
 sortir.geometry('+200+100')
 sortir.maxsize(800, 600)
-sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00'))
 
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
 pogovorit.pack(fill=BOTH, side=TOP, expand=True)
@@ -74,7 +73,7 @@ butt = Button(
     state='disabled',
     command=sortir.destroy,
 )
-butt.pack(padx=4, pady=2, fill=X, side=BOTTOM, expand=True)
+butt.pack(padx=4, pady=2, fill='x', side=BOTTOM, expand=True)
 
 sortir.withdraw()
 
@@ -110,7 +109,7 @@ with subprocess.Popen(
         sortir.update()
         sortir.update_idletasks()
 
-butt.config(text='Finished, Dismissed!', state='normal')
+butt.config(text='Finished, Dismissed!', bg='spring green', state='normal')
 
 sortir.update()
 sortir.update_idletasks()

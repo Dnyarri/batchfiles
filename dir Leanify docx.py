@@ -22,7 +22,7 @@ __status__ = 'Production'
 import subprocess
 from glob import glob
 from os import name
-from tkinter import Label, PhotoImage, Tk, filedialog
+from tkinter import Label, Tk, filedialog
 
 # --------------------------------------------------------------
 # Creating dialog
@@ -31,7 +31,6 @@ sortir = Tk()
 sortir.title('Recompressing .docx...')
 sortir.geometry('+100+100')
 sortir.maxsize(800, 600)
-sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00'))
 zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 sortir.withdraw()
