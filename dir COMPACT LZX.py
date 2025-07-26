@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-'''
+"""
 Compress selected dir and subdirs using Microsoft compact.exe LZX compression (LZX supported since Windows 8).
 Since compact.exe itself provides recursion and stuff, this program does practically nothing
 but provides nice GUI and remembers all the switches for me.
@@ -15,30 +15,30 @@ to open in "target_name" dir, or add
 
 to "Send to" or right-click or .bat (use exact addresses of pythonw and this file)
 
-'''
+"""
 
-__author__ = "Ilya Razmanov"
-__copyright__ = "(c) 2024 Ilya Razmanov"
-__credits__ = "Ilya Razmanov"
-__license__ = "unlicense"
-__version__ = "2025.07.12"
-__maintainer__ = "Ilya Razmanov"
-__email__ = "ilyarazmanov@gmail.com"
-__status__ = "Production"
+__author__ = 'Ilya Razmanov'
+__copyright__ = '(c) 2024 Ilya Razmanov'
+__credits__ = 'Ilya Razmanov'
+__license__ = 'unlicense'
+__version__ = '2025.07.25'
+__maintainer__ = 'Ilya Razmanov'
+__email__ = 'ilyarazmanov@gmail.com'
+__status__ = 'Production'
 
 import subprocess
 from pathlib import Path
 from sys import argv
-from tkinter import BOTH, BOTTOM, TOP, Button, Tk, filedialog
+from tkinter import Button, Tk, filedialog
 from tkinter.scrolledtext import ScrolledText
 
-'''
+"""
 run:
 
 ``python "dir COMPACT LZX.py" "target_name"``
 
 to open in "target_name" dir
-'''
+"""
 if len(argv) == 2:
     tryopen = argv[1]
     if Path(tryopen).exists():
@@ -51,7 +51,7 @@ if len(argv) == 2:
         else:
             tryopen = Path.cwd()
 else:
-    tryopen = Path.cwd()
+    tryopen = None  # Normally makes it start in MRU
 
 # --------------------------------------------------------------
 # Creating dialog
@@ -62,7 +62,7 @@ sortir.geometry('+200+100')
 sortir.maxsize(800, 600)
 
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
-pogovorit.pack(fill=BOTH, side=TOP, expand=True)
+pogovorit.pack(fill='both', side='top', expand=True)
 
 butt = Button(
     sortir,
@@ -73,7 +73,7 @@ butt = Button(
     state='disabled',
     command=sortir.destroy,
 )
-butt.pack(padx=4, pady=2, fill='x', side=BOTTOM, expand=True)
+butt.pack(padx=4, pady=2, fill='x', side='bottom', expand=True)
 
 sortir.withdraw()
 

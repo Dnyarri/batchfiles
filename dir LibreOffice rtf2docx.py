@@ -17,14 +17,14 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2025.07.12'
+__version__ = '2025.07.25'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
 import subprocess
 from pathlib import Path
-from tkinter import BOTH, BOTTOM, TOP, Button, Label, Tk, filedialog
+from tkinter import Button, Label, Tk, filedialog
 from tkinter.scrolledtext import ScrolledText
 from tkinter.ttk import Progressbar
 
@@ -43,10 +43,10 @@ zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), 
 zanyato.pack()
 
 progressbar = Progressbar(sortir, orient='horizontal', mode='indeterminate')
-progressbar.pack(fill='x', side=TOP, expand=True)
+progressbar.pack(fill='x', side='top', expand=True)
 
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
-pogovorit.pack(fill=BOTH, expand=True)
+pogovorit.pack(fill='both', expand=True)
 
 butt = Button(
     sortir,
@@ -57,7 +57,7 @@ butt = Button(
     state='disabled',
     command=sortir.destroy,
 )
-butt.pack(fill='x', side=BOTTOM, expand=True)
+butt.pack(fill='x', side='bottom', expand=True)
 
 sortir.withdraw()  # Main dialog created and hidden
 

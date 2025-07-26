@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-'''
+"""
 Opens a folder, and recursively feeds all flac files in it to ffmpeg.exe
 for conversion to ogg 16 bit 44.1 kHz, removing built-in preview and other junk.
 
@@ -19,31 +19,31 @@ to open in "target_name" dir, or add
 
 to "Send to" or right-click or .bat (use exact addresses of pythonw and this file)
 
-'''
+"""
 
-__author__ = "Ilya Razmanov"
-__copyright__ = "(c) 2024 Ilya Razmanov"
-__credits__ = "Ilya Razmanov"
-__license__ = "unlicense"
-__version__ = "2025.07.12"
-__maintainer__ = "Ilya Razmanov"
-__email__ = "ilyarazmanov@gmail.com"
-__status__ = "Production"
+__author__ = 'Ilya Razmanov'
+__copyright__ = '(c) 2024 Ilya Razmanov'
+__credits__ = 'Ilya Razmanov'
+__license__ = 'unlicense'
+__version__ = '2025.07.25'
+__maintainer__ = 'Ilya Razmanov'
+__email__ = 'ilyarazmanov@gmail.com'
+__status__ = 'Production'
 
 import subprocess
 from pathlib import Path
 from sys import argv
-from tkinter import BOTH, BOTTOM, Button, Label, Tk, filedialog
+from tkinter import Button, Label, Tk, filedialog
 from tkinter.scrolledtext import ScrolledText
 
-'''
+"""
 run:
 
 ``python "dir ffmpeg flac2ogg 44.py" "target_name"``
 
 to open in "target_name" dir
 
-'''
+"""
 
 # Add required file extensions here
 extension_list = ['.flac', '.wav', '.dsf', '.ape']
@@ -60,7 +60,7 @@ if len(argv) == 2:
         else:
             tryopen = Path.cwd()
 else:
-    tryopen = Path.cwd()
+    tryopen = None  # Normally makes it start in MRU
 
 # Creating dialog
 sortir = Tk()
@@ -71,7 +71,7 @@ zanyato = Label(sortir, wraplength=800, text='Starting...', font=('arial', 12), 
 zanyato.pack()
 
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
-pogovorit.pack(fill=BOTH, expand=True)
+pogovorit.pack(fill='both', expand=True)
 
 butt = Button(
     sortir,
@@ -82,7 +82,7 @@ butt = Button(
     state='disabled',
     command=sortir.destroy,
 )
-butt.pack(fill='x', side=BOTTOM, expand=True)
+butt.pack(fill='x', side='bottom', expand=True)
 
 pogovorit.insert('1.0', 'Allons-y!\n')
 
@@ -111,7 +111,6 @@ file_list = (p.resolve() for p in path.rglob('*.*') if p.suffix in extension_lis
 
 # Processing file list
 for filename in file_list:
-
     zanyato.config(text=f'Processing {filename}...')  # Updating UI, showing processed file name
     pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
     pogovorit.see('end')
