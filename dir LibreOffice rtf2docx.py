@@ -17,7 +17,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2025.07.25'
+__version__ = '2025.8.4'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -42,7 +42,7 @@ sortir.maxsize(800, 600)
 zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 
-progressbar = Progressbar(sortir, orient='horizontal', mode='indeterminate')
+progressbar = Progressbar(sortir, orient='horizontal')
 progressbar.pack(fill='x', side='top', expand=True)
 
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
@@ -67,7 +67,12 @@ if sourcedir == '':
     sortir.destroy()
     quit()
 
+# Creating file list
 path = Path(sourcedir)
+file_list = [p.resolve() for p in path.rglob('*.*') if p.suffix in extension_list]
+file_number = len(file_list)
+progressbar['maximum'] = file_number
+counter = 0
 
 # Updating dialog
 sortir.deiconify()
@@ -77,13 +82,11 @@ pogovorit.insert('1.0', 'Allons-y!\n')
 sortir.update()
 sortir.update_idletasks()
 
-# Creating file list
-file_list = (p.resolve() for p in path.rglob('*.*') if p.suffix in extension_list)
-
 # Processing file list
 for filename in file_list:
     zanyato.config(text=f' Processing {filename}... ')  # Updating UI
-    progressbar.start(50)
+    counter += 1
+    progressbar['value'] = counter
     pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
     pogovorit.see('end')
     sortir.update()
