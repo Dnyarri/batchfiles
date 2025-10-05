@@ -21,7 +21,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2025.07.25'
+__version__ = '2025.10.25'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -58,8 +58,6 @@ else:
 
 sortir = Tk()
 sortir.title('Compact dir with LZX')
-sortir.geometry('+200+100')
-sortir.maxsize(800, 600)
 
 pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
 pogovorit.pack(fill='both', side='top', expand=True)
@@ -68,7 +66,8 @@ butt = Button(
     sortir,
     text='Busy...',
     font=('arial', 14),
-    cursor='hand2',
+    height=2,
+    cursor='wait',
     justify='center',
     state='disabled',
     command=sortir.destroy,
@@ -85,6 +84,13 @@ if sourcedir == '':
 
 # Updating dialog
 sortir.deiconify()
+
+# Center window horizontally, +100 vertically
+sortir.update()
+sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
+sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+100')
+
+# Updating scrolled text
 pogovorit.insert('1.0', 'Allons-y!\n')
 pogovorit.focus()
 sortir.update()
@@ -109,7 +115,7 @@ with subprocess.Popen(
         sortir.update()
         sortir.update_idletasks()
 
-butt.config(text='Finished, Dismissed!', bg='spring green', state='normal')
+butt.config(text='Finished, Dismissed!', bg='spring green', cursor='hand2', state='normal')
 
 sortir.update()
 sortir.update_idletasks()

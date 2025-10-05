@@ -17,7 +17,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2025.8.4'
+__version__ = '2025.10.4'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -37,8 +37,6 @@ convert_to_format = 'docx'
 # Creating dialog
 sortir = Tk()
 sortir.title('rtf2docx LibreOffice converter')
-sortir.geometry('+100+100')
-sortir.maxsize(800, 600)
 zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 
@@ -52,7 +50,8 @@ butt = Button(
     sortir,
     text='Busy...',
     font=('arial', 14),
-    cursor='hand2',
+    height=2,
+    cursor='wait',
     justify='center',
     state='disabled',
     command=sortir.destroy,
@@ -76,6 +75,13 @@ counter = 0
 
 # Updating dialog
 sortir.deiconify()
+
+# Center window horizontally, +100 vertically
+sortir.update()
+sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
+sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+100')
+
+# Updating text
 zanyato.config(text='Allons-y!')
 pogovorit.focus()
 pogovorit.insert('1.0', 'Allons-y!\n')
@@ -101,6 +107,6 @@ for filename in file_list:
 
 zanyato.config(text=f'Finished {sourcedir}')
 progressbar.stop()
-butt.config(text='Finished, Dismissed!', bg='spring green', state='normal')
+butt.config(text='Finished, Dismissed!', bg='spring green', cursor='hand2', state='normal')
 
 sortir.mainloop()
