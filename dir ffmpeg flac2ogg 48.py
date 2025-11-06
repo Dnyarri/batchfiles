@@ -25,7 +25,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2025.10.25'
+__version__ = '2025.11.7'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -112,7 +112,7 @@ startupinfo = subprocess.STARTUPINFO()
 startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
 # Creating file list
-file_list = (p.resolve() for p in path.rglob('*.*') if p.suffix in extension_list)
+file_list = (p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in extension_list)
 
 # Processing file list
 for filename in file_list:

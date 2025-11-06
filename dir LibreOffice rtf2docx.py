@@ -17,7 +17,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2025.10.4'
+__version__ = '2025.11.7'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -68,7 +68,7 @@ if sourcedir == '':
 
 # Creating file list
 path = Path(sourcedir)
-file_list = [p.resolve() for p in path.rglob('*.*') if p.suffix in extension_list]
+file_list = [p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in extension_list]
 file_number = len(file_list)
 progressbar['maximum'] = file_number
 counter = 0
