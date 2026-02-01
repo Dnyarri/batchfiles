@@ -1,27 +1,38 @@
 #!/usr/bin/env python3
 
-"""
-Compress selected dir and subdirs using Microsoft compact.exe LZX compression (LZX supported since Windows 8).
-Since compact.exe itself provides recursion and stuff, this program does practically nothing
-but provides nice GUI and remembers all the switches for me.
+"""GUI for selecting folder to compress with Microsoft ``compact.exe``
+LZX compression (LZX supported since Windows 8).
 
-Also supports commandline arguments. Run:
+Since ``compact.exe`` itself provides recursion and stuff,
+this script does practically nothing but provides nice GUI
+and remembers all the switches.
 
-``pythonw.exe "dir COMPACT LZX.py" "target_name"``
+Current script supports commandline arguments.
 
-to open in "target_name" dir, or add
+Run::
 
-``pythonw.exe "dir COMPACT LZX.py.py" "%1"``
+    pythonw.exe "dir COMPACT LZX.py" "target_name"
 
-to "Send to" or right-click or .bat (use exact addresses of pythonw and this file)
+to open in "target_name" dir, or add::
+
+    pythonw.exe "dir COMPACT LZX.py.py" "%1"
+
+
+to "Send to" or right-click or .bat, or create a shortcut
+(use exact files addresses).
+
+----
+**More Python freeware**: `The Toad's Slimy Mudhole`_
+
+.. _The Toad's Slimy Mudhole: https://dnyarri.github.io/
 
 """
 
 __author__ = 'Ilya Razmanov'
-__copyright__ = '(c) 2024 Ilya Razmanov'
+__copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2025.10.25'
+__version__ = '2026.2.1'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -32,26 +43,19 @@ from sys import argv
 from tkinter import Button, Tk, filedialog
 from tkinter.scrolledtext import ScrolledText
 
-"""
-run:
-
-``python "dir COMPACT LZX.py" "target_name"``
-
-to open in "target_name" dir
-"""
 if len(argv) == 2:
-    tryopen = argv[1]
-    if Path(tryopen).exists():
-        if Path(tryopen).is_file():
-            tryopen = Path(tryopen).parent
+    try_open = argv[1]
+    if Path(try_open).exists():
+        if Path(try_open).is_file():
+            try_open = Path(try_open).parent
     else:
-        tryopen = Path(tryopen).parent
-        if Path(tryopen).exists():
-            tryopen = tryopen
+        try_open = Path(try_open).parent
+        if Path(try_open).exists():
+            try_open = try_open
         else:
-            tryopen = Path.cwd()
+            try_open = Path.cwd()
 else:
-    tryopen = None  # Normally makes it start in MRU
+    try_open = None  # Normally makes it start in MRU
 
 # --------------------------------------------------------------
 # Creating dialog
@@ -77,10 +81,9 @@ butt.pack(padx=4, pady=2, fill='x', side='bottom', expand=True)
 sortir.withdraw()
 
 # Open source dir
-sourcedir = filedialog.askdirectory(title='DIR to compress with LZX', initialdir=tryopen, mustexist=True)
-if sourcedir == '':
+source_dir = filedialog.askdirectory(title='DIR to compress with LZX', initialdir=try_open, mustexist=True)
+if source_dir == '':
     sortir.destroy()
-    quit()
 
 # Updating dialog
 sortir.deiconify()
@@ -101,7 +104,7 @@ startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
 # Process dir
 with subprocess.Popen(
-    f'compact.exe /c /s /a /i /f /exe:lzx "{sourcedir}/*"',
+    f'compact.exe /c /s /a /i /f /exe:lzx "{source_dir}/*"',
     stdout=subprocess.PIPE,
     stderr=subprocess.PIPE,
     bufsize=1,

@@ -1,32 +1,37 @@
 #!/usr/bin/env python3
 
-"""
-Opens a folder, and recursively feeds all OGG files in it to
-optivorbis.exe
-for recompression and reducing file size.
+"""Batch recompression of .ogg files in selected folder, recursively,
+by means of `optivorbis.exe`_
 
-optivorbis.exe is available from https://github.com/OptiVorbis/OptiVorbis/
+Current script supports commandline arguments.
 
-WARNING:
-Source files are replaced! No backup, no mercy!
+Run::
 
-Also supports commandline arguments. Run:
+    pythonw.exe "dir OPTIVORBIS ogg.py" "target_name"
 
-``pythonw.exe "dir OPTIVORBIS ogg.py" "target_name"``
+to open in "target_name" dir, or add::
 
-to open in "target_name" dir, or add
+    pythonw.exe "dir OPTIVORBIS ogg.py" "%1"
 
-``pythonw.exe "dir OPTIVORBIS ogg.py" "%1"``
+to "Send to" or right-click or .bat, or create a shortcut
+(use exact files addresses).
 
-to "Send to" or right-click or .bat (use exact addresses of pythonw and this file)
+----
+**More Python freeware**: `The Toad's Slimy Mudhole`_
+
+.. _The Toad's Slimy Mudhole: https://dnyarri.github.io/
+
+**Optivorbis download**: `optivorbis.exe`_
+
+.. _optivorbis.exe: https://github.com/OptiVorbis/OptiVorbis/
 
 """
 
 __author__ = 'Ilya Razmanov'
-__copyright__ = '(c) 2024 Ilya Razmanov'
+__copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2025.10.4'
+__version__ = '2026.2.1'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -38,26 +43,19 @@ from tkinter import Button, Label, Tk, filedialog
 from tkinter.scrolledtext import ScrolledText
 from tkinter.ttk import Progressbar
 
-"""
-run:
-
-``python "dir OPTIVORBIS ogg.py" "target_name"``
-
-to open in "target_name" dir
-"""
 if len(argv) == 2:
-    tryopen = argv[1]
-    if Path(tryopen).exists():
-        if Path(tryopen).is_file():
-            tryopen = Path(tryopen).parent
+    try_open = argv[1]
+    if Path(try_open).exists():
+        if Path(try_open).is_file():
+            try_open = Path(try_open).parent
     else:
-        tryopen = Path(tryopen).parent
-        if Path(tryopen).exists():
-            tryopen = tryopen
+        try_open = Path(try_open).parent
+        if Path(try_open).exists():
+            try_open = try_open
         else:
-            tryopen = Path.cwd()
+            try_open = Path.cwd()
 else:
-    tryopen = None  # Normally makes it start in MRU
+    try_open = None  # Normally makes it start in MRU
 
 # Creating dialog
 sortir = Tk()
@@ -88,13 +86,12 @@ pogovorit.insert('1.0', 'Allons-y!\n')
 sortir.withdraw()  # Main dialog created and hidden
 
 # Open source dir
-sourcedir = filedialog.askdirectory(title='DIR to optimize OGG files', initialdir=tryopen, mustexist=True)
-if sourcedir == '':
+source_dir = filedialog.askdirectory(title='DIR to optimize OGG files', initialdir=try_open, mustexist=True)
+if source_dir == '':
     sortir.destroy()
-    quit()
 
 # Creating file list
-path = Path(sourcedir)
+path = Path(source_dir)
 file_list = [p for p in path.rglob('*.ogg', case_sensitive=False)]  # list of OGG files in subfolders
 file_number = len(file_list)
 progressbar['maximum'] = file_number
@@ -120,8 +117,8 @@ startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 # Process file list
 for filename in file_list:  # cycle through OGG files in subfolders
     zanyato.config(text=f' Processing {filename}... ')  # Updating UI, showing processed file name
-    counter += 1
     progressbar['value'] = counter
+    counter += 1
     pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
     pogovorit.see('end')
     sortir.update()
@@ -141,8 +138,9 @@ for filename in file_list:  # cycle through OGG files in subfolders
 
     tempfile.unlink(missing_ok=True)  # removing temp file
 
-zanyato.config(text=f'Finished {sourcedir}')
-progressbar.stop()
+zanyato.config(text=f'Finished {source_dir}')
+progressbar['value'] = progressbar['maximum']
+sortir.after(1000, lambda: progressbar.stop())
 butt.config(text='Finished, Dismissed!', bg='spring green', cursor='hand2', state='normal')
 
 sortir.mainloop()

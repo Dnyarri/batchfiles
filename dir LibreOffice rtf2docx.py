@@ -1,23 +1,31 @@
 #!/usr/bin/env python3
 
-"""
-Batch conversion of .rtf, .doc, .odt and .fb2 files into .docx in selected folder, recursively,
-by means of LibreOffice.
+"""Batch conversion of .rtf, .doc, and .odt files into .docx
+in selected folder, recursively, by means of `LibreOffice`_.
 
-May be used for any other conversion LibreOffice can handle (for example, for conversion to pdf) by changing 'extension_list' and 'convert_to_format' appropriately.
+May be used for any other conversion LibreOffice can handle
+(for example, for conversion to pdf) by changing 'extension_list'
+and 'convert_to_format' appropriately.
 
-Warning: LibreOffice location is hardcoded directly, change it to match you computer.
+Warning: LibreOffice location is hardcoded directly,
+change it to match you computer.
 
-Created by: Ilya Razmanov (mailto:ilyarazmanov@gmail.com)
-            aka Ilyich the Toad (mailto:amphisoft@gmail.com)
+----
+**More Python freeware**: `The Toad's Slimy Mudhole`_
+
+.. _The Toad's Slimy Mudhole: https://dnyarri.github.io/
+
+**LibreOffice download**: `LibreOffice`_
+
+.. _LibreOffice: https://www.libreoffice.org/download/download-libreoffice/
 
 """
 
 __author__ = 'Ilya Razmanov'
-__copyright__ = '(c) 2024 Ilya Razmanov'
+__copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2025.11.7'
+__version__ = '2026.2.1'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -29,7 +37,11 @@ from tkinter.scrolledtext import ScrolledText
 from tkinter.ttk import Progressbar
 
 # List of extensions to convert from
-extension_list = {'.rtf', '.doc', '.odt', '.fb2'}
+extension_list = (
+    '.rtf',
+    '.doc',
+    '.odt',
+)
 
 # Extension to convert to
 convert_to_format = 'docx'
@@ -61,13 +73,12 @@ butt.pack(fill='x', side='bottom', expand=True)
 sortir.withdraw()  # Main dialog created and hidden
 
 # Open source dir
-sourcedir = filedialog.askdirectory(title='Open DIR to process')
-if sourcedir == '':
+source_dir = filedialog.askdirectory(title='Open DIR to process')
+if source_dir == '':
     sortir.destroy()
-    quit()
 
 # Creating file list
-path = Path(sourcedir)
+path = Path(source_dir)
 file_list = [p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in extension_list]
 file_number = len(file_list)
 progressbar['maximum'] = file_number
@@ -91,8 +102,8 @@ sortir.update_idletasks()
 # Processing file list
 for filename in file_list:
     zanyato.config(text=f' Processing {filename}... ')  # Updating UI
-    counter += 1
     progressbar['value'] = counter
+    counter += 1
     pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
     pogovorit.see('end')
     sortir.update()
@@ -100,13 +111,13 @@ for filename in file_list:
 
     subprocess.run(f'D:/LibreOffice/program/soffice.exe --headless --convert-to {convert_to_format} "{filename}" --outdir "{(Path(filename)).parent}"')
 
-    progressbar.start(50)  # Updating UI
     pogovorit.insert('end -1 chars', ' Done\n')
     sortir.update()
     sortir.update_idletasks()
 
-zanyato.config(text=f'Finished {sourcedir}')
-progressbar.stop()
+zanyato.config(text=f'Finished {source_dir}')
+progressbar['value'] = progressbar['maximum']
+sortir.after(1000, lambda: progressbar.stop())
 butt.config(text='Finished, Dismissed!', bg='spring green', cursor='hand2', state='normal')
 
 sortir.mainloop()
