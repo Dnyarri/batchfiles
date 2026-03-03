@@ -32,7 +32,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2026.2.1'
+__version__ = '2026.3.3'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -86,6 +86,7 @@ if source_dir == '':
     sortir.destroy()
 
 # Updating dialog
+sortir.title(f'Compacting "{source_dir}/" with LZX')
 sortir.deiconify()
 
 # Center window horizontally, +100 vertically
@@ -118,6 +119,7 @@ with subprocess.Popen(
         sortir.update()
         sortir.update_idletasks()
 
+sortir.title(f'Compacting "{source_dir}/" finished')
 butt.config(text='Finished, Dismissed!', bg='spring green', cursor='hand2', state='normal')
 
 sortir.update()
