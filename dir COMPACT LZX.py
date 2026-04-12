@@ -32,7 +32,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2026.3.3'
+__version__ = '2026.4.12'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -86,7 +86,7 @@ if source_dir == '':
     sortir.destroy()
 
 # Updating dialog
-sortir.title(f'Compacting "{source_dir}/" with LZX')
+sortir.title(f'Compacting "{source_dir.replace("/", "\\")}\\" with LZX')
 sortir.deiconify()
 
 # Center window horizontally, +100 vertically
@@ -105,7 +105,7 @@ startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
 # Process dir
 with subprocess.Popen(
-    f'compact.exe /c /s /a /i /f /exe:lzx "{source_dir}/*"',
+    f'compact.exe /c /s /a /i /f /exe:lzx "{source_dir}\*"',
     stdout=subprocess.PIPE,
     stderr=subprocess.PIPE,
     bufsize=1,
@@ -119,7 +119,7 @@ with subprocess.Popen(
         sortir.update()
         sortir.update_idletasks()
 
-sortir.title(f'Compacting "{source_dir}/" finished')
+sortir.title(f'Compacting "{source_dir.replace("/", "\\")}\\" finished')
 butt.config(text='Finished, Dismissed!', bg='spring green', cursor='hand2', state='normal')
 
 sortir.update()

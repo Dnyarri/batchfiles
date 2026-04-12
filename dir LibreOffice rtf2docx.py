@@ -25,7 +25,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2026.2.1'
+__version__ = '2026.4.12'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -115,7 +115,7 @@ for filename in file_list:
     sortir.update()
     sortir.update_idletasks()
 
-zanyato.config(text=f'Finished {source_dir}')
+zanyato.config(text=f'Finished {source_dir.replace("/", "\\")}\\')
 progressbar['value'] = progressbar['maximum']
 sortir.after(1000, lambda: progressbar.stop())
 butt.config(text='Finished, Dismissed!', bg='spring green', cursor='hand2', state='normal')
