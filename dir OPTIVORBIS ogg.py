@@ -16,6 +16,9 @@ to open in "target_name" dir, or add::
 to "Send to" or right-click or .bat, or create a shortcut
 (use exact files addresses).
 
+.. warning:: optivorbis.exe location is hardcoded directly,
+    change it to match you computer.
+
 ----
 **More Python freeware**: `The Toad's Slimy Mudhole`_
 
@@ -31,7 +34,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2026.4.12'
+__version__ = '26.4.25.17'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'

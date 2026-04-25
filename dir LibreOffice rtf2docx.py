@@ -7,8 +7,8 @@ May be used for any other conversion LibreOffice can handle
 (for example, for conversion to pdf) by changing 'extension_list'
 and 'convert_to_format' appropriately.
 
-Warning: LibreOffice location is hardcoded directly,
-change it to match you computer.
+.. warning:: LibreOffice location is hardcoded directly,
+    change it to match you computer.
 
 ----
 **More Python freeware**: `The Toad's Slimy Mudhole`_
@@ -25,7 +25,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2026.4.12'
+__version__ = '26.4.25.17'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'

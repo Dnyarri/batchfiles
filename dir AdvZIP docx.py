@@ -1,90 +1,139 @@
 #!/usr/bin/env python3
 
 """
-Opens a folder, and recursively feeds all .docx files in it to advzip.exe for recompression and reducing file size.
-advzip.exe is available from https://github.com/amadvance/advancecomp
+Opens a folder, and recursively feeds all .docx and .zip files in it
+to `advzip`_ for recompression and reducing file size.
 
-WARNING:
----------
-Source files are replaced! No backup, no renaming!
+.. warning:: advzip.exe location is hardcoded directly,
+    change it to match you computer.
+
+----
+**More Python freeware**: `The Toad's Slimy Mudhole`_
+
+.. _The Toad's Slimy Mudhole: https://dnyarri.github.io/
+
+**advzip**: `advzip`_
+
+.. _advzip: https://github.com/amadvance/advancecomp
 
 """
 
 __author__ = 'Ilya Razmanov'
-__copyright__ = '(c) 2024 Ilya Razmanov'
+__copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2024.02.27'
+__version__ = '26.4.25.17'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
 import subprocess
-from glob import glob
-from os import name
-from tkinter import Label, Tk, filedialog
+from pathlib import Path
+from sys import argv
+from tkinter import Button, Label, Tk, filedialog
+from tkinter.scrolledtext import ScrolledText
+from tkinter.ttk import Progressbar
 
-# --------------------------------------------------------------
+# Add required file extensions here
+extension_list = (
+    '.docx',
+    '.zip',
+)
+
+if len(argv) == 2:
+    try_open = argv[1]
+    if Path(try_open).exists():
+        if Path(try_open).is_file():
+            try_open = Path(try_open).parent
+    else:
+        try_open = Path(try_open).parent
+        if Path(try_open).exists():
+            try_open = try_open
+        else:
+            try_open = Path.cwd()
+else:
+    try_open = None  # Normally makes it start in MRU
+
 # Creating dialog
-
 sortir = Tk()
-sortir.title('Recompressing .docx...')
-sortir.geometry('+100+100')
-sortir.maxsize(800, 600)
+sortir.title('dir AdvZIP docx')
 zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
-sortir.withdraw()
 
-# Main dialog created and hidden
-# --------------------------------------------------------------
+progressbar = Progressbar(sortir, orient='horizontal')
+progressbar.pack(fill='x', side='top', expand=True)
+
+pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
+pogovorit.pack(fill='both', expand=True)
+
+butt = Button(
+    sortir,
+    text='Busy...',
+    font=('arial', 14),
+    height=2,
+    cursor='wait',
+    justify='center',
+    state='disabled',
+    command=sortir.destroy,
+)
+butt.pack(fill='x', side='bottom', expand=True)
+
+pogovorit.insert('1.0', 'Allons-y!\n')
+
+sortir.withdraw()  # Main dialog created and hidden
 
 # Open source dir
-sourcedir = filedialog.askdirectory(title='Open DIR to compress DOCX files')
-if sourcedir == '':
+source_dir = filedialog.askdirectory(title='DIR to compress DOCX in it', initialdir=try_open, mustexist=True)
+if source_dir == '':
     sortir.destroy()
-    quit()
 
-# --------------------------------------------------------------
+path = Path(source_dir)
+file_list = [p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in extension_list]
+file_number = len(file_list)
+progressbar['maximum'] = file_number
+counter = 0
+
 # Updating dialog
-
 sortir.deiconify()
+
+# Center window horizontally, +100 vertically
+sortir.update()
+sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
+sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+100')
+
+# Updating scrolled text
 zanyato.config(text='Allons-y!')
+pogovorit.focus()
 sortir.update()
 sortir.update_idletasks()
 
-# Dialog shown and updated
-# --------------------------------------------------------------
+# Helping hide console under Windows when it doesn't want to
+startupinfo = subprocess.STARTUPINFO()
+startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-# --------------------------------------------------------------
-# Creating subprocess startupinfo for hidden console. Requires
-# from os import name
-#
+# Creating file list
+file_list = (p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in extension_list)
 
-startupinfo = None
-if name == 'nt':
-    startupinfo = subprocess.STARTUPINFO()
-    startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-
-#
-# now .popen or .run may be used as below:
-# subprocess.run(f'program.exe -switches "{filename}"', startupinfo=startupinfo)
-# --------------------------------------------------------------
-
-# Process file list
-for filename in glob(sourcedir + '/**/*.docx', recursive=True):  # select all files in all subfolders
-    zanyato.config(text=f' Processing {filename}... ')  # Updating label, showing processed file name
+# Processing file list
+for filename in file_list:
+    zanyato.config(text=f'Processing {filename}...')  # Updating UI, showing processed file name
+    progressbar['value'] = counter
+    counter += 1
+    pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
+    pogovorit.see('end')
     sortir.update()
     sortir.update_idletasks()
 
-    # output in quotes for paths with spaces
+    # Note: output in quotes below for paths with spaces
     subprocess.run(f'advzip.exe -q -z -4 -i 30 "{filename}"', startupinfo=startupinfo)
 
+    pogovorit.insert('end -1 chars', ' Done\n')
+    sortir.update()
+    sortir.update_idletasks()
 
-# --------------------------------------------------------------
-# Destroying dialog
+zanyato.config(text=f'Finished {source_dir.replace("/", "\\")}\\')
+progressbar['value'] = progressbar['maximum']
+sortir.after(1000, lambda: progressbar.stop())
+butt.config(text='Finished, Dismissed!', bg='spring green', cursor='hand2', state='normal')
 
-sortir.destroy()
 sortir.mainloop()
-
-# Dialog destroyed and closed
-# --------------------------------------------------------------
