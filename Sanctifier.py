@@ -49,16 +49,17 @@ Therefore, suggested workflow is as following:
 4. If necessary, change icon images order by changing file order in file list
    by selecting a file name and pressing *Ctrl+Up* or *Ctrl+Down* to move
    selected item up or down; *Ctrl+I* fully inverts the list order.
-5. Once satisfied with file list order, press *"Sanctify"* button;
+5. Once satisfied with file list order, press *Enter*;
    icon file *"Save as"* dialog will pop up.
-6. Once finished, don't forget to exit Sanctifier by pressing Ctrl+Q.
+6. If you feel like making one more icon, press *Ctrl+O* to open new file list.
+7. Once finished, don't forget to exit Sanctifier by pressing *Ctrl+Q*.
 
 References
 ----------
 
-1. Original `Make Icon From PNGs`_.
-2. Microsoft `Icons (Design basics)`_.
-3. Efficient yet fast PNG optimizer `oxipng`_.
+1. Original `Make Icon From PNGs`_ program.
+2. Microsoft's `Icons (Design basics)`_ recommendations.
+3. Efficient yet fast PNG optimizer `oxipng`_ repository.
 
 .. _Make Icon From PNGs: https://github.com/emklasson/make-icon-from-pngs
 
@@ -83,12 +84,12 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2026 Ilya Razmanov'
 __credits__ = ['Mikael Klasson', 'Ilya Razmanov']
 __license__ = 'unlicense'
-__version__ = '26.4.24.14'
+__version__ = '26.4.26.6'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
-from tkinter import Button, Label, Listbox, StringVar, Tk, filedialog
+from tkinter import Label, Listbox, StringVar, Tk, filedialog
 
 
 def DisMiss(event=None) -> None:
@@ -97,11 +98,30 @@ def DisMiss(event=None) -> None:
     sortir.destroy()
 
 
+def getList(event=None):
+    """Get source file list."""
+
+    global png_list, png_list_str
+    png_list = list(  # askopenfilenames returns tuple
+        filedialog.askopenfilenames(
+            title='Select PNG files to sanctify',
+            filetypes=[
+                ('Portable network graphics', '.png'),
+            ],
+        )
+    )
+    if png_list == []:  # User pressed `Esc`
+        png_list = [None]  # Dummy for "showSelected" to work
+    else:
+        sortir.bind_all('<Return>', Sanctify)  # Bind export only for non-empty list
+    png_list_str.set(png_list)  # Updating StringVar with new list
+
+
 def showSelected(event=None) -> None:
     """Show item, selected in Listbox, in Label below."""
 
     n = png_listbox.curselection()[0]  # curselection() returns tuple[int,]
-    zanyato['text'] = f'№: {n + 1}; PNG file: {png_list[n]}'
+    zanyato['text'] = f'Icon № {n + 1} out of {len(png_list)}; PNG file: {png_list[n]}'
 
 
 def moveUp(event=None) -> None:
@@ -197,6 +217,7 @@ def Sanctify(event=None) -> None:
             icon_file.write(png.file_data)
             png_data_offset += png.file_size
             image_directory_offset += 16
+    zanyato['text'] = f'File {output_file} written'
 
 
 class Png:
@@ -227,75 +248,63 @@ class Png:
             self.file_size = f.tell()
 
 
-# ↓ Dialog
-sortir = Tk()
-sortir.title('PNG Sanctifier')
-sortir.iconify()
+if __name__ == '__main__':  # Just to make python help(Sanctifier) work.
+    # ↓ Dialog
+    sortir = Tk()
+    sortir.title('PNG Sanctifier')
+    sortir.iconify()
 
-# ↓ Actual list of file names
-png_list = list(  # askopenfilenames returns tuple
-    filedialog.askopenfilenames(
-        title='Select PNG files to sanctify',
-        filetypes=[
-            ('Portable network graphics', '.png'),
-        ],
+    # ↓ Dummy initialize for starting, made to avoid more complex getList()
+    png_list = ['', '']
+    # ↓ List-based list-looking StringVar to be displayed in Listbox
+    png_list_str = StringVar(value=png_list)
+
+    # ↓ Now getting actual "png_list" and "png_list_str"
+    getList()
+
+    # ↓ Listbox
+    png_listbox = Listbox(
+        sortir,
+        selectmode='single',
+        listvariable=png_list_str,
+        width=100,
     )
-)
+    png_listbox.grid(row=0, column=0)
+    png_listbox.bind('<<ListboxSelect>>', showSelected)
+    png_listbox.bind('<Up>', moveUp)
+    png_listbox.bind('<Down>', moveDown)
+    png_listbox.bind('<Control-Up>', makeUp)
+    png_listbox.bind('<Control-Down>', makeDown)
+    png_listbox.bind('<Control-i>', makeInverse)
+    png_listbox.activate(0)
+    png_listbox.select_set(first=0)
 
-# ↓ List-based list-looking StringVar to be displayed in Listbox
-png_list_str = StringVar(value=png_list)
+    # ↓ Currently selected file info
+    zanyato = Label(
+        sortir,
+        text='Sanctify your PNGs - convert them to ICON!',
+        relief='sunken',
+        width=100,
+    )
+    zanyato.grid(row=1, column=0)
 
-# ↓ Listbox
-png_listbox = Listbox(
-    sortir,
-    selectmode='single',
-    listvariable=png_list_str,
-    width=100,
-)
-png_listbox.grid(row=0, column=0)
-png_listbox.bind('<<ListboxSelect>>', showSelected)
-png_listbox.bind('<Up>', moveUp)
-png_listbox.bind('<Down>', moveDown)
-png_listbox.bind('<Control-Up>', makeUp)
-png_listbox.bind('<Control-Down>', makeDown)
-png_listbox.bind('<Control-i>', makeInverse)
+    # ↓ UI hints
+    info = Label(
+        sortir,
+        text='Ctrl+Up or Ctrl+Down to move item up or down; Ctrl+I to invert list; Enter to Export ICO; Ctrl+Q to quit',
+        state='disabled',
+    )
+    info.grid(row=2, column=0, pady=(4, 0))
 
-# ↓ Main button
-sanctify = Button(
-    sortir,
-    text='Sanctify',
-    font=('helvetica', 24),
-    relief='groove',
-    overrelief='ridge',
-    command=Sanctify,
-)
-sanctify.grid(row=0, column=1, sticky='ne', padx=(10, 0))
-sanctify.bind('<Enter>', lambda event=None: sanctify.config(foreground='dark blue', background='#E5F1FB'))
-sanctify.bind('<Leave>', lambda event=None: sanctify.config(foreground='SystemButtonText', background='SystemButtonFace'))
+    sortir.deiconify()  # Without deiconify() it doesn't get focus
 
-# ↓ Currently selected file info
-zanyato = Label(
-    sortir,
-    text='Sanctify your PNGs - convert them to Icon NOW!',
-    relief='sunken',
-    width=100,
-)
-zanyato.grid(row=1, column=0)
+    sortir.bind_all('<Control-o>', getList)
+    sortir.bind_all('<Control-O>', getList)
+    sortir.bind_all('<Control-q>', DisMiss)
+    sortir.bind_all('<Control-Q>', DisMiss)
+    sortir.bind_all('<Control-w>', DisMiss)
+    sortir.bind_all('<Control-W>', DisMiss)
 
-# ↓ UI hints
-info = Label(
-    sortir,
-    text='Ctrl+Up and Ctrl+Down to move file up and down; Ctrl+I to invert list; Ctrl+Q to quit',
-    state='disabled',
-)
-info.grid(row=2, column=0, columnspan=2, pady=(4, 0))
+    png_listbox.focus_set()
 
-sortir.deiconify()  # Without iconify()/deiconify() it doesn't get focus 😡
-
-sortir.bind_all('<Return>', Sanctify)
-sortir.bind_all('<Control-q>', DisMiss)
-sortir.bind_all('<Control-Q>', DisMiss)
-sortir.bind_all('<Control-w>', DisMiss)
-sortir.bind_all('<Control-W>', DisMiss)
-
-sortir.mainloop()
+    sortir.mainloop()
