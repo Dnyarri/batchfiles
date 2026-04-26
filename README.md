@@ -20,7 +20,10 @@ Most frequently used are:
 > and then simply drag-and-drop folders onto shortcut to open program right where you need it.  
 > If argument is absent (e.g., you simply double-click program), program simply opens GUI in default directory and wait for you to browse and point to required location.  
 
-- **Sanctifier** - not a batch script but self-containing PNG to ICO converter, developed for assembling Windows icon (.ICO) files from PNG files without introducing changes to the latter. The main idea is that Sanctifier simply inserts compressed PNG data into ICO skeleton, keeping source compression. This allows me to compress source PNGs to maximum degree first, and then use them to assemble multiple image single file ICO of minimal size.
+- **Sanctifier** - not a batch script but self-containing PNG to ICO converter, developed for assembling Windows icon (.ICO) files from PNG files without introducing any changes to the latter. The main idea is that Sanctifier simply inserts compressed PNG data into ICO skeleton, keeping source compression. This allows you to compress source PNGs to maximum degree first, and then use them to assemble multiple image single file ICO of minimal size, following simple steps below:
+  1. Create your PNG files and save them into **one** folder.
+  2. Optimize PNG files thus created ([oxipng](https://github.com/oxipng/oxipng) is highly recommended).
+  3. Start Sanctifier.py, select PNGs to assemble your ICO, follow hints displayed in info string of GUI.
 
 - **dir AdvZIP docx** - recompressing .docx after *dir LibreOffice rtf2docx* using [AdvZIP](https://github.com/amadvance/advancecomp) gives up to 10% space saving.  
 
