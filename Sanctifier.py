@@ -84,7 +84,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2026 Ilya Razmanov'
 __credits__ = ['Mikael Klasson', 'Ilya Razmanov']
 __license__ = 'unlicense'
-__version__ = '26.4.26.6'
+__version__ = '26.4.28.18'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -102,8 +102,9 @@ def getList(event=None):
     """Get source file list."""
 
     global png_list, png_list_str
-    png_list = list(  # askopenfilenames returns tuple
+    png_list = list(  # askopenfilenames returns tuple, not a list
         filedialog.askopenfilenames(
+            parent=sortir,
             title='Select PNG files to sanctify',
             filetypes=[
                 ('Portable network graphics', '.png'),
@@ -111,10 +112,20 @@ def getList(event=None):
         )
     )
     if png_list == []:  # User pressed `Esc`
-        png_list = [None]  # Dummy for "showSelected" to work
+        png_list = ['No PNG file chosen']  # Dummy for `png_list` and `png_list[0]` to have a `len`
+        zanyato['text'] = 'Sanctify your PNGs - convert them to ICON!'
+        sortir.unbind_all('<Return>')  # User pressed `Esc` in a non-first run
     else:
         sortir.bind_all('<Return>', Sanctify)  # Bind export only for non-empty list
     png_list_str.set(png_list)  # Updating StringVar with new list
+    png_listbox.select_set(first=0)
+    # ↓ Readopting 'sortir.minsize' to fit the screen.
+    png_listbox['width'] = max(60, max(len(filename) for filename in png_list))
+    png_listbox['height'] = len(png_list) + 1
+    sortir.update()
+    fit_width = min(sortir.winfo_reqwidth(), 8 * sortir.winfo_screenwidth() // 10)
+    fit_height = min(sortir.winfo_reqheight(), 8 * sortir.winfo_screenheight() // 10)
+    sortir.minsize(fit_width, fit_height)
 
 
 def showSelected(event=None) -> None:
@@ -252,24 +263,23 @@ if __name__ == '__main__':  # Just to make python help(Sanctifier) work.
     # ↓ Dialog
     sortir = Tk()
     sortir.title('PNG Sanctifier')
-    sortir.iconify()
+    sortir.iconify()  # Not really needed, but I need sortir.deiconify() to get focus
 
     # ↓ Dummy initialize for starting, made to avoid more complex getList()
     png_list = ['', '']
     # ↓ List-based list-looking StringVar to be displayed in Listbox
     png_list_str = StringVar(value=png_list)
 
-    # ↓ Now getting actual "png_list" and "png_list_str"
-    getList()
-
     # ↓ Listbox
     png_listbox = Listbox(
         sortir,
         selectmode='single',
         listvariable=png_list_str,
-        width=100,
+        font=('helvetica', 10),
+        height=len(png_list) + 1,
+        selectborderwidth=2,
     )
-    png_listbox.grid(row=0, column=0)
+    png_listbox.grid(row=0, column=0, sticky='we')
     png_listbox.bind('<<ListboxSelect>>', showSelected)
     png_listbox.bind('<Up>', moveUp)
     png_listbox.bind('<Down>', moveDown)
@@ -283,18 +293,22 @@ if __name__ == '__main__':  # Just to make python help(Sanctifier) work.
     zanyato = Label(
         sortir,
         text='Sanctify your PNGs - convert them to ICON!',
+        font=png_listbox['font'],
         relief='sunken',
-        width=100,
     )
-    zanyato.grid(row=1, column=0)
+    zanyato.grid(row=1, column=0, sticky='we')
 
     # ↓ UI hints
-    info = Label(
+    hints = Label(
         sortir,
-        text='Ctrl+Up or Ctrl+Down to move item up or down; Ctrl+I to invert list; Enter to Export ICO; Ctrl+Q to quit',
+        text=' Ctrl+Up or Ctrl+Down to move item up or down; Ctrl+I to invert list; Enter to Export ICO; Ctrl+O to open new list; Ctrl+Q to quit ',
+        font=('helvetica', 8),
         state='disabled',
     )
-    info.grid(row=2, column=0, pady=(4, 0))
+    hints.grid(row=2, column=0, sticky='we', pady=(4, 0))
+
+    # ↓ Now getting actual "png_list" and "png_list_str"
+    getList()
 
     sortir.deiconify()  # Without deiconify() it doesn't get focus
 
@@ -306,5 +320,10 @@ if __name__ == '__main__':  # Just to make python help(Sanctifier) work.
     sortir.bind_all('<Control-W>', DisMiss)
 
     png_listbox.focus_set()
+
+    sortir.update()
+    # ↓ Setting 'sortir.maxsize' to fit 90% of screen
+    sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
+    sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+64')
 
     sortir.mainloop()
