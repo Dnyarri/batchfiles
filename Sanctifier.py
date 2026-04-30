@@ -30,15 +30,17 @@ and use best specialized PNG optimizing software, thus making resulting
 ICO file size noticeably smaller than that provided by regular icon editors,
 based upon regular PNG implementation.
 
-Therefore, suggested workflow is as following:
+Suggested workflow is as following:
 
 1. Create a set of images (according to `Icons (Design basics)`_
    16, 32, 48 and 256 pixel sizes seem to be a minimal set,
    although adding 20, 24, 40, 64 and 96 px is often recommended),
-   and save a copies of your working images as PNG files **in one folder**.
-2. Run a PNG optimizer on these files (`oxipng`_ gives *ca.* 10% savings).
+   and save a copies of your images as PNG files **in one folder**.
+2. Run a PNG optimizer on these files (for example, `oxipng`_ provides
+   *ca.* 10% savings on a 256*256px photo-like PNGs).
 3. Start Sanctifier.py. Immediately a file *"Open"* dialog, allowing
-   multiple selection, will pop up.
+   multiple file selection, will pop up.
+   Select PNG files intended to be used for icon construction.
 
    .. note:: Select **all** the necessary files at once, then
         press *"Open"* button.
@@ -63,7 +65,7 @@ References
 
 .. _Make Icon From PNGs: https://github.com/emklasson/make-icon-from-pngs
 
-.. _Icons (Design basics): https://learn.microsoft.com/en-us/windows/win32/uxguide/vis-icons
+.. _Icons (Design basics): https://learn.microsoft.com/en-us/windows/win32/uxguide/vis-icons#size-requirements
 
 .. _oxipng: https://github.com/oxipng/oxipng
 
@@ -84,12 +86,16 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2026 Ilya Razmanov'
 __credits__ = ['Mikael Klasson', 'Ilya Razmanov']
 __license__ = 'unlicense'
-__version__ = '26.4.28.18'
+__version__ = '26.5.1.1'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
-from tkinter import Label, Listbox, StringVar, Tk, filedialog
+from tkinter import Label, Listbox, PhotoImage, StringVar, Tk, filedialog
+
+""" ╒═══════════════╕
+    │ GUI functions │
+    ╰───────────────╯ """
 
 
 def DisMiss(event=None) -> None:
@@ -105,20 +111,33 @@ def getList(event=None):
     png_list = list(  # askopenfilenames returns tuple, not a list
         filedialog.askopenfilenames(
             parent=sortir,
-            title='Select PNG files to sanctify',
+            title='Select PNG files to build ICO from',
             filetypes=[
                 ('Portable network graphics', '.png'),
             ],
         )
     )
-    if png_list == []:  # User pressed `Esc`
-        png_list = ['No PNG file chosen']  # Dummy for `png_list` and `png_list[0]` to have a `len`
+
+    # ↓ If user cancelled files selection, unbind export and events from Listbox
+    #   and assign some dummy for `png_list` and `png_list[0]` to have a `len`.
+    if png_list == []:
+        png_list = ['No PNG file chosen']
         zanyato['text'] = 'Sanctify your PNGs - convert them to ICON!'
-        sortir.unbind_all('<Return>')  # User pressed `Esc` in a non-first run
+        sortir.unbind_all('<Return>')
+        for event in bindings:
+            png_listbox.unbind(event[0])
+
+    # ↓ If user selected files, bind export and events
+    #   to Listbox in case they were unbound before.
     else:
-        sortir.bind_all('<Return>', Sanctify)  # Bind export only for non-empty list
+        zanyato['text'] = f'{len(png_list)} PNGs to be sanctified to ICON'
+        sortir.bind_all('<Return>', Sanctify)
+        for event in bindings:
+            png_listbox.bind(event[0], event[1])
+
     png_list_str.set(png_list)  # Updating StringVar with new list
     png_listbox.select_set(first=0)
+    png_listbox.activate(0)
     # ↓ Readopting 'sortir.minsize' to fit the screen.
     png_listbox['width'] = max(60, max(len(filename) for filename in png_list))
     png_listbox['height'] = len(png_list) + 1
@@ -132,7 +151,10 @@ def showSelected(event=None) -> None:
     """Show item, selected in Listbox, in Label below."""
 
     n = png_listbox.curselection()[0]  # curselection() returns tuple[int,]
-    zanyato['text'] = f'Icon № {n + 1} out of {len(png_list)}; PNG file: {png_list[n]}'
+    filename = png_list[n]
+    img = PhotoImage(file=filename)
+    img_width, img_height = img.width(), img.height()  # Reading PNG X and Y
+    zanyato['text'] = f' Icon № {n + 1} out of {len(png_list)}; X = {img_width} px, Y = {img_height} px ← File {filename} '
 
 
 def moveUp(event=None) -> None:
@@ -199,11 +221,13 @@ def Sanctify(event=None) -> None:
     if output_file == '':
         return None
 
-    # ↓ Writing export file.
-    #   Largely based on: https://github.com/emklasson/make-icon-from-pngs
+    """ ╒═════════════╕
+        │ ICO writing │
+        ╰─────────────╯ """
+
+    # ↓ Largely based on: https://github.com/emklasson/make-icon-from-pngs
     with open(output_file, 'wb') as icon_file:
-        icon_file.write(b'\x00\x00')
-        icon_file.write(b'\x01\x00')
+        icon_file.write(b'\x00\x00\x01\x00')
         image_count = len(png_list)
         icon_file.write(image_count.to_bytes(2, byteorder='little'))
         image_directory_offset = 6
@@ -229,6 +253,11 @@ def Sanctify(event=None) -> None:
             png_data_offset += png.file_size
             image_directory_offset += 16
     zanyato['text'] = f'File {output_file} written'
+
+
+""" ╒═════════════╕
+    │ PNG reading │
+    ╰─────────────╯ """
 
 
 class Png:
@@ -260,12 +289,15 @@ class Png:
 
 
 if __name__ == '__main__':  # Just to make python help(Sanctifier) work.
-    # ↓ Dialog
+    """ ╒═════════════╕
+        │ Main dialog │
+        ╰─────────────╯ """
     sortir = Tk()
-    sortir.title('PNG Sanctifier')
-    sortir.iconify()  # Not really needed, but I need sortir.deiconify() to get focus
+    sortir.title(f'PNG Sanctifier {__version__}')
+    sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x7f\x00\xff\xff\x00\xff\x00\xff\x00\xff\xff'))
+    sortir.iconify()  # Not really needed, but sortir.deiconify() required to get focus
 
-    # ↓ Dummy initialize for starting, made to avoid more complex getList()
+    # ↓ Dummy initialize for starting, just to avoid more complex getList()
     png_list = ['', '']
     # ↓ List-based list-looking StringVar to be displayed in Listbox
     png_list_str = StringVar(value=png_list)
@@ -280,12 +312,21 @@ if __name__ == '__main__':  # Just to make python help(Sanctifier) work.
         selectborderwidth=2,
     )
     png_listbox.grid(row=0, column=0, sticky='we')
-    png_listbox.bind('<<ListboxSelect>>', showSelected)
-    png_listbox.bind('<Up>', moveUp)
-    png_listbox.bind('<Down>', moveDown)
-    png_listbox.bind('<Control-Up>', makeUp)
-    png_listbox.bind('<Control-Down>', makeDown)
-    png_listbox.bind('<Control-i>', makeInverse)
+
+    # ↓ tuple(tuple('event', function),) to bind to / unbind from Listbox
+    bindings = (
+        ('<<ListboxSelect>>', showSelected),
+        ('<Up>', moveUp),
+        ('<Down>', moveDown),
+        ('<Control-Up>', makeUp),
+        ('<Control-Down>', makeDown),
+        ('<Control-i>', makeInverse),
+    )
+
+    # ↓ Initial binding of tuple(tuple('event', function),) above
+    for event in bindings:
+        png_listbox.bind(event[0], event[1])
+
     png_listbox.activate(0)
     png_listbox.select_set(first=0)
 
@@ -307,8 +348,7 @@ if __name__ == '__main__':  # Just to make python help(Sanctifier) work.
     )
     hints.grid(row=2, column=0, sticky='we', pady=(4, 0))
 
-    # ↓ Now getting actual "png_list" and "png_list_str"
-    getList()
+    getList()  # Now getting actual "png_list" and "png_list_str"
 
     sortir.deiconify()  # Without deiconify() it doesn't get focus
 
