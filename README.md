@@ -2,6 +2,8 @@
 
 Current repository comprizes various batch files created for my personal use and appeared to be so useful that I even update and improve them from time to time.
 
+## Main batch files
+
 Most batchfiles are equipped with GUI, some intended to be used as templates for further editing.
 Most frequently used are:  
 
@@ -20,11 +22,6 @@ Most frequently used are:
 > and then simply drag-and-drop folders onto shortcut to open program right where you need it.  
 > If argument is absent (e.g., you simply double-click program), program simply opens GUI in default directory and wait for you to browse and point to required location.  
 
-- **Sanctifier** - not a batch script but self-containing PNG to ICO converter, developed for assembling Windows icon (.ICO) files from PNG files without introducing any changes to the latter. The main idea is that Sanctifier simply inserts compressed PNG data into ICO skeleton, keeping source compression. This allows you to compress source PNGs to maximum degree first, and then use them to assemble multiple image single file ICO of minimal size, following simple steps below:
-  1. Create your PNG files and save them into **one** folder.
-  2. Optimize PNG files thus created ([oxipng](https://github.com/oxipng/oxipng) is highly recommended).
-  3. Start Sanctifier.py, select PNGs to assemble your ICO, follow hints displayed in info string of GUI.
-
 - **dir AdvZIP docx** - recompressing .docx after *dir LibreOffice rtf2docx* using [AdvZIP](https://github.com/amadvance/advancecomp) gives up to 10% space saving.  
 
 - **dir RENAME untranslit** - batch renaming, intended **for Russian users**. Программа для оптового переименования (batch renaming) файлов с транслитерированными именами обратно с латиницы на русский (кириллицу). Не соответствует ISO 9, словари переименования составлены на основе того, с чем я лично сталкиваюсь.
@@ -36,6 +33,14 @@ Most frequently used are:
 
 > [!NOTE]
 > *dir RENAME unflibusta.py* was initially created to batch fix silly filename convention for files downloaded from [Flibusta](https://flibusta.is/) and is supposed to be edited at will as you encounter any other silly file naming scheme.
+
+## Sanctifier
+
+[**Sanctifier**](https://dnyarri.github.io/batch.html#sanctifier "Pure Python program for assembling Windows ICO from PNG files") actually is not a batch script but self-containing pure Python PNG to ICO converter, developed for assembling Windows icon (.ICO) files from PNG files without introducing any changes to the latter. The main idea is that Sanctifier simply inserts compressed PNG data into ICO skeleton *as is*, keeping source compression. This allows you to compress source PNGs to maximum degree first, and then use them to assemble multiple image single file ICO of minimal size, following simple steps below:
+
+  1. Create your PNG files and save them into **one** folder.
+  2. Optimize PNG files thus created ([oxipng](https://github.com/oxipng/oxipng) is highly recommended).
+  3. Start Sanctifier.py, select PNGs to assemble your ICO, follow hints displayed in info string of GUI.
 
 ## Related links
 
