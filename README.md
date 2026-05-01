@@ -42,6 +42,8 @@ Most frequently used are:
   2. Optimize PNG files thus created ([oxipng](https://github.com/oxipng/oxipng) is highly recommended).
   3. Start Sanctifier.py, select PNGs to assemble your ICO, follow hints displayed in info string of GUI.
 
+[![Sanctifier GUI](https://dnyarri.github.io/batch/sanctifier.png "Sanctifier PNG to ICO converter GUI")](https://dnyarri.github.io/batch.html#sanctifier "Pure Python program for assembling Windows ICO from PNG files")
+
 ## Related links
 
 [Dnyarri website - more Python freeware for image processing, 3D, and batch automation](https://dnyarri.github.io "The Toad's Slimy Mudhole - Python freeware for POV-Ray and other 3D, Scale2x, Scale3x, Scale2xSFX, Scale3xSFX, PPM and PGM image support, bilinear and barycentric image interpolation, and batch processing") by the same author.
