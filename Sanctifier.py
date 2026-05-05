@@ -86,7 +86,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2026 Ilya Razmanov'
 __credits__ = ['Mikael Klasson', 'Ilya Razmanov']
 __license__ = 'unlicense'
-__version__ = '26.5.1.1'
+__version__ = '26.5.5.5'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -122,15 +122,15 @@ def getList(event=None):
     #   and assign some dummy for `png_list` and `png_list[0]` to have a `len`.
     if png_list == []:
         png_list = ['No PNG file chosen']
-        zanyato['text'] = 'Sanctify your PNGs - convert them to ICON!'
-        sortir.unbind_all('<Return>')
-        for event in bindings:
+        zanyato['text'] = 'Sanctify your PNGs - convert them to ICON!\n'
+        sortir.unbind_all('<Return>')  # Unbinding export
+        for event in bindings:  # Unbinding events from Listbox
             png_listbox.unbind(event[0])
 
     # ↓ If user selected files, bind export and events
     #   to Listbox in case they were unbound before.
     else:
-        zanyato['text'] = f'{len(png_list)} PNGs to be sanctified to ICON'
+        zanyato['text'] = f'{len(png_list)} PNGs to be sanctified to ICON\n'
         sortir.bind_all('<Return>', Sanctify)
         for event in bindings:
             png_listbox.bind(event[0], event[1])
@@ -154,11 +154,11 @@ def showSelected(event=None) -> None:
     filename = png_list[n]
     img = PhotoImage(file=filename)
     img_width, img_height = img.width(), img.height()  # Reading PNG X and Y
-    zanyato['text'] = f' Icon № {n + 1} out of {len(png_list)}; X = {img_width} px, Y = {img_height} px ← File {filename} '
+    zanyato['text'] = f' Icon № {n + 1} out of {len(png_list)}; width {img_width} px, height {img_height} px \n File {filename} '
 
 
-def moveUp(event=None) -> None:
-    """Move both focus and selection up, no change to list itself."""
+def selectUp(event=None) -> None:
+    """Move selection up, no change to list itself."""
 
     n = png_listbox.curselection()[0]
     if n > 0:
@@ -167,8 +167,8 @@ def moveUp(event=None) -> None:
     showSelected()
 
 
-def moveDown(event=None) -> None:
-    """Move both focus and selection down, no change to list itself."""
+def selectDown(event=None) -> None:
+    """Move selection down, no change to list itself."""
 
     n = png_listbox.curselection()[0]
     if n < len(png_list) - 1:
@@ -177,7 +177,7 @@ def moveDown(event=None) -> None:
     showSelected()
 
 
-def makeUp(event=None) -> None:
+def makeUp(event=None) -> None:  # No Moon Prism Power consumed
     """Push selected item up the list by exchanging it with previous one."""
 
     n = png_listbox.curselection()[0]
@@ -316,8 +316,8 @@ if __name__ == '__main__':  # Just to make python help(Sanctifier) work.
     # ↓ tuple(tuple('event', function),) to bind to / unbind from Listbox
     bindings = (
         ('<<ListboxSelect>>', showSelected),
-        ('<Up>', moveUp),
-        ('<Down>', moveDown),
+        ('<Up>', selectUp),
+        ('<Down>', selectDown),
         ('<Control-Up>', makeUp),
         ('<Control-Down>', makeDown),
         ('<Control-i>', makeInverse),
@@ -335,6 +335,7 @@ if __name__ == '__main__':  # Just to make python help(Sanctifier) work.
         sortir,
         text='Sanctify your PNGs - convert them to ICON!',
         font=png_listbox['font'],
+        justify='left',
         relief='sunken',
     )
     zanyato.grid(row=1, column=0, sticky='we')
@@ -342,8 +343,9 @@ if __name__ == '__main__':  # Just to make python help(Sanctifier) work.
     # ↓ UI hints
     hints = Label(
         sortir,
-        text=' Ctrl+Up or Ctrl+Down to move item up or down; Ctrl+I to invert list; Enter to Export ICO; Ctrl+O to open new list; Ctrl+Q to quit ',
+        text=' Ctrl+Up or Ctrl+Down to move item up or down; Ctrl+I to invert list; \n Enter to Export ICO; Ctrl+O to open new list; Ctrl+Q to quit ',
         font=('helvetica', 8),
+        justify='left',
         state='disabled',
     )
     hints.grid(row=2, column=0, sticky='we', pady=(4, 0))
