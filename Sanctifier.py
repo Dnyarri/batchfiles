@@ -86,7 +86,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2026 Ilya Razmanov'
 __credits__ = ['Mikael Klasson', 'Ilya Razmanov']
 __license__ = 'unlicense'
-__version__ = '26.5.5.5'
+__version__ = '26.5.9.5'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -118,11 +118,16 @@ def getList(event=None):
         )
     )
 
+    # ↓ Restoring default colors in case previous ones were a warning.
+    zanyato['foreground'] = 'SystemButtonText'
+    zanyato['background'] = 'SystemButtonFace'
+
     # ↓ If user cancelled files selection, unbind export and events from Listbox
     #   and assign some dummy for `png_list` and `png_list[0]` to have a `len`.
     if png_list == []:
-        png_list = ['No PNG file chosen']
-        zanyato['text'] = 'Sanctify your PNGs - convert them to ICON!\n'
+        png_list = ['No PNG file chosen']  # Dummy
+        png_listbox.select_clear(first=0)
+        zanyato['text'] = 'Sanctify your PNGs - convert them to ICON!'
         sortir.unbind_all('<Return>')  # Unbinding export
         for event in bindings:  # Unbinding events from Listbox
             png_listbox.unbind(event[0])
@@ -130,14 +135,15 @@ def getList(event=None):
     # ↓ If user selected files, bind export and events
     #   to Listbox in case they were unbound before.
     else:
-        zanyato['text'] = f'{len(png_list)} PNGs to be sanctified to ICON\n'
-        sortir.bind_all('<Return>', Sanctify)
-        for event in bindings:
+        png_listbox.select_set(first=0)
+        png_listbox.activate(0)
+        showSelected()
+        sortir.bind_all('<Return>', Sanctify)  # Binding export
+        for event in bindings:  # Binding events to Listbox
             png_listbox.bind(event[0], event[1])
 
-    png_list_str.set(png_list)  # Updating StringVar with new list
-    png_listbox.select_set(first=0)
-    png_listbox.activate(0)
+    png_list_str.set(png_list)  # Updating StringVar with new list, be it real or dummy
+
     # ↓ Readopting 'sortir.minsize' to fit the screen.
     png_listbox['width'] = max(60, max(len(filename) for filename in png_list))
     png_listbox['height'] = len(png_list) + 1
@@ -153,7 +159,13 @@ def showSelected(event=None) -> None:
     n = png_listbox.curselection()[0]  # curselection() returns tuple[int,]
     filename = png_list[n]
     img = PhotoImage(file=filename)
-    img_width, img_height = img.width(), img.height()  # Reading PNG X and Y
+    img_width, img_height = img.width(), img.height()  # Reading PNG width and height
+    if img_width > 256 or img_height > 256:  # Warn user unobtrusively
+        zanyato['foreground'] = f'#{64:02x}{0:02x}{0:02x}'
+        zanyato['background'] = f'#{255:02x}{200:02x}{200:02x}'
+    else:  # Restore Tkinter defaults
+        zanyato['foreground'] = 'SystemButtonText'
+        zanyato['background'] = 'SystemButtonFace'
     zanyato['text'] = f' Icon № {n + 1} out of {len(png_list)}; width {img_width} px, height {img_height} px \n File {filename} '
 
 
