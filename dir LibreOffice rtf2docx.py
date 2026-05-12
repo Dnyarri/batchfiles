@@ -25,7 +25,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.4.25.17'
+__version__ = '26.5.12.19'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -49,6 +49,10 @@ convert_to_format = 'docx'
 # Creating dialog
 sortir = Tk()
 sortir.title('rtf2docx LibreOffice converter')
+icon_path = Path(__file__).resolve().parent / 'dnyarri.ico'
+if icon_path.exists():
+    sortir.iconbitmap(icon_path)
+
 zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 
@@ -76,48 +80,48 @@ sortir.withdraw()  # Main dialog created and hidden
 source_dir = filedialog.askdirectory(title='Open DIR to process')
 if source_dir == '':
     sortir.destroy()
+else:
+    # Creating file list
+    path = Path(source_dir)
+    file_list = [p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in extension_list]
+    file_number = len(file_list)
+    progressbar['maximum'] = file_number
+    counter = 0
 
-# Creating file list
-path = Path(source_dir)
-file_list = [p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in extension_list]
-file_number = len(file_list)
-progressbar['maximum'] = file_number
-counter = 0
+    # Updating dialog
+    sortir.deiconify()
 
-# Updating dialog
-sortir.deiconify()
+    # Center window horizontally, +100 vertically
+    sortir.update()
+    sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
+    sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+100')
 
-# Center window horizontally, +100 vertically
-sortir.update()
-sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
-sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+100')
-
-# Updating text
-zanyato.config(text='Allons-y!')
-pogovorit.focus()
-pogovorit.insert('1.0', 'Allons-y!\n')
-sortir.update()
-sortir.update_idletasks()
-
-# Processing file list
-for filename in file_list:
-    zanyato.config(text=f' Processing {filename}... ')  # Updating UI
-    progressbar['value'] = counter
-    counter += 1
-    pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
-    pogovorit.see('end')
+    # Updating text
+    zanyato.config(text='Allons-y!')
+    pogovorit.focus()
+    pogovorit.insert('1.0', 'Allons-y!\n')
     sortir.update()
     sortir.update_idletasks()
 
-    subprocess.run(f'D:/LibreOffice/program/soffice.exe --headless --convert-to {convert_to_format} "{filename}" --outdir "{(Path(filename)).parent}"')
+    # Processing file list
+    for filename in file_list:
+        zanyato.config(text=f' Processing {filename}... ')  # Updating UI
+        progressbar['value'] = counter
+        counter += 1
+        pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
+        pogovorit.see('end')
+        sortir.update()
+        sortir.update_idletasks()
 
-    pogovorit.insert('end -1 chars', ' Done\n')
-    sortir.update()
-    sortir.update_idletasks()
+        subprocess.run(f'D:/LibreOffice/program/soffice.exe --headless --convert-to {convert_to_format} "{filename}" --outdir "{(Path(filename)).parent}"')
 
-zanyato.config(text=f'Finished {source_dir.replace("/", "\\")}\\')
-progressbar['value'] = progressbar['maximum']
-sortir.after(1000, lambda: progressbar.stop())
-butt.config(text='Finished, Dismissed!', bg='spring green', cursor='hand2', state='normal')
+        pogovorit.insert('end -1 chars', ' Done\n')
+        sortir.update()
+        sortir.update_idletasks()
+
+    zanyato.config(text=f'Finished {source_dir.replace("/", "\\")}\\')
+    progressbar['value'] = progressbar['maximum']
+    sortir.after(1000, lambda: progressbar.stop())
+    butt.config(text='Finished, Dismissed!', bg='spring green', cursor='hand2', state='normal')
 
 sortir.mainloop()

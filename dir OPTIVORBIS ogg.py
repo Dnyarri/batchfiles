@@ -34,7 +34,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.4.25.17'
+__version__ = '26.5.12.19'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -63,6 +63,10 @@ else:
 # Creating dialog
 sortir = Tk()
 sortir.title('Recompressing .OGG...')
+icon_path = Path(__file__).resolve().parent / 'dnyarri.ico'
+if icon_path.exists():
+    sortir.iconbitmap(icon_path)
+
 zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 
@@ -92,58 +96,58 @@ sortir.withdraw()  # Main dialog created and hidden
 source_dir = filedialog.askdirectory(title='DIR to optimize OGG files', initialdir=try_open, mustexist=True)
 if source_dir == '':
     sortir.destroy()
+else:
+    # Creating file list
+    path = Path(source_dir)
+    file_list = [p for p in path.rglob('*.ogg', case_sensitive=False)]  # list of OGG files in subfolders
+    file_number = len(file_list)
+    progressbar['maximum'] = file_number
+    counter = 0
 
-# Creating file list
-path = Path(source_dir)
-file_list = [p for p in path.rglob('*.ogg', case_sensitive=False)]  # list of OGG files in subfolders
-file_number = len(file_list)
-progressbar['maximum'] = file_number
-counter = 0
+    # Updating dialog
+    sortir.deiconify()
 
-# Updating dialog
-sortir.deiconify()
+    # Center window horizontally, +100 vertically
+    sortir.update()
+    sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
+    sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+100')
 
-# Center window horizontally, +100 vertically
-sortir.update()
-sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
-sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+100')
-
-# Updating scrolled text
-zanyato.config(text='Allons-y!')
-pogovorit.focus()
-sortir.update()
-sortir.update_idletasks()
-
-startupinfo = subprocess.STARTUPINFO()
-startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
-
-# Process file list
-for filename in file_list:  # cycle through OGG files in subfolders
-    zanyato.config(text=f' Processing {filename}... ')  # Updating UI, showing processed file name
-    progressbar['value'] = counter
-    counter += 1
-    pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
-    pogovorit.see('end')
+    # Updating scrolled text
+    zanyato.config(text='Allons-y!')
+    pogovorit.focus()
     sortir.update()
     sortir.update_idletasks()
 
-    currentfile = Path(filename).resolve()  # file to be processed
-    tempfile = Path(filename.resolve().parent / 'hujwam.ogg')  # temp file hujwam.ogg
-    currentfile.replace(tempfile)  # move file to temp
+    startupinfo = subprocess.STARTUPINFO()
+    startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-    # Note: output in quotes below for paths with spaces
-    subprocess.run(f'optivorbis.exe --quiet --vendor_string_action empty "{tempfile}" "{filename}"', startupinfo=startupinfo)
-    # optivorbis.exe writes result from temp back to source location
+    # Process file list
+    for filename in file_list:  # cycle through OGG files in subfolders
+        zanyato.config(text=f' Processing {filename}... ')  # Updating UI, showing processed file name
+        progressbar['value'] = counter
+        counter += 1
+        pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
+        pogovorit.see('end')
+        sortir.update()
+        sortir.update_idletasks()
 
-    pogovorit.insert('end -1 chars', ' Done\n')
-    sortir.update()
-    sortir.update_idletasks()
+        currentfile = Path(filename).resolve()  # file to be processed
+        tempfile = Path(filename.resolve().parent / 'hujwam.ogg')  # temp file hujwam.ogg
+        currentfile.replace(tempfile)  # move file to temp
 
-    tempfile.unlink(missing_ok=True)  # removing temp file
+        # Note: output in quotes below for paths with spaces
+        subprocess.run(f'optivorbis.exe --quiet --vendor_string_action empty "{tempfile}" "{filename}"', startupinfo=startupinfo)
+        # optivorbis.exe writes result from temp back to source location
 
-zanyato.config(text=f'Finished {source_dir.replace("/", "\\")}\\')
-progressbar['value'] = progressbar['maximum']
-sortir.after(1000, lambda: progressbar.stop())
-butt.config(text='Finished, Dismissed!', bg='spring green', cursor='hand2', state='normal')
+        pogovorit.insert('end -1 chars', ' Done\n')
+        sortir.update()
+        sortir.update_idletasks()
+
+        tempfile.unlink(missing_ok=True)  # removing temp file
+
+    zanyato.config(text=f'Finished {source_dir.replace("/", "\\")}\\')
+    progressbar['value'] = progressbar['maximum']
+    sortir.after(1000, lambda: progressbar.stop())
+    butt.config(text='Finished, Dismissed!', bg='spring green', cursor='hand2', state='normal')
 
 sortir.mainloop()
