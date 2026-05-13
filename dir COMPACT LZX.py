@@ -43,6 +43,7 @@ from sys import argv
 from tkinter import Button, Tk, filedialog
 from tkinter.scrolledtext import ScrolledText
 
+# ↓ In case command line or shortcut was used
 if len(argv) == 2:
     try_open = argv[1]
     if Path(try_open).exists():
@@ -57,9 +58,7 @@ if len(argv) == 2:
 else:
     try_open = None  # Normally makes it start in MRU
 
-# --------------------------------------------------------------
-# Creating dialog
-
+# ↓ Creating dialog
 sortir = Tk()
 sortir.title('Compact dir with LZX')
 icon_path = Path(__file__).resolve().parent / 'dnyarri.ico'
@@ -83,30 +82,29 @@ butt.pack(padx=4, pady=2, fill='x', side='bottom', expand=True)
 
 sortir.withdraw()
 
-# Open source dir
+# ↓ Open source dir
 source_dir = filedialog.askdirectory(title='DIR to compress with LZX', initialdir=try_open, mustexist=True)
 if source_dir == '':
     sortir.destroy()
 else:
-    # Updating dialog
+    # ↓ Updating dialog
     sortir.title(f'Compacting "{source_dir.replace("/", "\\")}\\" with LZX')
     sortir.deiconify()
-
-    # Center window horizontally, +100 vertically
     sortir.update()
     sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
     sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+100')
 
-    # Updating scrolled text
+    # ↓ Updating scrolled text
     pogovorit.insert('1.0', 'Allons-y!\n')
     pogovorit.focus()
     sortir.update()
     sortir.update_idletasks()
 
+    # ↓ `startupinfo` to force subprocess window hide under Windows
     startupinfo = subprocess.STARTUPINFO()
     startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-    # Process dir
+    # ↓ Process dir
     with subprocess.Popen(
         f'compact.exe /c /s /a /i /f /exe:lzx "{source_dir}\\*"',
         stdout=subprocess.PIPE,

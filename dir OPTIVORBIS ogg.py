@@ -46,6 +46,7 @@ from tkinter import Button, Label, Tk, filedialog
 from tkinter.scrolledtext import ScrolledText
 from tkinter.ttk import Progressbar
 
+# ↓ In case command line or shortcut was used
 if len(argv) == 2:
     try_open = argv[1]
     if Path(try_open).exists():
@@ -60,7 +61,7 @@ if len(argv) == 2:
 else:
     try_open = None  # Normally makes it start in MRU
 
-# Creating dialog
+# ↓ Creating dialog
 sortir = Tk()
 sortir.title('Recompressing .OGG...')
 icon_path = Path(__file__).resolve().parent / 'dnyarri.ico'
@@ -92,36 +93,35 @@ pogovorit.insert('1.0', 'Allons-y!\n')
 
 sortir.withdraw()  # Main dialog created and hidden
 
-# Open source dir
+# ↓ Open source dir
 source_dir = filedialog.askdirectory(title='DIR to optimize OGG files', initialdir=try_open, mustexist=True)
 if source_dir == '':
     sortir.destroy()
 else:
-    # Creating file list
+    # ↓ Creating file list
     path = Path(source_dir)
     file_list = [p for p in path.rglob('*.ogg', case_sensitive=False)]  # list of OGG files in subfolders
     file_number = len(file_list)
     progressbar['maximum'] = file_number
     counter = 0
 
-    # Updating dialog
+    # ↓ Updating dialog
     sortir.deiconify()
-
-    # Center window horizontally, +100 vertically
     sortir.update()
     sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
     sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+100')
 
-    # Updating scrolled text
+    # ↓ Updating scrolled text
     zanyato.config(text='Allons-y!')
     pogovorit.focus()
     sortir.update()
     sortir.update_idletasks()
 
+    # ↓ `startupinfo` to force subprocess window hide under Windows
     startupinfo = subprocess.STARTUPINFO()
     startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-    # Process file list
+    # ↓ Process file list
     for filename in file_list:  # cycle through OGG files in subfolders
         zanyato.config(text=f' Processing {filename}... ')  # Updating UI, showing processed file name
         progressbar['value'] = counter
@@ -135,7 +135,7 @@ else:
         tempfile = Path(filename.resolve().parent / 'hujwam.ogg')  # temp file hujwam.ogg
         currentfile.replace(tempfile)  # move file to temp
 
-        # Note: output in quotes below for paths with spaces
+        # ↓ Note: output in quotes below for paths with spaces
         subprocess.run(f'optivorbis.exe --quiet --vendor_string_action empty "{tempfile}" "{filename}"', startupinfo=startupinfo)
         # optivorbis.exe writes result from temp back to source location
 

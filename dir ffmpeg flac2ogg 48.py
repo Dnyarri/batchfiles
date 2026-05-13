@@ -47,7 +47,7 @@ from tkinter import Button, Label, Tk, filedialog
 from tkinter.scrolledtext import ScrolledText
 from tkinter.ttk import Progressbar
 
-# Add required file extensions here
+# ↓ Add required file extensions here
 extension_list = (
     '.flac',
     '.wav',
@@ -55,6 +55,7 @@ extension_list = (
     '.ape',
 )
 
+# ↓ In case command line or shortcut was used
 if len(argv) == 2:
     try_open = argv[1]
     if Path(try_open).exists():
@@ -69,7 +70,7 @@ if len(argv) == 2:
 else:
     try_open = None  # Normally makes it start in MRU
 
-# Creating dialog
+# ↓ Creating dialog
 sortir = Tk()
 sortir.title('flac2ogg 48 kHz')
 icon_path = Path(__file__).resolve().parent / 'dnyarri.ico'
@@ -101,7 +102,7 @@ pogovorit.insert('1.0', 'Allons-y!\n')
 
 sortir.withdraw()  # Main dialog created and hidden
 
-# Open source dir
+# ↓ Open source dir
 source_dir = filedialog.askdirectory(title='DIR to convert FLAC to OGG 48 kHz', initialdir=try_open, mustexist=True)
 if source_dir == '':
     sortir.destroy()
@@ -112,27 +113,25 @@ else:
     progressbar['maximum'] = file_number
     counter = 0
 
-    # Updating dialog
     sortir.deiconify()
-
-    # Center window horizontally, +100 vertically
     sortir.update()
     sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
     sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+100')
 
-    # Updating scrolled text
+    # ↓ Updating scrolled text
     zanyato.config(text='Allons-y!')
     pogovorit.focus()
     sortir.update()
     sortir.update_idletasks()
 
+    # ↓ `startupinfo` to force subprocess window hide under Windows
     startupinfo = subprocess.STARTUPINFO()
     startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-    # Creating file list
+    # ↓ Creating file list
     file_list = (p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in extension_list)
 
-    # Processing file list
+    # ↓ Processing file list
     for filename in file_list:
         zanyato.config(text=f'Processing {filename}...')  # Updating UI, showing processed file name
         progressbar['value'] = counter
@@ -147,7 +146,7 @@ else:
         currentfile_noext = str(Path(filename).resolve().stem)  # file to be processed without extension
         oggfile = f'{currentdir}\\{currentfile_noext}.ogg'  # resulting file name
 
-        # Note: output in quotes below for paths with spaces
+        # ↓ Note: output in quotes below for paths with spaces
         subprocess.run(
             f'ffmpeg.exe -loglevel quiet -i "{currentfile}" -map 0:a:? -c:a: libvorbis -aq 10 -ar 48000 -vn -sn -map_metadata:s:0 0:s:0 -metadata comment="" -metadata encoder="" -metadata description="" -metadata copyright="" -metadata encoded_by="" "{oggfile}"',
             startupinfo=startupinfo,

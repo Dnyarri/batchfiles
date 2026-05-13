@@ -36,17 +36,17 @@ from tkinter import Button, Label, Tk, filedialog
 from tkinter.scrolledtext import ScrolledText
 from tkinter.ttk import Progressbar
 
-# List of extensions to convert from
+# ↓ List of extensions to convert from
 extension_list = (
     '.rtf',
     '.doc',
     '.odt',
 )
 
-# Extension to convert to
+# ↓ Extension to convert to
 convert_to_format = 'docx'
 
-# Creating dialog
+# ↓ Creating dialog
 sortir = Tk()
 sortir.title('rtf2docx LibreOffice converter')
 icon_path = Path(__file__).resolve().parent / 'dnyarri.ico'
@@ -76,34 +76,32 @@ butt.pack(fill='x', side='bottom', expand=True)
 
 sortir.withdraw()  # Main dialog created and hidden
 
-# Open source dir
+# ↓ Open source dir
 source_dir = filedialog.askdirectory(title='Open DIR to process')
 if source_dir == '':
     sortir.destroy()
 else:
-    # Creating file list
+    # ↓ Creating file list
     path = Path(source_dir)
     file_list = [p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in extension_list]
     file_number = len(file_list)
     progressbar['maximum'] = file_number
     counter = 0
 
-    # Updating dialog
+    # ↓ Updating dialog
     sortir.deiconify()
-
-    # Center window horizontally, +100 vertically
     sortir.update()
     sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
     sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+100')
 
-    # Updating text
+    # ↓ Updating text
     zanyato.config(text='Allons-y!')
     pogovorit.focus()
     pogovorit.insert('1.0', 'Allons-y!\n')
     sortir.update()
     sortir.update_idletasks()
 
-    # Processing file list
+    # ↓ Processing file list
     for filename in file_list:
         zanyato.config(text=f' Processing {filename}... ')  # Updating UI
         progressbar['value'] = counter
