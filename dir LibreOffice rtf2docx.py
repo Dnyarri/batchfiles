@@ -25,7 +25,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.5.12.19'
+__version__ = '26.5.15.15'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -53,7 +53,7 @@ icon_path = Path(__file__).resolve().parent / 'dnyarri.ico'
 if icon_path.exists():
     sortir.iconbitmap(icon_path)
 
-zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
+zanyato = Label(sortir, wraplength=700, text='Starting...', font=('helvetica', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 
 progressbar = Progressbar(sortir, orient='horizontal')
@@ -65,7 +65,7 @@ pogovorit.pack(fill='both', expand=True)
 butt = Button(
     sortir,
     text='Busy...',
-    font=('arial', 14),
+    font=('helvetica', 14),
     height=2,
     cursor='wait',
     justify='center',
@@ -77,7 +77,7 @@ butt.pack(fill='x', side='bottom', expand=True)
 sortir.withdraw()  # Main dialog created and hidden
 
 # ↓ Open source dir
-source_dir = filedialog.askdirectory(title='Open DIR to process')
+source_dir = filedialog.askdirectory(title='DIR to process RTF to DOCX')
 if source_dir == '':
     sortir.destroy()
 else:
@@ -95,7 +95,7 @@ else:
     sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+100')
 
     # ↓ Updating text
-    zanyato.config(text='Allons-y!')
+    zanyato.config(text='Starting LibreOffice...')
     pogovorit.focus()
     pogovorit.insert('1.0', 'Allons-y!\n')
     sortir.update()

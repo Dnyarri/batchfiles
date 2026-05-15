@@ -34,7 +34,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.5.12.19'
+__version__ = '26.5.15.15'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -68,7 +68,7 @@ icon_path = Path(__file__).resolve().parent / 'dnyarri.ico'
 if icon_path.exists():
     sortir.iconbitmap(icon_path)
 
-zanyato = Label(sortir, wraplength=700, text='Starting...', font=('arial', 12), padx=16, pady=10, justify='center')
+zanyato = Label(sortir, wraplength=700, text='Starting...', font=('helvetica', 12), padx=16, pady=10, justify='center')
 zanyato.pack()
 
 progressbar = Progressbar(sortir, orient='horizontal')
@@ -80,7 +80,7 @@ pogovorit.pack(fill='both', expand=True)
 butt = Button(
     sortir,
     text='Busy...',
-    font=('arial', 14),
+    font=('helvetica', 14),
     height=2,
     cursor='wait',
     justify='center',

@@ -32,7 +32,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.5.12.19'
+__version__ = '26.5.15.15'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -71,7 +71,7 @@ pogovorit.pack(fill='both', side='top', expand=True)
 butt = Button(
     sortir,
     text='Busy...',
-    font=('arial', 14),
+    font=('helvetica', 14),
     height=2,
     cursor='wait',
     justify='center',
