@@ -86,11 +86,12 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2026 Ilya Razmanov'
 __credits__ = ['Mikael Klasson', 'Ilya Razmanov']
 __license__ = 'unlicense'
-__version__ = '26.5.9.5'
+__version__ = '26.6.6.6'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
+from pathlib import Path
 from tkinter import Label, Listbox, PhotoImage, StringVar, Tk, filedialog
 
 """ ╒═══════════════╕
@@ -229,6 +230,7 @@ def Sanctify(event=None) -> None:
         title='Save Windows ICO file',
         filetypes=[('Windows icon file', '.ico')],
         defaultextension='.ico',
+        initialfile=Path(png_list[0]).stem + '.ico',
     )
     if output_file == '':
         return None
