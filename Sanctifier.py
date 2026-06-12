@@ -86,7 +86,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2026 Ilya Razmanov'
 __credits__ = ['Mikael Klasson', 'Ilya Razmanov']
 __license__ = 'unlicense'
-__version__ = '26.6.6.6'
+__version__ = '26.6.12.12'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -266,6 +266,8 @@ def Sanctify(event=None) -> None:
             icon_file.write(png.file_data)
             png_data_offset += png.file_size
             image_directory_offset += 16
+    zanyato['foreground'] = f'#{0:02x}{64:02x}{0:02x}'
+    zanyato['background'] = f'#{200:02x}{255:02x}{200:02x}'
     zanyato['text'] = f'File {output_file} written'
 
 
@@ -379,7 +381,7 @@ if __name__ == '__main__':  # Just to make python help(Sanctifier) work.
 
     sortir.update()
     # ↓ Setting 'sortir.maxsize' to fit 90% of screen
-    sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
+    sortir.maxsize(8 * sortir.winfo_screenwidth() // 10, 8 * sortir.winfo_screenheight() // 10)
     sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+64')
 
     sortir.mainloop()

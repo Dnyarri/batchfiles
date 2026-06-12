@@ -25,7 +25,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.5.15.15'
+__version__ = '26.6.12.12'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -91,8 +91,8 @@ else:
     # ↓ Updating dialog
     sortir.deiconify()
     sortir.update()
-    sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
-    sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+100')
+    sortir.maxsize(8 * sortir.winfo_screenwidth() // 10, 8 * sortir.winfo_screenheight() // 10)
+    sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+64')
 
     # ↓ Updating text
     zanyato.config(text='Starting LibreOffice...')
@@ -120,6 +120,7 @@ else:
     zanyato.config(text=f'Finished {source_dir.replace("/", "\\")}\\')
     progressbar['value'] = progressbar['maximum']
     sortir.after(1000, lambda: progressbar.stop())
-    butt.config(text='Finished, Dismissed!', bg='spring green', cursor='hand2', state='normal')
+    butt.config(text='Finished, Dismissed!', bg='green1', cursor='hand2', state='normal')
+    sortir.after(1000, lambda: butt.config(bg='green3'))
 
 sortir.mainloop()
