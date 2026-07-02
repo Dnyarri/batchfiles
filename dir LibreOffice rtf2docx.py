@@ -4,7 +4,7 @@
 in selected folder, recursively, by means of `LibreOffice`_.
 
 May be used for any other conversion LibreOffice can handle
-(for example, for conversion to pdf) by changing 'extension_list'
+(for example, for conversion to pdf) by changing 'convert_from_format'
 and 'convert_to_format' appropriately.
 
 .. warning:: LibreOffice location is hardcoded directly,
@@ -25,7 +25,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.6.12.12'
+__version__ = '26.7.2.8'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -37,7 +37,7 @@ from tkinter.scrolledtext import ScrolledText
 from tkinter.ttk import Progressbar
 
 # ↓ List of extensions to convert from
-extension_list = (
+convert_from_format = (
     '.rtf',
     '.doc',
     '.odt',
@@ -45,6 +45,9 @@ extension_list = (
 
 # ↓ Extension to convert to
 convert_to_format = 'docx'
+
+# ↓ LibreOffice location
+exe_location = 'D:/LibreOffice/program/soffice.exe'
 
 # ↓ Creating dialog
 sortir = Tk()
@@ -83,7 +86,7 @@ if source_dir == '':
 else:
     # ↓ Creating file list
     path = Path(source_dir)
-    file_list = [p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in extension_list]
+    file_list = [p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in convert_from_format]
     file_number = len(file_list)
     progressbar['maximum'] = file_number
     counter = 0
@@ -111,7 +114,7 @@ else:
         sortir.update()
         sortir.update_idletasks()
 
-        subprocess.run(f'D:/LibreOffice/program/soffice.exe --headless --convert-to {convert_to_format} "{filename}" --outdir "{(Path(filename)).parent}"')
+        subprocess.run(f'{exe_location} --headless --convert-to {convert_to_format} "{filename}" --outdir "{(Path(filename)).parent}"')
 
         pogovorit.insert('end -1 chars', ' Done\n')
         sortir.update()

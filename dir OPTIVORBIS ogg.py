@@ -34,15 +34,17 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.6.12.12'
+__version__ = '26.7.2.8'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
 import subprocess
 from pathlib import Path
+from shutil import which
 from sys import argv
 from tkinter import Button, Label, Tk, filedialog
+from tkinter.messagebox import showerror
 from tkinter.scrolledtext import ScrolledText
 from tkinter.ttk import Progressbar
 
@@ -60,6 +62,10 @@ if len(argv) == 2:
             try_open = Path.cwd()
 else:
     try_open = None  # Normally makes it start in MRU
+
+# ↓ Trying to find necessary executable
+exe = 'optivorbis.exe'
+exe_location = which(exe)
 
 # ↓ Creating dialog
 sortir = Tk()
@@ -89,9 +95,19 @@ butt = Button(
 )
 butt.pack(fill='x', side='bottom', expand=True)
 
-pogovorit.insert('1.0', 'Allons-y!\n')
+pogovorit.insert('1.0', f'{exe.capitalize()} found: {exe_location}\nAllons-y!\n')
 
 sortir.withdraw()  # Main dialog created and hidden
+
+# ↓ Quit if main exe was not found
+if exe_location is None:
+    showerror(
+        title='Sorry',
+        message=f'This program appeared to be unable to locate {exe}',
+        detail=f'Either {exe} does not exist in your system,\nor is placed outside searchable PATH.',
+    )
+    sortir.destroy()
+    quit()
 
 # ↓ Open source dir
 source_dir = filedialog.askdirectory(title='DIR to optimize OGG files', initialdir=try_open, mustexist=True)
@@ -136,7 +152,7 @@ else:
         currentfile.replace(tempfile)  # move file to temp
 
         # ↓ Note: output in quotes below for paths with spaces
-        subprocess.run(f'optivorbis.exe --quiet --vendor_string_action empty "{tempfile}" "{filename}"', startupinfo=startupinfo)
+        subprocess.run(f'{exe_location} --quiet --vendor_string_action empty "{tempfile}" "{filename}"', startupinfo=startupinfo)
         # optivorbis.exe writes result from temp back to source location
 
         pogovorit.insert('end -1 chars', ' Done\n')

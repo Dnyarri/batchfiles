@@ -39,15 +39,17 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.6.12.12'
+__version__ = '26.7.2.8'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
 import subprocess
 from pathlib import Path
+from shutil import which
 from sys import argv
 from tkinter import Button, Label, Tk, filedialog
+from tkinter.messagebox import showerror
 from tkinter.scrolledtext import ScrolledText
 from tkinter.ttk import Progressbar
 
@@ -73,6 +75,10 @@ if len(argv) == 2:
             try_open = Path.cwd()
 else:
     try_open = None  # Normally makes it start in MRU
+
+# ↓ Trying to find necessary executable
+exe = 'ffmpeg.exe'
+exe_location = which(exe)
 
 # ↓ Creating dialog
 sortir = Tk()
@@ -102,9 +108,19 @@ butt = Button(
 )
 butt.pack(fill='x', side='bottom', expand=True)
 
-pogovorit.insert('1.0', 'Allons-y!\n')
+pogovorit.insert('1.0', f'{exe.capitalize()} found: {exe_location}\nAllons-y!\n')
 
 sortir.withdraw()  # Main dialog created and hidden
+
+# ↓ Quit if main exe was not found
+if exe_location is None:
+    showerror(
+        title='Sorry',
+        message=f'This program appeared to be unable to locate {exe}',
+        detail=f'Either {exe} does not exist in your system,\nor is placed outside searchable PATH.',
+    )
+    sortir.destroy()
+    quit()
 
 # ↓ Open source dir
 source_dir = filedialog.askdirectory(title='DIR to convert FLAC to OGG 𝘢𝘴 𝘪𝘴', initialdir=try_open, mustexist=True)
@@ -153,7 +169,7 @@ else:
         # ↓ Note: output in quotes below for paths with spaces.
         #   Note: "-y" in this position means "yes" to overwrite.
         subprocess.run(
-            f'ffmpeg.exe -y -loglevel quiet -i "{currentfile}" -map 0:a:? -c:a: libvorbis -aq 10 -vn -sn -map_metadata:s:0 0:s:0 -metadata comment="" -metadata encoder="" -metadata description="" -metadata copyright="" -metadata encoded_by="" "{oggfile}"',
+            f'{exe_location} -y -loglevel quiet -i "{currentfile}" -map 0:a:? -c:a: libvorbis -aq 10 -vn -sn -map_metadata:s:0 0:s:0 -metadata comment="" -metadata encoder="" -metadata description="" -metadata copyright="" -metadata encoded_by="" "{oggfile}"',
             startupinfo=startupinfo,
         )
 
