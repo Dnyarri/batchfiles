@@ -105,10 +105,10 @@ def DisMiss(event=None) -> None:
     sortir.destroy()
 
 
-def getList(event=None):
+def getList(event=None) -> None:
     """Get source file list."""
 
-    global png_list, png_list_str
+    global png_list, png_list_str  # No, "png_list_str" doesn't need an assignment, it needs .set()
     png_list = list(  # askopenfilenames returns tuple, not a list
         filedialog.askopenfilenames(
             parent=sortir,
@@ -233,7 +233,7 @@ def Sanctify(event=None) -> None:
         initialfile=Path(png_list[0]).stem + '.ico',
     )
     if output_file == '':
-        return None
+        return None  # Yes, it have to be here regardless of linter opinion!
 
     """ ╒═════════════╕
         │ ICO writing │
@@ -380,7 +380,7 @@ if __name__ == '__main__':  # Just to make python help(Sanctifier) work.
     png_listbox.focus_set()
 
     sortir.update()
-    # ↓ Setting 'sortir.maxsize' to fit 90% of screen
+    # ↓ Setting 'sortir.maxsize' to fit 80% of screen
     sortir.maxsize(8 * sortir.winfo_screenwidth() // 10, 8 * sortir.winfo_screenheight() // 10)
     sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+64')
 
