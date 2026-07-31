@@ -108,7 +108,7 @@ def DisMiss(event=None) -> None:
 def getList(event=None) -> None:
     """Get source file list."""
 
-    global png_list, png_list_str  # No, "png_list_str" doesn't need an assignment, it needs .set()
+    global png_list, png_list_str  # "png_list_str" doesn't need an assignment, it needs .set()
     png_list = list(  # askopenfilenames returns tuple, not a list
         filedialog.askopenfilenames(
             parent=sortir,
@@ -149,8 +149,7 @@ def getList(event=None) -> None:
     png_listbox['width'] = max(60, max(len(filename) for filename in png_list))
     png_listbox['height'] = len(png_list) + 1
     sortir.update()
-    fit_width = min(sortir.winfo_reqwidth(), 8 * sortir.winfo_screenwidth() // 10)
-    fit_height = min(sortir.winfo_reqheight(), 8 * sortir.winfo_screenheight() // 10)
+    fit_width, fit_height = min(sortir.winfo_reqwidth(), 8 * sortir.winfo_screenwidth() // 10), min(sortir.winfo_reqheight(), 8 * sortir.winfo_screenheight() // 10)
     sortir.minsize(fit_width, fit_height)
 
 
@@ -233,7 +232,7 @@ def Sanctify(event=None) -> None:
         initialfile=Path(png_list[0]).stem + '.ico',
     )
     if output_file == '':
-        return None  # Yes, it have to be here regardless of linter opinion!
+        return
 
     """ ╒═════════════╕
         │ ICO writing │

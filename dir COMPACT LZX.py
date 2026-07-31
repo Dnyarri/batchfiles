@@ -32,7 +32,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.6.12.12'
+__version__ = '26.8.1.1'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -51,9 +51,7 @@ if len(argv) == 2:
             try_open = Path(try_open).parent
     else:
         try_open = Path(try_open).parent
-        if Path(try_open).exists():
-            try_open = try_open
-        else:
+        if not Path(try_open).exists():
             try_open = Path.cwd()
 else:
     try_open = None  # Normally makes it start in MRU
@@ -86,45 +84,46 @@ sortir.withdraw()
 source_dir = filedialog.askdirectory(title='DIR to compress with LZX', initialdir=try_open, mustexist=True)
 if source_dir == '':
     sortir.destroy()
-else:
-    # ↓ Updating dialog
-    sortir.title(f'Compacting "{source_dir.replace("/", "\\")}\\" with LZX')
-    sortir.deiconify()
-    sortir.update()
-    sortir.maxsize(8 * sortir.winfo_screenwidth() // 10, 8 * sortir.winfo_screenheight() // 10)
-    sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+64')
+    raise SystemExit
 
-    # ↓ Updating scrolled text
-    pogovorit.insert('1.0', 'Allons-y!\n')
-    pogovorit.focus()
-    sortir.update()
-    sortir.update_idletasks()
+# ↓ Updating dialog
+sortir.title(f'Compacting "{source_dir.replace("/", "\\")}\\" with LZX')
+sortir.deiconify()
+sortir.update()
+sortir.maxsize(8 * sortir.winfo_screenwidth() // 10, 8 * sortir.winfo_screenheight() // 10)
+sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+64')
 
-    # ↓ `startupinfo` to force subprocess window hide under Windows
-    startupinfo = subprocess.STARTUPINFO()
-    startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+# ↓ Updating scrolled text
+pogovorit.insert('1.0', 'Allons-y!\n')
+pogovorit.focus()
+sortir.update()
+sortir.update_idletasks()
 
-    # ↓ Process dir
-    with subprocess.Popen(
-        f'compact.exe /c /s /a /i /f /exe:lzx "{source_dir}\\*"',
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        bufsize=1,
-        encoding='cp866',
-        text=True,
-        startupinfo=startupinfo,
-    ) as p:
-        for line in p.stdout:
-            pogovorit.insert('end', line)
-            pogovorit.see('end')
-            sortir.update()
-            sortir.update_idletasks()
+# ↓ `startupinfo` to force subprocess window hide under Windows
+startupinfo = subprocess.STARTUPINFO()
+startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
-    sortir.title(f'Compacting "{source_dir.replace("/", "\\")}\\" finished')
-    butt.config(text='Finished, Dismissed!', bg='green1', cursor='hand2', state='normal')
-    sortir.after(1000, lambda: butt.config(bg='green3'))
+# ↓ Process dir
+with subprocess.Popen(
+    f'compact.exe /c /s /a /i /f /exe:lzx "{source_dir}\\*"',
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    bufsize=1,
+    encoding='cp866',
+    text=True,
+    startupinfo=startupinfo,
+) as p:
+    for line in p.stdout:
+        pogovorit.insert('end', line)
+        pogovorit.see('end')
+        sortir.update()
+        sortir.update_idletasks()
 
-    sortir.update()
-    sortir.update_idletasks()
+sortir.title(f'Compacting "{source_dir.replace("/", "\\")}\\" finished')
+butt.config(text='Finished, Dismissed!', bg='green1', cursor='hand2', state='normal')
+sortir.after(1000, lambda: butt.config(bg='green3'))
+
+sortir.update()
+sortir.update_idletasks()
 
 sortir.mainloop()

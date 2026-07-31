@@ -8,10 +8,10 @@ Dictionaries are subject to change.
 """
 
 __author__ = 'Ilya Razmanov'
-__copyright__ = '(c) 2024 Ilya Razmanov'
+__copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2024.09.24'
+__version__ = '26.8.1.1'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -119,7 +119,7 @@ Rez = {
 # Open source dir
 sourcedir = filedialog.askdirectory(title='Open folder with files to process')
 if sourcedir == '':
-    quit()
+    raise SystemExit
 
 path = Path(sourcedir)
 

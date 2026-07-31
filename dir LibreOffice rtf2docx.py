@@ -25,7 +25,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.7.2.8'
+__version__ = '26.8.1.1'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -46,7 +46,9 @@ convert_from_format = (
 # ↓ Extension to convert to
 convert_to_format = 'docx'
 
-# ↓ LibreOffice location
+""" ╒══════════════════╕
+    │ LibreOffice path │
+    ╰──────────────────╯ """
 exe_location = 'D:/LibreOffice/program/soffice.exe'
 
 # ↓ Creating dialog
@@ -83,47 +85,48 @@ sortir.withdraw()  # Main dialog created and hidden
 source_dir = filedialog.askdirectory(title='DIR to process RTF to DOCX')
 if source_dir == '':
     sortir.destroy()
-else:
-    # ↓ Creating file list
-    path = Path(source_dir)
-    file_list = [p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in convert_from_format]
-    file_number = len(file_list)
-    progressbar['maximum'] = file_number
-    counter = 0
+    raise SystemExit
 
-    # ↓ Updating dialog
-    sortir.deiconify()
-    sortir.update()
-    sortir.maxsize(8 * sortir.winfo_screenwidth() // 10, 8 * sortir.winfo_screenheight() // 10)
-    sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+64')
+# ↓ Creating file list
+path = Path(source_dir)
+file_list = [p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in convert_from_format]
+file_number = len(file_list)
+progressbar['maximum'] = file_number
+counter = 0
 
-    # ↓ Updating text
-    zanyato.config(text='Starting LibreOffice...')
-    pogovorit.focus()
-    pogovorit.insert('1.0', 'Allons-y!\n')
+# ↓ Updating dialog
+sortir.deiconify()
+sortir.update()
+sortir.maxsize(8 * sortir.winfo_screenwidth() // 10, 8 * sortir.winfo_screenheight() // 10)
+sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+64')
+
+# ↓ Updating text
+zanyato.config(text='Starting LibreOffice...')
+pogovorit.focus()
+pogovorit.insert('1.0', 'Allons-y!\n')
+pogovorit.insert('end -1 chars', f'Found {file_number} input files\n')
+sortir.update()
+sortir.update_idletasks()
+
+# ↓ Processing file list
+for counter, filename in enumerate(file_list):
+    zanyato.config(text=f' Processing {filename}... ')  # Updating UI
+    progressbar['value'] = counter
+    pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
+    pogovorit.see('end')
     sortir.update()
     sortir.update_idletasks()
 
-    # ↓ Processing file list
-    for filename in file_list:
-        zanyato.config(text=f' Processing {filename}... ')  # Updating UI
-        progressbar['value'] = counter
-        counter += 1
-        pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
-        pogovorit.see('end')
-        sortir.update()
-        sortir.update_idletasks()
+    subprocess.run(f'{exe_location} --headless --convert-to {convert_to_format} "{filename}" --outdir "{(Path(filename)).parent}"')
 
-        subprocess.run(f'{exe_location} --headless --convert-to {convert_to_format} "{filename}" --outdir "{(Path(filename)).parent}"')
+    pogovorit.insert('end -1 chars', ' Done\n')
+    sortir.update()
+    sortir.update_idletasks()
 
-        pogovorit.insert('end -1 chars', ' Done\n')
-        sortir.update()
-        sortir.update_idletasks()
-
-    zanyato.config(text=f'Finished {source_dir.replace("/", "\\")}\\')
-    progressbar['value'] = progressbar['maximum']
-    sortir.after(1000, lambda: progressbar.stop())
-    butt.config(text='Finished, Dismissed!', bg='green1', cursor='hand2', state='normal')
-    sortir.after(1000, lambda: butt.config(bg='green3'))
+zanyato.config(text=f'Finished {source_dir.replace("/", "\\")}\\')
+progressbar['value'] = progressbar['maximum']
+sortir.after(1000, lambda: progressbar.stop())
+butt.config(text='Finished, Dismissed!', bg='green1', cursor='hand2', state='normal')
+sortir.after(1000, lambda: butt.config(bg='green3'))
 
 sortir.mainloop()

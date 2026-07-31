@@ -35,7 +35,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.7.2.8'
+__version__ = '26.8.1.1'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -65,9 +65,7 @@ if len(argv) == 2:
             try_open = Path(try_open).parent
     else:
         try_open = Path(try_open).parent
-        if Path(try_open).exists():
-            try_open = try_open
-        else:
+        if not Path(try_open).exists():
             try_open = Path.cwd()
 else:
     try_open = None  # Normally makes it start in MRU
@@ -116,69 +114,68 @@ if exe_location is None:
         detail=f'Either {exe} does not exist in your system,\nor is placed outside searchable PATH.',
     )
     sortir.destroy()
-    quit()
+    raise SystemExit
 
 # ↓ Open source dir
 source_dir = filedialog.askdirectory(title='DIR to convert FLAC to OGG 16 bit 44.1 kHz', initialdir=try_open, mustexist=True)
 if source_dir == '':
     sortir.destroy()
-else:
-    path = Path(source_dir)
-    file_list = [p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in extension_list]
-    file_number = len(file_list)
-    progressbar['maximum'] = file_number
-    counter = 0
+    raise SystemExit
 
-    sortir.deiconify()
-    sortir.update()
-    sortir.maxsize(8 * sortir.winfo_screenwidth() // 10, 8 * sortir.winfo_screenheight() // 10)
-    sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+64')
+# ↓ Creating file list
+path = Path(source_dir)
+file_list = [p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in extension_list]
+file_number = len(file_list)
+progressbar['maximum'] = file_number
+counter = 0
 
-    # ↓ Updating scrolled text
-    zanyato.config(text='Allons-y!')
-    pogovorit.focus()
+sortir.deiconify()
+sortir.update()
+sortir.maxsize(8 * sortir.winfo_screenwidth() // 10, 8 * sortir.winfo_screenheight() // 10)
+sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+64')
+
+# ↓ Updating scrolled text
+zanyato.config(text='Allons-y!')
+pogovorit.focus()
+pogovorit.insert('end -1 chars', f'Found {file_number} input files\n')
+sortir.update()
+sortir.update_idletasks()
+
+# ↓ `startupinfo` to force subprocess window hide under Windows
+startupinfo = subprocess.STARTUPINFO()
+startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
+# ↓ Processing file list
+for counter, filename in enumerate(file_list):
+    zanyato.config(text=f'Processing {filename}...')  # Updating UI, showing processed file name
+    progressbar['value'] = counter
+    pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
+    pogovorit.see('end')
     sortir.update()
     sortir.update_idletasks()
 
-    # ↓ `startupinfo` to force subprocess window hide under Windows
-    startupinfo = subprocess.STARTUPINFO()
-    startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+    currentfile = Path(filename).resolve()  # file to be processed
+    currentdir = Path(filename).resolve().parent  # dir with current file
+    currentfile_noext = str(Path(filename).resolve().stem)  # file to be processed without extension
+    oggfile = f'{currentdir}\\{currentfile_noext}.ogg'  # resulting file name
 
-    # ↓ Creating file list
-    file_list = (p.resolve() for p in path.rglob('*.*') if p.suffix.lower() in extension_list)
+    # ↓ Note: output in quotes below for paths with spaces.
+    #   Note: "-y" in this position means "yes" to overwrite.
+    subprocess.run(
+        f'{exe_location} -y -loglevel quiet -i "{currentfile}" -map 0:a:? -c:a: libvorbis -aq 10 -af aresample=out_sample_fmt=s16:out_sample_rate=44100 -vn -sn -map_metadata:s:0 0:s:0 -metadata comment="" -metadata encoder="" -metadata description="" -metadata copyright="" -metadata encoded_by="" "{oggfile}"',
+        startupinfo=startupinfo,
+    )
 
-    # ↓ Processing file list
-    for filename in file_list:
-        zanyato.config(text=f'Processing {filename}...')  # Updating UI, showing processed file name
-        progressbar['value'] = counter
-        counter += 1
-        pogovorit.insert('end -1 chars', f' Starting {filename}...  ')
-        pogovorit.see('end')
-        sortir.update()
-        sortir.update_idletasks()
+    # currentfile.unlink(missing_ok=True)        # removing source file
 
-        currentfile = Path(filename).resolve()  # file to be processed
-        currentdir = Path(filename).resolve().parent  # dir with current file
-        currentfile_noext = str(Path(filename).resolve().stem)  # file to be processed without extension
-        oggfile = f'{currentdir}\\{currentfile_noext}.ogg'  # resulting file name
+    pogovorit.insert('end -1 chars', ' Done\n')
+    sortir.update()
+    sortir.update_idletasks()
 
-        # ↓ Note: output in quotes below for paths with spaces.
-        #   Note: "-y" in this position means "yes" to overwrite.
-        subprocess.run(
-            f'{exe_location} -y -loglevel quiet -i "{currentfile}" -map 0:a:? -c:a: libvorbis -aq 10 -af aresample=out_sample_fmt=s16:out_sample_rate=44100 -vn -sn -map_metadata:s:0 0:s:0 -metadata comment="" -metadata encoder="" -metadata description="" -metadata copyright="" -metadata encoded_by="" "{oggfile}"',
-            startupinfo=startupinfo,
-        )
-
-        # currentfile.unlink(missing_ok=True)        # removing source file
-
-        pogovorit.insert('end -1 chars', ' Done\n')
-        sortir.update()
-        sortir.update_idletasks()
-
-    zanyato.config(text=f'Finished {source_dir.replace("/", "\\")}\\')
-    progressbar['value'] = progressbar['maximum']
-    sortir.after(1000, lambda: progressbar.stop())
-    butt.config(text='Finished, Dismissed!', bg='green1', cursor='hand2', state='normal')
-    sortir.after(1000, lambda: butt.config(bg='green3'))
+zanyato.config(text=f'Finished {source_dir.replace("/", "\\")}\\')
+progressbar['value'] = progressbar['maximum']
+sortir.after(1000, lambda: progressbar.stop())
+butt.config(text='Finished, Dismissed!', bg='green1', cursor='hand2', state='normal')
+sortir.after(1000, lambda: butt.config(bg='green3'))
 
 sortir.mainloop()

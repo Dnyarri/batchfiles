@@ -13,7 +13,7 @@ from tkinter import filedialog
 # Open source dir
 sourcedir = filedialog.askdirectory(title='Open folder with files to process')
 if sourcedir == '':
-    quit()
+    raise SystemExit
 
 tempfilename = ''
 
