@@ -7,22 +7,22 @@ Current repository comprizes various batch files created for my personal use and
 Most batchfiles are equipped with GUI, some intended to be used as templates for further editing.
 Most frequently used are:  
 
-- **dir ffmpeg flac2ogg 48** - converts all .flac within dir and subdirs to .ogg 48 kHz, using [ffmpeg](https://github.com/BtbN/FFmpeg-Builds/).  
+- **dir ffmpeg flac2ogg 48** - converts all .flac within dir and subdirs to .ogg 48 kHz, using [ffmpeg](https://github.com/BtbN/FFmpeg-Builds/). Other *dir ffmpeg flac2ogg* scripts in this repository do similar conversion except for settings, which you hopefully may figure out from their names.
 
-- **dir OPTIVORBIS ogg** - recompress all .ogg within dir and subdirs, using [OPTIVORBIS](https://github.com/OptiVorbis/OptiVorbis/); saves up to 10% of .ogg size.  
+- **dir OPTIVORBIS ogg** - recompress all .ogg within dir and subdirs, using [OPTIVORBIS](https://github.com/OptiVorbis/OptiVorbis/); saves up to 10% of .ogg size.
 
-- **dir LibreOffice rtf2docx** - batch conversion of .rtf, .doc, .odt and .fb2 files to .docx using [LibreOffice](https://www.libreoffice.org/). Overcomes clumsy LibreOffice idea of exporting all files into one dir.  
+- **dir LibreOffice rtf2docx** - batch conversion of .rtf, .doc, .odt and .fb2 files to .docx using [LibreOffice](https://www.libreoffice.org/). Overcomes clumsy LibreOffice idea of exporting all files into one dir.
 
-- **dir COMPACT LZX** - Windows only; makes Windows (ver. 8 and 10) compact.exe recompress selected folder and subfolder using LZX filesystem compression. Great for software installations - for modern bloatware compression ratio is typically 2.0-2.7, sometimes higher. No sense to use it on frequently updated docs and stuff - upon editing and saving file gets decompressed back.  
+- **dir COMPACT LZX** - Windows only; makes Windows (ver. 8 and 10) compact.exe recompress selected folder and subfolder using LZX filesystem compression. Great for software installations - for modern bloatware compression ratio is typically 2.0-2.7, sometimes higher. No sense to use it on frequently updated docs and stuff - upon editing and saving file gets decompressed back.
 
 > [!NOTE]
 > Windows users may rename forementioned files from .py to .pyw to avoid starting console.  
-> Programs *dir COMPACT LZX*, *dir OPTIVORBIS ogg* and *dir ffmpeg flac2ogg 48*, beside having Tkinter-based GUI, are capable to accept command line arguments at start time. Argument is supposed to be a name of folder; in this case program GUI opens right in this folder. If argument happen to be a file, GUI will be opened in folder containing it. You may use it for creating shortcuts like  
-> ``pythonw.exe "dir COMPACT LZX.py.py" "%1"``  
+> Programs *dir COMPACT LZX*, *dir OPTIVORBIS ogg* and *dir ffmpeg flac2ogg 48*, beside having Tkinter-based GUI, are capable to accept command line arguments at start time. Argument is supposed to be a name of folder; in this case program GUI opens right in this folder. If argument happen to be a file, GUI will be opened in folder containing it. You may this capability by creating shortcuts like
+> ``pythonw.exe "dir COMPACT LZX.py.py" "%1"``
 > and then simply drag-and-drop folders onto shortcut to open program right where you need it.  
-> If argument is absent (e.g., you simply double-click program), program simply opens GUI in default directory and wait for you to browse and point to required location.  
+> If argument is absent (e.g., you simply double-click program), program simply opens GUI in default directory and wait for you to browse and point to required location.
 
-- **dir AdvZIP docx** - recompressing .docx after *dir LibreOffice rtf2docx* using [AdvZIP](https://github.com/amadvance/advancecomp) gives up to 10% space saving.  
+- **dir AdvZIP docx** - recompressing .docx after *dir LibreOffice rtf2docx* using [AdvZIP](https://github.com/amadvance/advancecomp) gives up to 10% space saving.
 
 - **dir RENAME untranslit** - batch renaming, intended **for Russian users**. Программа для оптового переименования (batch renaming) файлов с транслитерированными именами обратно с латиницы на русский (кириллицу). Не соответствует ISO 9, словари переименования составлены на основе того, с чем я лично сталкиваюсь.
 
