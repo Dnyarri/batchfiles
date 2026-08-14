@@ -25,13 +25,14 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.8.1.1'
+__version__ = '26.8.14.6'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
 import subprocess
 from pathlib import Path
+from time import time
 from tkinter import Button, Label, Tk, filedialog
 from tkinter.scrolledtext import ScrolledText
 from tkinter.ttk import Progressbar
@@ -103,10 +104,12 @@ sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+64
 # ↓ Updating text
 zanyato.config(text='Starting LibreOffice...')
 pogovorit.focus()
-pogovorit.insert('1.0', 'Allons-y!\n')
-pogovorit.insert('end -1 chars', f'Found {file_number} input files\n')
+pogovorit.insert('1.0', f'Found {file_number} input files\n')
+pogovorit.insert('end -1 chars', 'Allons-y!\n')
 sortir.update()
 sortir.update_idletasks()
+
+start = time()
 
 # ↓ Processing file list
 for counter, filename in enumerate(file_list):
@@ -117,13 +120,15 @@ for counter, filename in enumerate(file_list):
     sortir.update()
     sortir.update_idletasks()
 
-    subprocess.run(f'{exe_location} --headless --convert-to {convert_to_format} "{filename}" --outdir "{(Path(filename)).parent}"')
+    subprocess.run(f'{exe_location} --headless --convert-to {convert_to_format} "{filename}" --outdir "{(Path(filename)).parent}"')  # noqa: PLW1510
 
     pogovorit.insert('end -1 chars', ' Done\n')
     sortir.update()
     sortir.update_idletasks()
 
 zanyato.config(text=f'Finished {source_dir.replace("/", "\\")}\\')
+pogovorit.insert('end -1 chars', f'{exe_location.capitalize()} processed {file_number} files in {int(time() - start)} seconds\n')
+pogovorit.see('end')
 progressbar['value'] = progressbar['maximum']
 sortir.after(1000, lambda: progressbar.stop())
 butt.config(text='Finished, Dismissed!', bg='green1', cursor='hand2', state='normal')

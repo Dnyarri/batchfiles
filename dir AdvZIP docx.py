@@ -22,7 +22,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.8.1.1'
+__version__ = '26.8.14.6'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -140,7 +140,7 @@ for counter, filename in enumerate(file_list):
     sortir.update_idletasks()
 
     # ↓ Note: output in quotes below for paths with spaces
-    subprocess.run(f'{exe_location} -q -z -4 -i 30 "{filename}"', startupinfo=startupinfo)
+    subprocess.run(f'{exe_location} -q -z -4 -i 30 "{filename}"', startupinfo=startupinfo)  # noqa: PLW1510
 
     pogovorit.insert('end -1 chars', ' Done\n')
     sortir.update()

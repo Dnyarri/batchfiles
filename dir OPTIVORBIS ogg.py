@@ -34,7 +34,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.8.1.1'
+__version__ = '26.8.14.6'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -43,6 +43,7 @@ import subprocess
 from pathlib import Path
 from shutil import which
 from sys import argv
+from time import time
 from tkinter import Button, Label, Tk, filedialog
 from tkinter.messagebox import showerror
 from tkinter.scrolledtext import ScrolledText
@@ -93,7 +94,7 @@ butt = Button(
 )
 butt.pack(fill='x', side='bottom', expand=True)
 
-pogovorit.insert('1.0', f'{exe.capitalize()} found: {exe_location}\nAllons-y!\n')
+pogovorit.insert('1.0', f'{exe.capitalize()} found: {exe_location}\n')
 
 sortir.withdraw()  # Main dialog created and hidden
 
@@ -129,13 +130,15 @@ sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+64
 # ↓ Updating scrolled text
 zanyato.config(text='Allons-y!')
 pogovorit.focus()
-pogovorit.insert('end -1 chars', f'Found {file_number} input files\n')
+pogovorit.insert('end -1 chars', f'Found {file_number} input files\nAllons-y!\n')
 sortir.update()
 sortir.update_idletasks()
 
 # ↓ `startupinfo` to force subprocess window hide under Windows
 startupinfo = subprocess.STARTUPINFO()
 startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+
+start = time()
 
 # ↓ Process file list
 for counter, filename in enumerate(file_list):  # cycle through OGG files in subfolders
@@ -151,7 +154,7 @@ for counter, filename in enumerate(file_list):  # cycle through OGG files in sub
     currentfile.replace(tempfile)  # move file to temp
 
     # ↓ Note: output in quotes below for paths with spaces
-    subprocess.run(f'{exe_location} --quiet --vendor_string_action empty "{tempfile}" "{filename}"', startupinfo=startupinfo)
+    subprocess.run(f'{exe_location} --quiet --vendor_string_action empty "{tempfile}" "{filename}"', startupinfo=startupinfo)  # noqa: PLW1510
     # optivorbis.exe writes result from temp back to source location
 
     pogovorit.insert('end -1 chars', ' Done\n')
@@ -161,6 +164,8 @@ for counter, filename in enumerate(file_list):  # cycle through OGG files in sub
     tempfile.unlink(missing_ok=True)  # removing temp file
 
 zanyato.config(text=f'Finished {source_dir.replace("/", "\\")}\\')
+pogovorit.insert('end -1 chars', f'{exe.capitalize()} processed {file_number} files in {int(time() - start)} seconds\n')
+pogovorit.see('end')
 progressbar['value'] = progressbar['maximum']
 sortir.after(1000, lambda: progressbar.stop())
 butt.config(text='Finished, Dismissed!', bg='green1', cursor='hand2', state='normal')
