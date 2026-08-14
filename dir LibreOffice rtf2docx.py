@@ -31,11 +31,37 @@ __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
 import subprocess
+import winreg
+from os import name
 from pathlib import Path
+from shutil import which
 from time import time
 from tkinter import Button, Label, Tk, filedialog
+from tkinter.messagebox import showerror
 from tkinter.scrolledtext import ScrolledText
 from tkinter.ttk import Progressbar
+
+
+def get_Windows_App_Path(app_name):
+    """Trying to find exe path in Windows App Path registry branch; None will be considered as valid error code later."""
+
+    key_path = rf'SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\{app_name}'
+
+    try:
+        # Open key for reading
+        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, key_path, 0, winreg.KEY_READ) as key:
+            return winreg.QueryValue(key, '')  # Return file path
+    except:  # noqa: E722
+        return None
+
+
+# ↓ Seems like under *nix 'soffice' is somewhere in PATH, while
+#   under Windows it is not so, but 'soffice.exe' can be found in registry at
+#   SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\
+if name == 'nt':
+    exe_location = get_Windows_App_Path('soffice.exe')
+else:
+    exe_location = which('soffice')
 
 # ↓ List of extensions to convert from
 convert_from_format = (
@@ -43,14 +69,8 @@ convert_from_format = (
     '.doc',
     '.odt',
 )
-
 # ↓ Extension to convert to
 convert_to_format = 'docx'
-
-""" ╒══════════════════╕
-    │ LibreOffice path │
-    ╰──────────────────╯ """
-exe_location = 'D:/LibreOffice/program/soffice.exe'
 
 # ↓ Creating dialog
 sortir = Tk()
@@ -82,6 +102,16 @@ butt.pack(fill='x', side='bottom', expand=True)
 
 sortir.withdraw()  # Main dialog created and hidden
 
+# ↓ Quit if main exe was not found
+if exe_location is None:
+    showerror(
+        title='Sorry',
+        message='This program appeared to be unable to locate LibreOffice',
+        detail='Either LibreOffice does not exist in your system,\nor is placed outside searchable PATH.',
+    )
+    sortir.destroy()
+    raise SystemExit
+
 # ↓ Open source dir
 source_dir = filedialog.askdirectory(title='DIR to process RTF to DOCX')
 if source_dir == '':
@@ -104,7 +134,8 @@ sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+64
 # ↓ Updating text
 zanyato.config(text='Starting LibreOffice...')
 pogovorit.focus()
-pogovorit.insert('1.0', f'Found {file_number} input files\n')
+pogovorit.insert('1.0', f'LibreOffice found: {exe_location}\n')
+pogovorit.insert('end -1 chars', f'Found {file_number} input files\n')
 pogovorit.insert('end -1 chars', 'Allons-y!\n')
 sortir.update()
 sortir.update_idletasks()
