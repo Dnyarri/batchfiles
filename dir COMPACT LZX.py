@@ -32,7 +32,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.8.1.1'
+__version__ = '26.8.14.18'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -63,7 +63,12 @@ icon_path = Path(__file__).resolve().parent / 'dnyarri.ico'
 if icon_path.exists():
     sortir.iconbitmap(icon_path)
 
-pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
+pogovorit = ScrolledText(
+    sortir,
+    height=26,
+    wrap='word',
+    state='normal',
+)
 pogovorit.pack(fill='both', side='top', expand=True)
 
 butt = Button(
@@ -78,8 +83,6 @@ butt = Button(
 )
 butt.pack(padx=4, pady=2, fill='x', side='bottom', expand=True)
 
-sortir.withdraw()
-
 # ↓ Open source dir
 source_dir = filedialog.askdirectory(title='DIR to compress with LZX', initialdir=try_open, mustexist=True)
 if source_dir == '':
@@ -88,7 +91,6 @@ if source_dir == '':
 
 # ↓ Updating dialog
 sortir.title(f'Compacting "{source_dir.replace("/", "\\")}\\" with LZX')
-sortir.deiconify()
 sortir.update()
 sortir.maxsize(8 * sortir.winfo_screenwidth() // 10, 8 * sortir.winfo_screenheight() // 10)
 sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+64')
@@ -120,8 +122,19 @@ with subprocess.Popen(
         sortir.update_idletasks()
 
 sortir.title(f'Compacting "{source_dir.replace("/", "\\")}\\" finished')
-butt.config(text='Finished, Dismissed!', bg='green1', cursor='hand2', state='normal')
-sortir.after(1000, lambda: butt.config(bg='green3'))
+butt.config(
+    text='Finished, Dismissed!',
+    background='green1',
+    cursor='hand2',
+    state='normal',
+)
+sortir.after(
+    1000,
+    lambda: butt.config(
+        background='green3',
+        activebackground='green1',
+    ),
+)
 
 sortir.update()
 sortir.update_idletasks()

@@ -35,7 +35,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.8.14.6'
+__version__ = '26.8.14.18'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -50,7 +50,7 @@ from tkinter.messagebox import showerror
 from tkinter.scrolledtext import ScrolledText
 from tkinter.ttk import Progressbar
 
-# ↓ Add required file extensions here
+# ↓ List of extensions to convert from
 extension_list = (
     '.flac',
     '.wav',
@@ -72,7 +72,7 @@ else:
     try_open = None  # Normally makes it start in MRU
 
 # ↓ Trying to find necessary executable
-exe = 'ffmpeg.exe'
+exe = 'ffmpeg'
 exe_location = which(exe)
 
 # ↓ Creating dialog
@@ -82,13 +82,26 @@ icon_path = Path(__file__).resolve().parent / 'dnyarri.ico'
 if icon_path.exists():
     sortir.iconbitmap(icon_path)
 
-zanyato = Label(sortir, wraplength=700, text='Starting...', font=('helvetica', 12), padx=16, pady=10, justify='center')
+zanyato = Label(
+    sortir,
+    wraplength=700,
+    text='Starting...',
+    font=('helvetica', 12),
+    padx=16,
+    pady=10,
+    justify='center',
+)
 zanyato.pack()
 
 progressbar = Progressbar(sortir, orient='horizontal')
 progressbar.pack(fill='x', side='top', expand=True)
 
-pogovorit = ScrolledText(sortir, height=26, wrap='word', state='normal')
+pogovorit = ScrolledText(
+    sortir,
+    height=26,
+    wrap='word',
+    state='normal',
+)
 pogovorit.pack(fill='both', expand=True)
 
 butt = Button(
@@ -104,8 +117,6 @@ butt = Button(
 butt.pack(fill='x', side='bottom', expand=True)
 
 pogovorit.insert('1.0', f'{exe.capitalize()} found: {exe_location}\n')
-
-sortir.withdraw()  # Main dialog created and hidden
 
 # ↓ Quit if main exe was not found
 if exe_location is None:
@@ -130,7 +141,6 @@ file_number = len(file_list)
 progressbar['maximum'] = file_number
 counter = 0
 
-sortir.deiconify()
 sortir.update()
 sortir.maxsize(8 * sortir.winfo_screenwidth() // 10, 8 * sortir.winfo_screenheight() // 10)
 sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+64')
@@ -159,8 +169,8 @@ for counter, filename in enumerate(file_list):
 
     currentfile = Path(filename).resolve()  # file to be processed
     currentdir = Path(filename).resolve().parent  # dir with current file
-    currentfile_noext = str(Path(filename).resolve().stem)  # file to be processed without extension
-    oggfile = f'{currentdir}\\{currentfile_noext}.ogg'  # resulting file name
+    currentfile_stem = str(Path(filename).resolve().stem)  # file to be processed without extension
+    oggfile = f'{currentdir}\\{currentfile_stem}.ogg'  # resulting file name
 
     # ↓ Note: output in quotes below for paths with spaces.
     #   Note: "-y" in this position means "yes" to overwrite.
@@ -180,7 +190,19 @@ pogovorit.insert('end -1 chars', f'{exe.capitalize()} processed {file_number} fi
 pogovorit.see('end')
 progressbar['value'] = progressbar['maximum']
 sortir.after(1000, lambda: progressbar.stop())
-butt.config(text='Finished, Dismissed!', bg='green1', cursor='hand2', state='normal')
-sortir.after(1000, lambda: butt.config(bg='green3'))
+sortir.title(f'Converting files in "{source_dir.replace("/", "\\")}\\" finished')
+butt.config(
+    text='Finished, Dismissed!',
+    background='green1',
+    cursor='hand2',
+    state='normal',
+)
+sortir.after(
+    1000,
+    lambda: butt.config(
+        background='green3',
+        activebackground='green1',
+    ),
+)
 
 sortir.mainloop()

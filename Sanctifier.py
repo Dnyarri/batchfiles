@@ -108,7 +108,7 @@ def DisMiss(event=None) -> None:
 def getList(event=None) -> None:
     """Get source file list."""
 
-    global png_list, png_list_str  # "png_list_str" doesn't need an assignment, it needs .set()
+    global png_list, png_list_str  # noqa: PLW0602
     png_list = list(  # askopenfilenames returns tuple, not a list
         filedialog.askopenfilenames(
             parent=sortir,
@@ -130,7 +130,7 @@ def getList(event=None) -> None:
         png_listbox.select_clear(first=0)
         zanyato['text'] = 'Sanctify your PNGs - convert them to ICON!'
         sortir.unbind_all('<Return>')  # Unbinding export
-        for event in bindings:  # Unbinding events from Listbox
+        for event in bindings:  # Unbinding events from Listbox # noqa: PLR1704
             png_listbox.unbind(event[0])
 
     # ↓ If user selected files, bind export and events

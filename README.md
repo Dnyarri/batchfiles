@@ -1,19 +1,21 @@
-# The Toad's Batchroom: Batch scripts for files and dirs processing
+# Facilities be damned, you need a Batchroom!
 
-Current repository comprizes various batch files created for my personal use and appeared to be so useful that I even update and improve them from time to time.
+## The Toad's Batchroom: Batch scripts for files and folders processing
+
+Current repository comprizes various batch files created for my personal use, and appeared to be so useful that I even update and improve them from time to time.
 
 ## Main batch files
 
 Most batchfiles are equipped with GUI, some intended to be used as templates for further editing.
 Most frequently used are:  
 
-- **dir ffmpeg flac2ogg 48** - converts all .flac within dir and subdirs to .ogg 48 kHz, using [ffmpeg](https://github.com/BtbN/FFmpeg-Builds/). Other *dir ffmpeg flac2ogg* scripts in this repository do similar conversion except for settings, which you hopefully may figure out from their names.
+- **dir ffmpeg flac2ogg 48** - converts all .flac within chosen folder and subfolders to .ogg 48 kHz, using [ffmpeg](https://github.com/BtbN/FFmpeg-Builds/). Other *dir ffmpeg flac2ogg* scripts in this repository do similar conversion except for settings, which you hopefully may figure out from their names.
 
-- **dir OPTIVORBIS ogg** - recompress all .ogg within dir and subdirs, using [OPTIVORBIS](https://github.com/OptiVorbis/OptiVorbis/); saves up to 10% of .ogg size.
+- **dir OPTIVORBIS ogg** - recompress all .ogg within chosen folder and subfolders, using [OPTIVORBIS](https://github.com/OptiVorbis/OptiVorbis/); saves up to 10% of .ogg size.
 
-- **dir LibreOffice rtf2docx** - batch conversion of .rtf, .doc, .odt and .fb2 files to .docx using [LibreOffice](https://www.libreoffice.org/). Overcomes clumsy LibreOffice idea of exporting all files into one dir.
+- **dir LibreOffice rtf2docx** - batch conversion of .rtf, .doc, .odt and .fb2 files to .docx using [LibreOffice](https://www.libreoffice.org/). Overcomes clumsy LibreOffice idea of exporting all files into one dir, as well as some other clumsy LibreOffice ideas.
 
-- **dir COMPACT LZX** - Windows only; makes Windows (ver. 8 and 10) compact.exe recompress selected folder and subfolder using LZX filesystem compression. Great for software installations - for modern bloatware compression ratio is typically 2.0-2.7, sometimes higher. No sense to use it on frequently updated docs and stuff - upon editing and saving file gets decompressed back.
+- **dir COMPACT LZX** - Windows only; makes Windows (ver. 8 and 10) [compact.exe](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/compact) recompress selected folder and subfolders using LZX filesystem compression. Great for software installations - for modern bloatware compression ratio is typically 2.0-2.7, sometimes higher. No sense to use it on frequently updated docs and stuff - upon editing and saving file gets decompressed back.
 
 > [!NOTE]
 > Windows users may rename forementioned files from .py to .pyw to avoid starting console.  
@@ -24,10 +26,10 @@ Most frequently used are:
 
 - **dir AdvZIP docx** - recompressing .docx after *dir LibreOffice rtf2docx* using [AdvZIP](https://github.com/amadvance/advancecomp) gives up to 10% space saving.
 
-- **dir RENAME untranslit** - batch renaming, intended **for Russian users**. Программа для оптового переименования (batch renaming) файлов с транслитерированными именами обратно с латиницы на русский (кириллицу). Не соответствует ISO 9, словари переименования составлены на основе того, с чем я лично сталкиваюсь.
+- **dir RENAME untranslit** - batch renaming, **intended for Russian users**. Программа для оптового переименования (batch renaming) файлов с транслитерированными именами обратно с латиницы на русский (кириллицу). Не соответствует ISO 9, словари переименования составлены на основе того, с чем я лично сталкиваюсь.
 
 > [!CAUTION]
-> **Будьте крайне осторожны**, не направляйте программу **dir RENAME untranslit** на директории типа Windows или Program Files!
+> **Будьте крайне осторожны**, никогда не направляйте программу **dir RENAME untranslit** на директории типа Windows или Program Files! Всю систему она вам, конечно, не переименует, но многое изгадить успеет.
 
 - **dir RENAME unflibusta** - batch renaming of files according to patterns, like replacing underscores with spaces, removing digits, and so on. Edit rules pattern to your need.
 
@@ -36,7 +38,7 @@ Most frequently used are:
 
 ## Sanctifier
 
-[**Sanctifier**](https://dnyarri.github.io/batch.html#sanctifier "Pure Python program for assembling Windows ICO from PNG files") actually is not a batch script but self-containing pure Python PNG to ICO converter, developed for assembling Windows icon (.ICO) files from PNG files without introducing any changes to the latter. The main idea is that Sanctifier simply inserts compressed PNG data into ICO skeleton *as is*, keeping source compression. This allows you to compress source PNGs to maximum degree first, and then use them to assemble multiple image single file ICO of minimal size, following simple steps below:
+[**Sanctifier**](https://dnyarri.github.io/batch.html#sanctifier "Pure Python program for assembling Windows ICO from PNG files") actually is not a batch script but self-contained pure Python PNG to ICO converter, developed for assembling Windows icon (.ICO) files from PNG files without introducing any changes to the latter. The main idea is that Sanctifier simply inserts compressed PNG data into ICO skeleton *as is*, keeping source compression. This allows you to compress source PNGs to maximum degree first, and then use them to assemble multiple image single file ICO of minimal size, following simple steps below:
 
   1. Create your PNG files and save them into **one** folder.
   2. Optimize PNG files thus created ([oxipng](https://github.com/oxipng/oxipng) is highly recommended).

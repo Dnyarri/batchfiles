@@ -22,7 +22,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.8.14.6'
+__version__ = '26.8.14.18'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -56,7 +56,7 @@ else:
     try_open = None  # Normally makes it start in MRU
 
 # ↓ Trying to find necessary executable
-exe = 'advzip.exe'
+exe = 'advzip'
 exe_location = which(exe)
 
 # ↓ Creating dialog
@@ -88,8 +88,6 @@ butt = Button(
 butt.pack(fill='x', side='bottom', expand=True)
 
 pogovorit.insert('1.0', f'{exe.capitalize()} found: {exe_location}\nAllons-y!\n')
-
-sortir.withdraw()  # Main dialog created and hidden
 
 # ↓ Quit if main exe was not found
 if exe_location is None:
@@ -149,7 +147,19 @@ for counter, filename in enumerate(file_list):
 zanyato.config(text=f'Finished {source_dir.replace("/", "\\")}\\')
 progressbar['value'] = progressbar['maximum']
 sortir.after(1000, lambda: progressbar.stop())
-butt.config(text='Finished, Dismissed!', bg='green1', cursor='hand2', state='normal')
-sortir.after(1000, lambda: butt.config(bg='green3'))
+sortir.title(f'Recompressing files in "{source_dir.replace("/", "\\")}\\" finished')
+butt.config(
+    text='Finished, Dismissed!',
+    background='green1',
+    cursor='hand2',
+    state='normal',
+)
+sortir.after(
+    1000,
+    lambda: butt.config(
+        background='green3',
+        activebackground='green1',
+    ),
+)
 
 sortir.mainloop()
