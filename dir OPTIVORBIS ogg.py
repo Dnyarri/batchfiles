@@ -16,8 +16,8 @@ to open in "target_name" dir, or add::
 to "Send to" or right-click or .bat, or create a shortcut
 (use exact files addresses).
 
-.. warning:: optivorbis.exe location is hardcoded directly,
-    change it to match you computer.
+.. warning:: program tries to find ``optivorbis.exe`` in CWD and PATH,
+    and fail if ``optivorbis.exe`` is absent or placed out of search area.
 
 ----
 **More Python freeware**: `The Toad's Slimy Mudhole`_
@@ -34,7 +34,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '26.8.14.18'
+__version__ = '26.10.15.19'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -66,9 +66,15 @@ else:
 exe = 'optivorbis'
 exe_location = which(exe)
 
+
+def filesize(size: int) -> str:
+    """Convert file size ``int`` in bytes to ``str`` in Gb or Mb or Kb with units."""
+    return f'{size / 1073741824:.2f} Gb' if (size > 1073741824) else f'{size / 1048576:.2f} Mb' if (size > 1048576) else f'{size / 1024:.2f} Kb' if (size > 1024) else f'{size} bytes'
+
+
 # ↓ Creating dialog
 sortir = Tk()
-sortir.title('Recompressing .OGG with optivorbis')
+sortir.title('Recompressing .OGG with OPTIVORBIS')
 icon_path = Path(__file__).resolve().parent / 'dnyarri.ico'
 if icon_path.exists():
     sortir.iconbitmap(icon_path)
@@ -126,8 +132,10 @@ if source_dir == '':
     raise SystemExit
 
 # ↓ Creating file list
-path = Path(source_dir)
-file_list = [p for p in path.rglob('*.ogg', case_sensitive=False)]  # list of OGG files in subfolders
+path = Path(source_dir).resolve()
+# ↓ List of OGG files in subfolders. I need `len` for progress bar maximum,
+#   therefore I need "solid" list rather than generator.
+file_list = [p for p in path.rglob('*.ogg', case_sensitive=False)]
 file_number = len(file_list)
 progressbar['maximum'] = file_number
 counter = 0
@@ -148,6 +156,9 @@ sortir.update_idletasks()
 startupinfo = subprocess.STARTUPINFO()
 startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
 
+# ↓ Total size of files before and after
+total_in = total_out = 0
+
 start = time()
 
 # ↓ Process file list
@@ -159,15 +170,21 @@ for counter, filename in enumerate(file_list):  # cycle through OGG files in sub
     sortir.update()
     sortir.update_idletasks()
 
-    currentfile = Path(filename).resolve()  # file to be processed
-    tempfile = Path(filename.resolve().parent / 'hujwam.ogg')  # temp file hujwam.ogg
-    currentfile.replace(tempfile)  # move file to temp
+    currentfile = Path(filename).resolve()
+    # ↑ file to be processed, resolved just in case
+    size_in = Path(currentfile).stat().st_size  # file size
+    total_in += size_in
+    tempfile = Path(filename.resolve().parent / 'hujwam.ogg')
+    # ↑ temp file `hujwam.ogg` in the same dir
+    currentfile.replace(tempfile)  # rename `currentfile` to `tempfile`
 
     # ↓ Note: output in quotes below for paths with spaces
     subprocess.run(f'{exe_location} --quiet --vendor_string_action empty "{tempfile}" "{filename}"', startupinfo=startupinfo)  # noqa: PLW1510
-    # optivorbis.exe writes result from temp back to source location
+    # ↑ optivorbis.exe writes result from temp back to source location
 
-    pogovorit.insert('end -1 chars', ' Done\n')
+    size_out = Path(filename).stat().st_size  # file size
+    total_out += size_out
+    pogovorit.insert('end -1 chars', f' {filesize(size_in)} to {filesize(size_out)}\n')
     sortir.update()
     sortir.update_idletasks()
 
@@ -175,6 +192,7 @@ for counter, filename in enumerate(file_list):  # cycle through OGG files in sub
 
 zanyato.config(text=f'Finished {source_dir.replace("/", "\\")}\\')
 pogovorit.insert('end -1 chars', f'{exe.capitalize()} processed {file_number} files in {int(time() - start)} seconds\n')
+pogovorit.insert('end -1 chars', f'Total {filesize(total_in)} to {filesize(total_out)} (benefit {filesize(total_in - total_out)} ({100 * (total_in - total_out) / total_in:.2f}%))\n')
 pogovorit.see('end')
 progressbar['value'] = progressbar['maximum']
 sortir.after(1000, lambda: progressbar.stop())
