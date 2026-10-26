@@ -54,7 +54,7 @@ Suggested workflow is as following:
 5. Once satisfied with file list order, press *Enter*;
    icon file *"Save as"* dialog will pop up.
 6. If you feel like making one more icon, press *Ctrl+O* to open new file list.
-7. Once finished, don't forget to exit Sanctifier by pressing *Ctrl+Q*.
+7. Once finished, don't forget to exit Sanctifier by pressing *Ctrl+Q* or *Ctrl+W*.
 
 References
 ----------
@@ -86,11 +86,13 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2026 Ilya Razmanov'
 __credits__ = ['Mikael Klasson', 'Ilya Razmanov']
 __license__ = 'unlicense'
-__version__ = '26.6.12.12'
+__version__ = '26.10.26.10'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
+import ctypes
+from os import name
 from pathlib import Path
 from tkinter import Label, Listbox, PhotoImage, StringVar, Tk, filedialog
 
@@ -103,6 +105,15 @@ def DisMiss(event=None) -> None:
     """Kill dialog and continue."""
 
     sortir.destroy()
+
+
+def F5(event=None) -> None:
+    """Try to update Windows icons."""
+
+    if name == 'nt':
+        shell32 = ctypes.OleDLL('shell32')
+        shell32.SHChangeNotify.restype = None
+        shell32.SHChangeNotify(0x08000000, 0x0000, None, None)
 
 
 def getList(event=None) -> None:
@@ -358,7 +369,7 @@ if __name__ == '__main__':  # Just to make python help(Sanctifier) work.
     # ↓ UI hints
     hints = Label(
         sortir,
-        text=' Ctrl+Up or Ctrl+Down to move item up or down; Ctrl+I to invert list; \n Enter to Export ICO; Ctrl+O to open new list; Ctrl+Q to quit ',
+        text=' Ctrl+Up or Ctrl+Down to move item up or down; Ctrl+I to invert list; Enter to Export ICO; \n F5 to update Windows icon cache; Ctrl+O to open new list; Ctrl+Q to quit ',
         font=('helvetica', 8),
         justify='left',
         state='disabled',
@@ -369,12 +380,20 @@ if __name__ == '__main__':  # Just to make python help(Sanctifier) work.
 
     sortir.deiconify()  # Without deiconify() it doesn't get focus
 
-    sortir.bind_all('<Control-o>', getList)
-    sortir.bind_all('<Control-O>', getList)
-    sortir.bind_all('<Control-q>', DisMiss)
-    sortir.bind_all('<Control-Q>', DisMiss)
-    sortir.bind_all('<Control-w>', DisMiss)
-    sortir.bind_all('<Control-W>', DisMiss)
+    # ↓ tuple(tuple('event', function),) to bind to / unbind from Tk
+    bind_all = (
+        ('<Control-o>', getList),
+        ('<Control-O>', getList),
+        ('<Control-q>', DisMiss),
+        ('<Control-Q>', DisMiss),
+        ('<Control-w>', DisMiss),
+        ('<Control-W>', DisMiss),
+        ('<F5>', F5),
+    )
+
+    # ↓ Initial binding of tuple(tuple('event', function),) above
+    for event in bind_all:
+        sortir.bind_all(event[0], event[1])
 
     png_listbox.focus_set()
 
